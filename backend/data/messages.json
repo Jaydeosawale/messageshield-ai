@@ -1,0 +1,98 @@
+[
+    {
+        "message": "Your OTP is 123456. Do not share this code.",
+        "category": "OTP_OR_SECURITY"
+    },
+    {
+        "message": "Use verification code 987654 to login.",
+        "category": "OTP_OR_SECURITY"
+    },
+    {
+        "message": "Your one time password is 456789.",
+        "category": "OTP_OR_SECURITY"
+    },
+    {
+        "message": "Security alert: enter OTP 111222 to verify.",
+        "category": "OTP_OR_SECURITY"
+    },
+    {
+        "message": "Never share your verification code 333444.",
+        "category": "OTP_OR_SECURITY"
+    },
+    {
+        "message": "Your account verification OTP is 555666.",
+        "category": "OTP_OR_SECURITY"
+    },
+    {
+        "message": "Your bank account has been debited Rs 500.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment of Rs 1200 was successful.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your account has been credited with Rs 3000.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Transaction successful. Amount Rs 750.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Rs 999 has been deducted from your account.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment received successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Huge discount! Buy now and save 50 percent.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Special offer available for a limited time.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Sale starts today. Get amazing discounts.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Buy one get one free on selected products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Exclusive promotion just for you.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop now and save big on your favorite items.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Hi, let's meet tomorrow for lunch.",
+        "category": "NORMAL"
+    },
+    {
+        "message": "Can you call me when you are free?",
+        "category": "NORMAL"
+    },
+    {
+        "message": "I will reach home by 7 PM.",
+        "category": "NORMAL"
+    },
+    {
+        "message": "Happy birthday! Have a wonderful day.",
+        "category": "NORMAL"
+    },
+    {
+        "message": "Please send me the meeting details.",
+        "category": "NORMAL"
+    },
+    {
+        "message": "Don't forget our appointment tomorrow.",
+        "category": "NORMAL"
+    }
+]

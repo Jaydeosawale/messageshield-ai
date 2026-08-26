@@ -1,0 +1,88 @@
+{
+  "accuracy": 0.8333333333333334,
+  "precision_weighted": 0.9166666666666666,
+  "recall_weighted": 0.8333333333333334,
+  "f1_weighted": 0.8333333333333334,
+  "train_samples": 18,
+  "test_samples": 6,
+  "total_samples": 24,
+  "class_distribution": {
+    "OTP_OR_SECURITY": 6,
+    "PAYMENT": 6,
+    "PROMOTION": 6,
+    "NORMAL": 6
+  },
+  "classes": [
+    "NORMAL",
+    "OTP_OR_SECURITY",
+    "PAYMENT",
+    "PROMOTION"
+  ],
+  "classification_report": {
+    "NORMAL": {
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1-score": 0.6666666666666666,
+      "support": 2.0
+    },
+    "OTP_OR_SECURITY": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1.0
+    },
+    "PAYMENT": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2.0
+    },
+    "PROMOTION": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1-score": 0.6666666666666666,
+      "support": 1.0
+    },
+    "accuracy": 0.8333333333333334,
+    "macro avg": {
+      "precision": 0.875,
+      "recall": 0.875,
+      "f1-score": 0.8333333333333333,
+      "support": 6.0
+    },
+    "weighted avg": {
+      "precision": 0.9166666666666666,
+      "recall": 0.8333333333333334,
+      "f1-score": 0.8333333333333334,
+      "support": 6.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      1,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      2,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "mlflow_run_id": "61cb2c9109534ef9866a3785dfdd83ad",
+  "experiment_name": "MessageShield"
+}

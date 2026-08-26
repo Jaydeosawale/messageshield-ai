@@ -1,0 +1,35 @@
+# ==========================================
+# Secrets
+# ==========================================
+.env
+backend/.env
+
+# ==========================================
+# Python
+# ==========================================
+.venv/
+backend/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# ==========================================
+# Flutter / Dart generated files
+# ==========================================
+frontend/.dart_tool/
+frontend/build/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+
+# ==========================================
+# ML generated tracking artifacts
+# ==========================================
+ml/models/*.joblib
+mlruns/
+
+# ==========================================
+# IDE / OS
+# ==========================================
+.DS_Store
+.idea/
+.ANTIGRAVITY/

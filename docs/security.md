@@ -1,0 +1,11 @@
+# Security backlog
+- Client-side secret redaction
+- Server-side validation
+- RBAC and admin MFA
+- Rate limits and abuse controls
+- Secrets manager
+- TLS
+- Safe URL handling
+- Audit logs
+- Dependency/container scanning
+- Threat model and penetration testing

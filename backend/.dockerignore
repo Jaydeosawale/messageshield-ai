@@ -1,0 +1,13 @@
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.git
+.gitignore
+
+.env
+*.log
+
+mlruns
+alembic/versions/__pycache__
