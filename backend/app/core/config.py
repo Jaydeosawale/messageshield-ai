@@ -25,9 +25,10 @@ class Settings(BaseSettings):
     mlflow_tracking_uri: Optional[str] = None
 
     cors_origins: str = (
-        "http://localhost:3000,"
-        "http://localhost:5173"
-    )
+    "http://localhost:3000,"
+    "http://localhost:5173,"
+    "https://messageshield-ai.vercel.app"
+)
 
     trusted_hosts: str = (
         "localhost,127.0.0.1,testserver"
