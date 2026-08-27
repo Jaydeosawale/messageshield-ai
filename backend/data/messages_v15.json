@@ -1,0 +1,4251 @@
+[
+    {
+        "message": "Your OTP is 123456. Do not share this code.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Use verification code 987654 to login.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your one time password is 456789.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Security alert: enter OTP 111222 to verify.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Never share your verification code 333444.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account verification OTP is 555666.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account has been debited Rs 500.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Payment of Rs 1200 was successful.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account has been credited with Rs 3000.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Transaction successful. Amount Rs 750.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Rs 999 has been deducted from your account.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Payment received successfully.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Huge discount! Buy now and save 50 percent.",
+        "category": "PROMOTION",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Special offer available for a limited time.",
+        "category": "PROMOTION",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Sale starts today. Get amazing discounts.",
+        "category": "PROMOTION",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Buy one get one free on selected products.",
+        "category": "PROMOTION",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Exclusive promotion just for you.",
+        "category": "PROMOTION",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Shop now and save big on your favorite items.",
+        "category": "PROMOTION",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Hi, let's meet tomorrow for lunch.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Can you call me when you are free?",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "I will reach home by 7 PM.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Happy birthday! Have a wonderful day.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Please send me the meeting details.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Don't forget our appointment tomorrow.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "URGENT: Your bank account has been suspended. Verify immediately at http://secure-bank-update.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your account will be blocked today. Update your KYC now: http://kyc-update-secure.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Congratulations! You have won a reward. Claim now at http://claim-reward-now.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your password expires today. Reset immediately using http://secure-password-reset.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Dear customer, unusual activity detected. Secure your account here: http://account-security-alert.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your parcel is waiting. Pay a small delivery fee here: http://delivery-fee.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Income tax refund approved. Submit bank details at http://tax-refund-claim.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your social media account will be deleted in 24 hours. Verify now: http://social-verify.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Security alert: confirm your card details at http://card-secure-check.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your subscription payment failed. Update payment details: http://payment-update.xyz",
+        "category": "PHISHING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Share the OTP you just received so we can verify your bank account.",
+        "category": "OTP",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your refund is ready. Send us the OTP to complete the transfer.",
+        "category": "OTP",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Our bank executive is calling you. Please provide the OTP for verification.",
+        "category": "OTP",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Tell me the OTP quickly or your account verification will fail.",
+        "category": "OTP",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "You received an OTP by mistake. Please forward it to me.",
+        "category": "OTP",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "To receive your prize money, share the OTP sent to your phone.",
+        "category": "OTP",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your OTP is 482913 for login. Do not share this OTP with anyone.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Use OTP 738291 to complete your login. It expires in 10 minutes. Do not share it.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your one-time password is 112233. Never share this code with anyone.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "OTP 928374 is required to verify your transaction. Do not disclose this OTP to anyone.",
+        "category": "OTP",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Enter your UPI PIN to receive ₹5,000 cashback.",
+        "category": "PAYMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Scan this QR code to receive your refund of ₹2,500.",
+        "category": "PAYMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "You won ₹10,000. Approve the collect request and enter your UPI PIN.",
+        "category": "PAYMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your payment failed. Enter your UPI PIN again to receive a refund.",
+        "category": "PAYMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "We accidentally sent you money. Approve the request and enter your UPI PIN to return it.",
+        "category": "PAYMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Complete this reward withdrawal by entering your UPI PIN.",
+        "category": "PAYMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "You have received ₹500 from Rahul via UPI.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your UPI payment of ₹250 to Merchant Store was successful.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "A payment request of ₹300 has been received. Review the request carefully before approving.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your UPI transaction was declined due to insufficient balance.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account statement for August is now available in the official mobile banking app.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your electricity bill of ₹850 is due on 30 August. Pay using the official provider app or website.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your order has been dispatched and is expected to arrive tomorrow.",
+        "category": "DELIVERY",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your interview is scheduled for Monday at 10 AM. Please join using the official meeting link sent by the recruiter.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your credit card payment of ₹4,500 was successfully received.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Reminder: Your appointment is scheduled for tomorrow at 3 PM.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your password was changed successfully. If this was not you, contact support through the official app.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your package is out for delivery today.",
+        "category": "DELIVERY",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your monthly mobile bill is ready. View and pay it through the official mobile operator app.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Thank you for your payment. Your transaction has been completed successfully.",
+        "category": "PAYMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your parcel is held. Pay Rs 25 immediately using this link.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package is on hold. Pay the delivery fee to release it.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Delivery failed. Pay a redelivery charge immediately.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel cannot be delivered until you pay the pending fee.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment is waiting. Click the link and pay the delivery charge.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Pay Rs 10 now to schedule redelivery of your package.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your courier package will be returned unless payment is completed today.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "A small handling charge is required before your parcel can be delivered.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is waiting at the warehouse. Pay the pending charge now.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Customs payment is required to release your shipment. Pay immediately.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your delivery is suspended due to an unpaid fee. Complete payment now.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package will be returned today. Pay the delivery fee to stop it.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Action required: pay the courier charge before your parcel is released.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment is blocked. Verify payment immediately to continue delivery.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Final notice: pay the small delivery charge to receive your package.",
+        "safety_label": "SCAM",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package has been shipped successfully.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is out for delivery today.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order has been delivered successfully.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment is expected to arrive tomorrow.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your delivery has been delayed due to weather conditions.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package is available for pickup at the selected location.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "A delivery attempt was unsuccessful. The courier will try again tomorrow.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment has reached the local delivery center.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Track your order using the tracking number in your official order details.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your courier has collected the package from the sender.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order is being prepared for delivery.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel has arrived at the destination sorting facility.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Delivery is scheduled between 2 PM and 5 PM tomorrow.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package has been handed to the delivery partner.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order is ready and will be dispatched soon.",
+        "safety_label": "SAFE",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your bank account will be blocked today. Click here immediately to update your KYC.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your account has been frozen due to suspicious activity. Verify your details using this link.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Dear customer, share your debit card number to reactivate your account.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your bank manager needs your OTP to verify your account.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your ATM card will expire today. Send your card details immediately.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "A refund of Rs 10,000 is pending. Provide your bank account credentials to receive it.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your account is under investigation. Verify your PIN to avoid suspension.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Update your PAN and Aadhaar details immediately to prevent account closure.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "You are eligible for a special bank reward. Enter your card details to claim it.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your bank account has unusual activity. Send the OTP to secure your account.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your bank account has been credited with Rs 5000.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your savings account statement is available in the official mobile banking app.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your debit card transaction of Rs 1200 was successful.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your monthly bank statement has been generated successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your fixed deposit will mature on 15 September.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your cheque has been successfully cleared.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your credit card payment has been received successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account balance is available in the official banking application.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account statement for this month is ready to download.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your debit card has been dispatched and will arrive within five working days.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Congratulations, you have been selected for a job. Pay Rs 2000 registration fee immediately.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Work from home and earn Rs 5000 daily. Pay a joining fee to start.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "You have been shortlisted without an interview. Send your documents and payment now.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Government job confirmed. Pay processing charges immediately.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your job offer expires today. Pay the training fee now.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Earn Rs 50,000 per month from home. Send Rs 999 to activate your account.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "You have been hired immediately. Share your bank details to receive your first salary.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Pay the verification fee to complete your job application.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Limited vacancies available. Transfer money now to reserve your position.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your job is guaranteed. Complete the payment to receive your appointment letter.",
+        "category": "JOB",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your interview is scheduled for Monday at 10 AM.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Thank you for applying. Our recruitment team will review your application.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "You have been invited to attend an interview through the official company portal.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your application status has been updated to under review.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Please join the interview meeting using the official company invitation.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your interview feedback will be shared within five working days.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The recruiter has scheduled your technical interview for tomorrow.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your application has been received successfully.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Please upload the requested documents through the official recruitment portal.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The company has sent you an interview confirmation email.",
+        "category": "JOB",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Guaranteed 500 percent returns in 30 days. Invest now before the opportunity closes.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Double your money in one week with our secret investment plan.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Risk free cryptocurrency investment with guaranteed daily profit.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Invest Rs 1000 today and receive Rs 10,000 tomorrow.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Our expert guarantees huge stock market profits. Send money to start investing.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Limited investment opportunity. Guaranteed returns with zero risk.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Send funds now and our trading bot will generate daily income.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "VIP investment group guarantees 10 percent profit every day.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Transfer Rs 5000 and receive guaranteed returns by tonight.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "This investment has no risk and guaranteed profit. Join immediately.",
+        "category": "INVESTMENT",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your mutual fund account statement is now available.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your SIP investment was successfully processed.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The stock market will open at 9:15 AM tomorrow.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your investment portfolio report is available in the official application.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your mutual fund NAV has been updated.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your SIP installment of Rs 2000 was successfully invested.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your demat account statement is available for review.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The market value of your portfolio has changed today.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your investment transaction has been completed successfully.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Please review your investment portfolio through your official broker application.",
+        "category": "INVESTMENT",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "I am calling from your bank. Share your OTP immediately for verification.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "This is the police department. Your account is involved in illegal activity. Transfer money immediately.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "I am your company HR manager. Send money for document verification.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "This is customer support. Install this application so we can fix your account.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your relative has been arrested. Transfer money immediately to help them.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "I am from the government department. Pay the penalty now to avoid legal action.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "This is your bank executive. Please provide your card number and CVV.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "I am from technical support. Give me remote access to your phone.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your manager needs money urgently. Transfer it to this account immediately.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "I am from the tax department. Pay immediately or your account will be blocked.",
+        "category": "IMPERSONATION",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Please contact customer support using the phone number listed on the official website.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your support request has been received and is being reviewed.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your complaint reference number has been generated successfully.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Please visit the official office during working hours for assistance.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your service request has been successfully completed.",
+        "category": "GENERAL",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your savings account has been temporarily restricted due to incomplete verification.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Please visit your nearest branch to complete the pending account verification process.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account has been marked inactive due to no recent transactions.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account will become dormant if there is no activity for the required period.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your banking profile requires an update to keep your account information current.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account has been successfully reactivated.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account is currently active and available for transactions.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account status has been updated successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The account verification request submitted at your branch has been completed.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account has been placed under temporary review by the bank.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your KYC documents have been verified successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your KYC update request has been received by the bank.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Please ensure that your registered address is updated in your bank records.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your PAN details have been successfully linked with your bank account.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your Aadhaar linking request has been processed successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The bank has updated your registered mobile number successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your email address has been updated in the bank account records.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your customer profile update has been completed successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The bank has received your request to update personal details.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your customer identification details are up to date.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your quarterly account statement is now available.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your annual bank account statement has been generated.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank statement for July is ready to view.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "A copy of your account statement has been sent to your registered email address.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your mini statement is available through the official banking service.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account transaction history has been updated.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The requested account statement has been generated successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account balance information is available in the official banking app.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account summary for this month is ready.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your banking records have been updated successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your new debit card has been successfully activated.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your replacement debit card request has been processed.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your ATM card replacement will be delivered to your registered address.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your debit card has been temporarily blocked following your request.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your debit card has been unblocked successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The bank has received your request for a new debit card.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your debit card renewal request is being processed.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your ATM card has been successfully linked to your savings account.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your debit card PIN has been generated successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your card delivery request has been registered with the bank.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your fixed deposit has been opened successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your fixed deposit certificate is now available.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your fixed deposit will mature next month.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your fixed deposit has been renewed for another term.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The interest earned on your fixed deposit has been credited to your account.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your recurring deposit account has been opened successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your recurring deposit installment schedule has been updated.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank has processed the fixed deposit closure request.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The maturity amount for your deposit will be credited on the scheduled date.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your deposit account details are available in the official banking application.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your cheque book request has been accepted.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your cheque book will be delivered to your registered address.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The bank has successfully processed your cheque stop request.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your branch transfer request has been submitted successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your account closure request has been received by the bank.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your nomination details have been updated successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your request for a bank certificate has been processed.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank branch appointment has been confirmed.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The bank has registered your service request successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your banking service request is currently being processed.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account will be closed today unless you verify your details immediately.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your account has been suspended. Update your bank details immediately to restore access.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your bank account is at risk. Provide your card information immediately.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your bank account requires urgent verification to prevent permanent closure.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your debit card will be permanently disabled unless you update your information today.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Suspicious activity has been detected on your account. Confirm your banking details immediately.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your KYC has expired. Update your banking details immediately to avoid account restrictions.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your bank profile must be verified today to continue using your account.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your bank account will be frozen unless your customer details are updated immediately.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your card services have been stopped. Provide your account details to reactivate them.",
+        "category": "BANKING",
+        "safety_label": "SCAM"
+    },
+    {
+        "message": "Your savings account interest rate has been updated.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank has successfully completed the account upgrade request.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your registered bank account has been verified successfully.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The bank has updated your account operating instructions.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your savings account service request has been completed.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account is eligible for an account type upgrade.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your request to change the bank account nominee has been processed.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "The bank has successfully updated your communication preferences.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your bank account requires review of the registered customer information.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your banking relationship manager details are available in the official application.",
+        "category": "BANKING",
+        "safety_label": "SAFE"
+    },
+    {
+        "message": "Your order has been shipped and is expected to arrive tomorrow.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package has been dispatched successfully.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is currently out for delivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment will arrive within the next two days.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order has reached the nearest delivery center.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package has arrived at the local sorting facility.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your courier is scheduled for delivery today.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order was successfully delivered to your address.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package was delivered to your registered address.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment is currently being processed for delivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order has left the warehouse.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is on the way to your location.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your delivery is scheduled between 2 PM and 6 PM.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order will be delivered by tomorrow evening.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment has reached your city.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package is waiting at the local delivery center.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your courier has been assigned to a delivery agent.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order status has been updated to dispatched.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package is being prepared for delivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment has been successfully handed to the courier.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order is expected to arrive on Monday.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel will arrive within three working days.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package has reached the destination facility.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your delivery has been rescheduled for tomorrow.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your courier could not be delivered and will be attempted again tomorrow.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package delivery attempt was unsuccessful because no one was available.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order is available for pickup at the official delivery center.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel has been received at the regional warehouse.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment is moving to the next delivery facility.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Track your order using the official tracking number.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your delivery address has been confirmed successfully.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order is scheduled for dispatch today.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is expected to arrive before 8 PM.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment has cleared the sorting center.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is on hold. Pay Rs 30 immediately to release it.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package cannot be delivered until you pay the pending charge.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Pay a small delivery fee now to receive your parcel.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment is waiting. Pay Rs 50 immediately.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package will be returned unless you pay the delivery charge.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Pay the customs fee immediately to receive your international package.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your courier is blocked. Make a payment now to continue delivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel requires a Rs 25 payment before delivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "A delivery charge is pending. Pay now to avoid cancellation.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package has been stopped. Transfer the handling fee immediately.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Pay the redelivery fee now to schedule another delivery attempt.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment will be cancelled if the pending fee is not paid today.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is waiting for payment confirmation.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "A small processing charge is required to release your package.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Pay Rs 99 immediately to prevent your order from being returned.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your delivery has failed. Send payment to arrange redelivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package is held due to an unpaid delivery fee.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Transfer money immediately to receive your courier.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is blocked. Pay now to avoid permanent cancellation.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment cannot continue until the service fee is paid.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Pay the delivery charge urgently to avoid losing your package.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order is suspended. Complete the payment immediately.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel requires immediate payment for final delivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Send Rs 40 now to release your shipment.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your courier will be returned today unless payment is completed.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Pay the urgent handling charge to receive your package.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package is waiting. Complete the payment to continue delivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "A final delivery fee is required. Pay immediately.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your parcel is pending because the delivery charge has not been paid.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Make payment now to prevent your shipment from being cancelled.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your order is held at the warehouse. Pay the release fee immediately.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your package requires payment verification before it can be delivered.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Pay now to unlock your parcel delivery.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Your shipment will be destroyed unless the pending fee is paid today.",
+        "category": "DELIVERY"
+    },
+    {
+        "message": "Hi, how are you doing today?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Good morning, have a nice day.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Good night, sleep well.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Can we talk later?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please call me when you are free.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I will call you after work.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Let us meet this weekend.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Are you available this evening?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I am on my way home.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I will reach there soon.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please let me know when you arrive.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I reached home safely.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "See you tomorrow.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Talk to you soon.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Take care and stay safe.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Thank you for your help.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Sorry, I missed your call.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I will reply later.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Can you send me the details?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please remind me tomorrow.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "What time should we meet?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I am running a little late.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The meeting has been postponed.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Let's have lunch tomorrow.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Can we reschedule our appointment?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I will be there at 6 PM.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please wait for me.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I have sent you the document.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Did you receive my message?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Let me know your decision.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Happy birthday! Hope you have a wonderful day.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Congratulations on your success.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Wishing you a happy anniversary.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Have a safe journey.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Welcome back home.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "How is everyone at home?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please give my regards to your family.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I hope you are feeling better today.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "We had a great time yesterday.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Let's plan a trip together.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Are you coming to the party?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The family dinner is at 8 PM.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please bring your friend along.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I will see you at the celebration.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Thank you for inviting me.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "It was nice meeting you.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please wish her happy birthday from me.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "We should catch up sometime.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I miss talking with you.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Let's meet for coffee tomorrow.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The meeting starts at 10 AM tomorrow.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please join the meeting on time.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I have completed the assigned task.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Can you review the document?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please send the report by evening.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The project deadline is next Friday.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I will share the update shortly.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Let's discuss this in tomorrow's meeting.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The presentation has been prepared.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please check your email for the details.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The office will be closed tomorrow.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I am working from home today.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Can we schedule a quick call?",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Please confirm your availability.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The interview has been moved to Monday.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Your appointment is confirmed for 3 PM.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The doctor is available tomorrow morning.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Your reservation has been confirmed.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The class starts at 9 AM.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Don't forget to attend the session.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Your electricity service will undergo maintenance tomorrow.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Water supply will be temporarily unavailable this morning.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The school will remain closed due to heavy rain.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Your train is scheduled to arrive at 7 PM.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The bus will depart in ten minutes.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Your table reservation is confirmed.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The event starts at 6 PM today.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Your library books are due next week.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The maintenance work has been completed.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "Your internet service is now restored.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The building lift is under maintenance.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The weather is expected to be cloudy today.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "The road is closed due to construction.",
+        "category": "GENERAL"
+    },
+    {
+        "message": "I am calling from your bank security team. Share your OTP immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the bank verification department. Provide your card number.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am a bank officer. Please confirm your account PIN.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Our bank manager needs your OTP to verify your identity.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the fraud department from your bank. Transfer money to secure your account.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the bank customer support team. Share your CVV for verification.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your bank relationship manager is requesting your account details.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is your bank executive. Send your debit card information now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I work with your bank. Please provide the verification code.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "The bank security officer is asking you to confirm your UPI PIN.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the official bank helpline. Share the OTP you received.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the bank account department. Verify your card details immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your bank manager. Send your account number for verification.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "The bank fraud team requires your OTP to investigate this case.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from your bank branch. Provide your PIN immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the police department. Pay the fine immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am a police officer. Your account is under investigation.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the cyber crime department. Transfer money to avoid arrest.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from the government office. Pay the penalty now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the tax department. Your payment is overdue.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am an income tax officer. Share your bank details immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the customs department. Pay the clearance charge now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from the passport office. Pay the processing fee.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the government verification team. Send your identity details.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the court department. Pay immediately to avoid legal action.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is a police officer. Your name is connected to a criminal case.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the cyber security department. Give us access to your phone.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "The government authority requires an immediate payment from you.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the official investigation department. Follow our instructions.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am a government officer. Transfer the penalty amount now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is technical support. Install our application immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from customer support. Give me remote access to your phone.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the device security team. Install the support application.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from mobile support. Share your screen with us.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is technical assistance. Download the remote access app.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Our support engineer needs control of your phone to fix the problem.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the security support team. Install this application now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is official customer care. Allow remote access to your device.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am a technical engineer. Open the application and share your screen.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "The support department needs access to your phone immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from device support. Install the security tool.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is account support. Give us remote access to resolve the issue.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am a support executive. Share your screen for verification.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "The technical team needs you to install a remote assistance app.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from customer service. Follow these steps to give us phone access.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your HR manager. Pay the document verification fee.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the company recruitment department. Transfer the registration fee.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from HR. Send your bank details immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is your company manager. Transfer money urgently.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the recruitment team. Pay to confirm your job.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your HR executive is requesting an immediate payment.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am the hiring manager. Send money to complete your application.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the company administration department. Pay the processing fee.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your manager. Transfer the amount to this account now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "The HR team requires your payment before issuing the offer letter.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from the company office. Share your personal documents.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the recruitment officer. Pay immediately to continue.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your supervisor. Send money urgently for company work.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "The company verification team needs your payment now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the HR department. Provide your banking details.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your relative. I need money urgently because of an emergency.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your family member has been arrested. Transfer money immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your friend. Please send money urgently to this account.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your brother is in trouble and needs an immediate payment.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling on behalf of your relative. Send money now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your family member is in the hospital. Transfer money urgently.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your cousin. I lost my phone and need money immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your friend has asked me to collect money from you.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your relative and I need urgent financial help.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your family member has had an accident. Send money immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling for your friend who needs emergency assistance.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your relative is in legal trouble. Transfer money to help them.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am your family member. Please send money to my new account.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Your friend is stranded and urgently needs financial support.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from your relative's phone. Send money immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the courier company. Pay the fee directly to our agent.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the electricity department. Transfer the pending amount now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the telecom company. Share your OTP to verify your SIM.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from the insurance department. Pay the renewal fee now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the official customer care team. Transfer money for verification.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the mobile network provider. Share the code sent to your phone.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the delivery service. Pay our representative immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the insurance company. Provide your card details.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the utility department. Make the payment to avoid disconnection.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from the service center. Pay the repair fee now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the subscription support team. Share your account details.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am from the official helpdesk. Transfer money to complete verification.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the service provider. Provide your OTP immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "I am calling from the customer assistance department. Pay now.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "This is the account verification team. Follow my instructions immediately.",
+        "category": "IMPERSONATION"
+    },
+    {
+        "message": "Invest today and get guaranteed returns within 30 days.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Earn guaranteed profits from our exclusive investment plan.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Double your investment in just one week.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Get high returns with absolutely no investment risk.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our investment scheme guarantees daily profit.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest Rs 5000 and receive double the amount next month.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Guaranteed monthly income is available through our investment program.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Earn huge profits from this limited investment opportunity.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our experts guarantee massive profits from this investment.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Turn your savings into double the amount quickly.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Get guaranteed income from our premium investment platform.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest a small amount today and earn large returns tomorrow.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "This investment offers risk free guaranteed profits.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Join now and start earning assured daily returns.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our trading experts guarantee profit from every stock trade.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Join our stock market group for guaranteed daily returns.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest in our trading strategy and earn profits every day.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our trading bot automatically generates guaranteed income.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Start stock trading with our expert guidance and guaranteed returns.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Send money to activate your premium trading account.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Earn daily income using our automated trading system.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Join the VIP trading group and receive guaranteed stock tips.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our secret trading strategy can double your money.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest in today's recommended stocks for guaranteed profit.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Activate your trading account by transferring the registration amount.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our professional traders guarantee successful investments.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Earn from stock trading without any previous experience.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Join our private trading channel for high profit opportunities.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest in cryptocurrency and earn guaranteed daily profits.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our crypto trading platform guarantees high returns.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Buy this digital currency now before the price increases.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest in our crypto plan and double your money.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Earn passive income from our automated cryptocurrency system.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Transfer funds to start your cryptocurrency investment.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our crypto experts guarantee profitable trades every day.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Join the exclusive crypto investment group now.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Get guaranteed returns from digital currency trading.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest in this new cryptocurrency before everyone else.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our crypto investment program has zero risk and high profit.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Start earning daily income from our digital asset platform.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Send money now to secure your crypto investment position.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our cryptocurrency strategy guarantees consistent profits.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest today in digital assets and receive fast returns.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Limited investment opportunity available today only.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest immediately before this profitable opportunity closes.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Only a few investment positions are remaining.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "This exclusive investment offer expires tonight.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Join now before the guaranteed return program closes.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest today to secure your place in this opportunity.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Last chance to participate in our high profit investment.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Only selected investors can join this premium program.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Transfer funds now before the investment deadline.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "This investment opportunity is closing within hours.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Act immediately to receive the special investment benefits.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Reserve your investment position before all slots are filled.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Today is the final day to join our profit program.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Limited seats are available for this exclusive investment.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest quickly before the opportunity disappears.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Earn passive income every day from our investment system.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Start earning without working through our automated investment plan.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Build a second income through our guaranteed investment program.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Earn money while you sleep with our investment strategy.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Receive daily payments from your investment account.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest your savings and receive monthly profit payments.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Join thousands of investors earning daily income.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Generate extra income through our exclusive investment method.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Start your passive income journey with a small investment.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Our investment platform provides regular guaranteed payouts.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Earn recurring profits from our managed investment service.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Invest today and create a reliable source of income.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Transfer Rs 1000 to begin your investment.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Send the investment amount now to activate your account.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Deposit funds immediately to secure guaranteed returns.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Make the initial investment payment today.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Transfer money to our account to join the investment program.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Pay the registration amount before starting your investment.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Send Rs 5000 now and begin earning profits.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Deposit the required amount to activate your investment plan.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Transfer funds today to receive your investment benefits.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Make payment now to reserve your investment opportunity.",
+        "category": "INVESTMENT"
+    },
+    {
+        "message": "Congratulations, you have been selected for the position.",
+        "category": "JOB"
+    },
+    {
+        "message": "You have been chosen for an immediate job opportunity.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your job application has been approved without an interview.",
+        "category": "JOB"
+    },
+    {
+        "message": "You have been selected for a high salary work from home job.",
+        "category": "JOB"
+    },
+    {
+        "message": "Congratulations, your employment has been confirmed.",
+        "category": "JOB"
+    },
+    {
+        "message": "You are eligible for immediate joining at our company.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your job offer has been approved. Complete the next step now.",
+        "category": "JOB"
+    },
+    {
+        "message": "You have been shortlisted for a premium job opportunity.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your appointment letter is ready for processing.",
+        "category": "JOB"
+    },
+    {
+        "message": "You have been selected based on your profile.",
+        "category": "JOB"
+    },
+    {
+        "message": "Congratulations, your job has been confirmed immediately.",
+        "category": "JOB"
+    },
+    {
+        "message": "Our company has approved your application without further screening.",
+        "category": "JOB"
+    },
+    {
+        "message": "You have been selected for an urgent vacancy.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your employment opportunity is waiting for confirmation.",
+        "category": "JOB"
+    },
+    {
+        "message": "Pay the registration fee immediately to confirm your job.",
+        "category": "JOB"
+    },
+    {
+        "message": "A processing fee is required before your appointment letter is issued.",
+        "category": "JOB"
+    },
+    {
+        "message": "Send the verification payment to continue your job application.",
+        "category": "JOB"
+    },
+    {
+        "message": "Pay the joining fee now to secure your position.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your application requires a small processing payment.",
+        "category": "JOB"
+    },
+    {
+        "message": "Transfer the registration amount to activate your job offer.",
+        "category": "JOB"
+    },
+    {
+        "message": "Pay the documentation fee before your employment can be confirmed.",
+        "category": "JOB"
+    },
+    {
+        "message": "A verification charge is pending for your job application.",
+        "category": "JOB"
+    },
+    {
+        "message": "Send the required fee immediately to complete registration.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your appointment letter will be released after payment.",
+        "category": "JOB"
+    },
+    {
+        "message": "A training fee must be paid before joining.",
+        "category": "JOB"
+    },
+    {
+        "message": "Transfer the required amount to complete employment verification.",
+        "category": "JOB"
+    },
+    {
+        "message": "Pay the recruitment fee to secure your selected position.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your job confirmation requires an immediate payment.",
+        "category": "JOB"
+    },
+    {
+        "message": "Work from home and earn Rs 5000 every day.",
+        "category": "JOB"
+    },
+    {
+        "message": "Earn money from home with only two hours of work.",
+        "category": "JOB"
+    },
+    {
+        "message": "Start working online and receive a guaranteed daily income.",
+        "category": "JOB"
+    },
+    {
+        "message": "Earn Rs 3000 daily from simple work at home.",
+        "category": "JOB"
+    },
+    {
+        "message": "No experience is required for this high paying online job.",
+        "category": "JOB"
+    },
+    {
+        "message": "Work from your phone and earn money every day.",
+        "category": "JOB"
+    },
+    {
+        "message": "Start today and receive your first payment immediately.",
+        "category": "JOB"
+    },
+    {
+        "message": "Simple online tasks can help you earn daily income.",
+        "category": "JOB"
+    },
+    {
+        "message": "Work flexible hours and earn guaranteed weekly payments.",
+        "category": "JOB"
+    },
+    {
+        "message": "Our home based job offers immediate earnings.",
+        "category": "JOB"
+    },
+    {
+        "message": "Start an easy online job with no previous experience.",
+        "category": "JOB"
+    },
+    {
+        "message": "Earn money by completing simple tasks from home.",
+        "category": "JOB"
+    },
+    {
+        "message": "Get paid daily for working a few hours online.",
+        "category": "JOB"
+    },
+    {
+        "message": "Join our remote work program and start earning today.",
+        "category": "JOB"
+    },
+    {
+        "message": "Only a few job vacancies are remaining. Apply immediately.",
+        "category": "JOB"
+    },
+    {
+        "message": "This job opportunity closes today.",
+        "category": "JOB"
+    },
+    {
+        "message": "Limited positions are available. Confirm your job now.",
+        "category": "JOB"
+    },
+    {
+        "message": "Apply immediately before all vacancies are filled.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your job offer will expire tonight.",
+        "category": "JOB"
+    },
+    {
+        "message": "Only selected candidates can join this opportunity.",
+        "category": "JOB"
+    },
+    {
+        "message": "Urgent hiring is taking place today only.",
+        "category": "JOB"
+    },
+    {
+        "message": "Last chance to secure your job opportunity.",
+        "category": "JOB"
+    },
+    {
+        "message": "The company is hiring immediately for limited positions.",
+        "category": "JOB"
+    },
+    {
+        "message": "Complete your registration before the vacancy closes.",
+        "category": "JOB"
+    },
+    {
+        "message": "Apply now to avoid missing this job opportunity.",
+        "category": "JOB"
+    },
+    {
+        "message": "Today is the final day to confirm your position.",
+        "category": "JOB"
+    },
+    {
+        "message": "Limited seats are available for immediate joining.",
+        "category": "JOB"
+    },
+    {
+        "message": "Act quickly to secure your employment offer.",
+        "category": "JOB"
+    },
+    {
+        "message": "Government job confirmed. Pay the processing amount now.",
+        "category": "JOB"
+    },
+    {
+        "message": "You have been selected for a government position without examination.",
+        "category": "JOB"
+    },
+    {
+        "message": "A government vacancy is available with immediate joining.",
+        "category": "JOB"
+    },
+    {
+        "message": "Pay the required fee to receive your government appointment letter.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your government job has been approved.",
+        "category": "JOB"
+    },
+    {
+        "message": "Secure a permanent government position by completing payment.",
+        "category": "JOB"
+    },
+    {
+        "message": "You have been selected for a high salary government role.",
+        "category": "JOB"
+    },
+    {
+        "message": "Government recruitment is open for immediate joining.",
+        "category": "JOB"
+    },
+    {
+        "message": "Pay now to confirm your government employment.",
+        "category": "JOB"
+    },
+    {
+        "message": "A government department has selected you for a position.",
+        "category": "JOB"
+    },
+    {
+        "message": "Complete payment to receive your government joining instructions.",
+        "category": "JOB"
+    },
+    {
+        "message": "Get a permanent job with guaranteed monthly salary.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your government employment application has been approved.",
+        "category": "JOB"
+    },
+    {
+        "message": "Pay the verification charge for your government job.",
+        "category": "JOB"
+    },
+    {
+        "message": "Share your bank details to receive your first salary.",
+        "category": "JOB"
+    },
+    {
+        "message": "Send your identity documents immediately for job verification.",
+        "category": "JOB"
+    },
+    {
+        "message": "Provide your Aadhaar and PAN details to complete joining.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your employer needs your bank account information urgently.",
+        "category": "JOB"
+    },
+    {
+        "message": "Upload your documents and pay the verification amount.",
+        "category": "JOB"
+    },
+    {
+        "message": "Send your personal details to receive the appointment letter.",
+        "category": "JOB"
+    },
+    {
+        "message": "Provide your banking information for salary activation.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your documents require immediate verification payment.",
+        "category": "JOB"
+    },
+    {
+        "message": "Share your identification details to continue the recruitment.",
+        "category": "JOB"
+    },
+    {
+        "message": "Send your bank account number for employment confirmation.",
+        "category": "JOB"
+    },
+    {
+        "message": "Your OTP is 482910. Do not share this code with anyone.",
+        "category": "OTP"
+    },
+    {
+        "message": "Use OTP 738421 to complete your login.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your verification code is 614829.",
+        "category": "OTP"
+    },
+    {
+        "message": "Enter the one time password 395741 to continue.",
+        "category": "OTP"
+    },
+    {
+        "message": "Use verification code 564321 to verify your account.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your login OTP is 918273.",
+        "category": "OTP"
+    },
+    {
+        "message": "The OTP for your transaction is 472819.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your account verification code is 751482.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your verification OTP is 426891.",
+        "category": "OTP"
+    },
+    {
+        "message": "Use OTP 691274 to complete the process.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your login verification code is 853127.",
+        "category": "OTP"
+    },
+    {
+        "message": "The code 274918 is required to confirm your login.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your secure OTP is 419682.",
+        "category": "OTP"
+    },
+    {
+        "message": "Enter verification code 732561.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your one time security code is 965214.",
+        "category": "OTP"
+    },
+    {
+        "message": "Use code 518429 to verify your mobile number.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your OTP 684193 is valid for ten minutes.",
+        "category": "OTP"
+    },
+    {
+        "message": "Enter the code 247861 to confirm your identity.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your authentication OTP is 391572.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the OTP sent to your phone immediately.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell me the verification code you just received.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send your OTP now so we can verify your account.",
+        "category": "OTP"
+    },
+    {
+        "message": "Please provide the one time password sent to your mobile.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the security code to complete the verification.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell us the OTP received on your phone.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell the bank executive the OTP you received.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send us your one time password to process the request.",
+        "category": "OTP"
+    },
+    {
+        "message": "Provide the OTP immediately for security verification.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the code sent to your registered mobile number.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell me the six digit OTP you just received.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send your account verification code now.",
+        "category": "OTP"
+    },
+    {
+        "message": "Please provide the security OTP immediately.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the login code to complete the account check.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell us the OTP before it expires.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send the verification password to our representative.",
+        "category": "OTP"
+    },
+    {
+        "message": "Provide your OTP to confirm your identity.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your refund is ready. Share the OTP to receive the money.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send your OTP to complete the refund process.",
+        "category": "OTP"
+    },
+    {
+        "message": "Provide the verification code to receive your cashback.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the OTP so we can release your pending refund.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your bank executive needs the OTP for verification.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your refund will fail unless you provide the OTP.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send the OTP immediately to receive the credited amount.",
+        "category": "OTP"
+    },
+    {
+        "message": "Provide your verification code for the refund payment.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share your OTP to unblock your bank account.",
+        "category": "OTP"
+    },
+    {
+        "message": "Provide the security code to receive your reward money.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send the one time password to complete the bank verification.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your cashback is pending. Share the OTP immediately.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell us the verification code to process your payment refund.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the OTP to confirm the credit in your account.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your transaction is pending. Provide the OTP to complete it.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send your OTP now to receive the refund.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the OTP quickly or your account will be blocked.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell me the code immediately before it expires.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your account verification will fail unless you provide the OTP.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send the OTP urgently to avoid account suspension.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the verification code now to prevent account closure.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell us the OTP immediately to secure your account.",
+        "category": "OTP"
+    },
+    {
+        "message": "Provide the code quickly or your transaction will be cancelled.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your account is at risk. Share the OTP for verification.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share your OTP immediately to avoid losing access.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell me the code before the verification request expires.",
+        "category": "OTP"
+    },
+    {
+        "message": "Provide the OTP now to prevent your account from being frozen.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your service will be stopped unless you share the verification code.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send the one time password urgently to restore your account.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the OTP now or your refund request will be cancelled.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell us your security code immediately to avoid penalties.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your account will be locked. Share the code immediately.",
+        "category": "OTP"
+    },
+    {
+        "message": "Send the OTP before time runs out.",
+        "category": "OTP"
+    },
+    {
+        "message": "Tell the verification code now to avoid service interruption.",
+        "category": "OTP"
+    },
+    {
+        "message": "This is customer support. Please share your OTP for verification.",
+        "category": "OTP"
+    },
+    {
+        "message": "Our support team needs your verification code to help you.",
+        "category": "OTP"
+    },
+    {
+        "message": "The bank representative is requesting your OTP.",
+        "category": "OTP"
+    },
+    {
+        "message": "Customer care requires your one time password to resolve the issue.",
+        "category": "OTP"
+    },
+    {
+        "message": "Our agent needs the security code sent to your phone.",
+        "category": "OTP"
+    },
+    {
+        "message": "Technical support requires your OTP to fix your account.",
+        "category": "OTP"
+    },
+    {
+        "message": "The account manager needs your verification code immediately.",
+        "category": "OTP"
+    },
+    {
+        "message": "Our executive is waiting for your OTP to complete the process.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share your one time password with the support representative.",
+        "category": "OTP"
+    },
+    {
+        "message": "The service agent needs your OTP for account confirmation.",
+        "category": "OTP"
+    },
+    {
+        "message": "Please tell our representative the code you received.",
+        "category": "OTP"
+    },
+    {
+        "message": "The bank support officer requires your OTP.",
+        "category": "OTP"
+    },
+    {
+        "message": "Our customer care team needs the login verification code.",
+        "category": "OTP"
+    },
+    {
+        "message": "Share the security code with the official looking support agent.",
+        "category": "OTP"
+    },
+    {
+        "message": "Your payment of Rs 500 was completed successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment of Rs 1,250 has been received successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your transaction for Rs 750 was successful.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment completed successfully for your recent purchase.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your bill payment has been processed successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "We have received your payment of Rs 2,000.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your card payment was completed successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Transaction successful. Rs 1,500 has been paid.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your utility bill payment has been received.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment confirmation: Rs 650 paid successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your subscription payment was processed successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "The transaction amount has been successfully paid.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your payment has been accepted and confirmed.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Rs 2,500 payment completed successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your credit card payment was successful.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment received. Thank you for your transaction.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Rs 500 has been debited from your bank account.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your account has been credited with Rs 2,000.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "An amount of Rs 750 was debited from your account.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Rs 1,200 has been credited to your account.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your account was debited by ₹999.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "An amount of ₹3,000 has been credited successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Rs 450 was deducted from your bank account.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your account was credited with ₹1,500.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "An amount of Rs 600 has been debited successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your account balance was reduced by Rs 350.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "A credit of Rs 2,750 has been received.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Rs 875 was debited from your account.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your account has been credited with Rs 4,500.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "A debit of ₹1,100 was made from your account.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your payment of Rs 800 could not be completed.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "The transaction failed due to insufficient balance.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your payment is currently pending.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment unsuccessful. Please try again later.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your recent transaction could not be processed.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "The payment was declined by your bank.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your payment could not be completed at this time.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Transaction failed. No amount has been deducted.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your UPI payment is pending.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "The payment was cancelled before completion.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your recent transaction was declined.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment processing is delayed. Please check later.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your UPI payment of Rs 450 was successful.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "UPI transaction completed successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Rs 750 was sent successfully through UPI.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your UPI transfer has been completed.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Payment received through UPI successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your UPI transaction is pending confirmation.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "A UPI payment of ₹1,000 has been processed.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your digital wallet payment was successful.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Money transfer completed successfully.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your UPI transaction reference has been generated.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Enter your UPI PIN to receive your refund.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Provide your UPI PIN to receive Rs 5,000 cashback.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Enter your UPI PIN to accept the refund payment.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Use your UPI PIN to receive the reward amount.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Share your UPI PIN to receive the pending payment.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Enter your UPI PIN to receive the prize money.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Provide the UPI PIN to receive the credited amount.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Enter your PIN to accept the money transfer.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Use your UPI PIN to receive your reward.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Enter your UPI PIN immediately to claim Rs 10,000.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Scan this QR code to receive your refund.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Scan the QR code to receive Rs 2,000.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Scan this code to collect your cashback.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Use the QR code to receive your pending refund.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Approve the collect request to receive your money.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Accept the UPI collect request to get your refund.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Approve this collect request to receive Rs 5,000.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Accept the payment request to claim your prize.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Approve the transaction request to receive cashback.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Scan the QR code and enter your PIN to receive payment.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Accept the collect request to receive the credited amount.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "You have won Rs 10,000. Complete payment verification to receive it.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Pay a small fee to receive your cashback reward.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your refund requires a verification payment first.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Send Rs 100 to unlock your reward money.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Transfer a small amount to activate your cashback.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your prize money is ready. Pay the release charge first.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Make a payment now to receive your reward.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Pay the verification amount to complete your refund.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your cashback will expire unless you complete the payment.",
+        "category": "PAYMENT"
+    },
+    {
+        "message": "Your bank account has been suspended. Verify your identity at http://bank-verify-now.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Update your KYC immediately using http://secure-kyc-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account will be blocked today. Confirm your details at http://account-check.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Unusual activity was detected. Secure your account at http://bank-security.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your bank login has expired. Sign in again at http://secure-login.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Verify your PAN details immediately at http://pan-verification.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account needs urgent verification. Visit http://verify-account.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Update your banking information at http://bank-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your debit card has been temporarily blocked. Reactivate it at http://card-reactivate.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Confirm your account information at http://customer-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your KYC verification is pending. Complete it at http://kyc-complete.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your bank account will be frozen. Verify now at http://account-secure.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "We detected suspicious activity. Confirm your identity at http://security-check.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account requires immediate action. Visit http://urgent-bank-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your banking profile is incomplete. Update it at http://profile-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Verify your registered mobile number at http://mobile-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account access will expire. Renew it at http://account-renew.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Confirm your bank details to avoid account suspension at http://verify-bank.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Congratulations! You won a cash reward. Claim it at http://claim-cash.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "You have been selected for a special prize. Visit http://prize-claim.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Claim your reward before it expires at http://reward-now.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "You won a free gift. Confirm your details at http://free-gift.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your cashback is ready. Collect it at http://cashback-claim.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "You are eligible for a bonus reward. Visit http://bonus-reward.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Congratulations! Claim your lucky prize at http://lucky-prize.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "You have won Rs 10,000. Claim now at http://winner-claim.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "A special offer has been reserved for you. Visit http://special-offer.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your reward points are expiring. Redeem them at http://points-redeem.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Claim your festival prize at http://festival-reward.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "You have been selected for a cashback reward at http://cash-reward.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your free voucher is ready. Get it at http://voucher-claim.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Congratulations! Your prize is waiting at http://prize-center.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your refund is pending. Complete verification at http://refund-process.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "A payment failed. Update your details at http://payment-update-now.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your transaction requires confirmation at http://transaction-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your refund has been approved. Submit details at http://refund-claim.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your cashback payment is pending. Confirm at http://cashback-confirm.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your UPI account needs verification at http://upi-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "A refund of Rs 5,000 is waiting. Claim it at http://refund-money.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your payment account will be restricted. Update it at http://payment-secure.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Confirm your transaction immediately at http://transaction-confirm.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your payment failed due to verification. Visit http://payment-help.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Update your billing details at http://billing-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your refund request is ready. Complete it at http://refund-ready.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "A payment reversal is pending. Visit http://payment-reversal.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Verify your UPI details at http://upi-security.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your parcel is waiting. Track it at http://parcel-track.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your delivery requires confirmation at http://delivery-confirm.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your package cannot be delivered. Update details at http://package-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Track your shipment immediately at http://shipment-track.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your parcel is on hold. Visit http://parcel-release.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "A delivery attempt failed. Reschedule at http://redelivery-now.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your order is waiting for confirmation at http://order-confirm.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your package has a pending issue. Check http://delivery-alert.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your shipment will be returned. Confirm at http://shipment-confirm.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Update your delivery address at http://address-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your parcel requires verification at http://parcel-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your courier status has changed. Visit http://courier-status.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your password expires today. Reset it at http://password-reset-now.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account login was detected from a new device. Check http://login-alert.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your social account will be disabled. Verify at http://social-secure.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Confirm your email account at http://email-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your password needs immediate updating at http://password-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Suspicious login detected. Secure your account at http://login-security.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your email storage is full. Upgrade at http://mail-storage.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account will be deleted. Verify now at http://account-restore.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "A security update is required. Visit http://security-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your login session has expired. Sign in at http://session-renew.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Verify your account ownership at http://ownership-check.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account has been limited. Restore access at http://access-restore.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your tax refund is approved. Claim it at http://tax-refund-now.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Income tax verification is required. Visit http://tax-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your PAN has been flagged. Update details at http://pan-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Government refund payment is pending at http://gov-refund.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your Aadhaar verification is incomplete. Visit http://aadhaar-check.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Tax information must be updated at http://tax-update.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your government benefit is ready. Claim at http://benefit-claim.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Verify your identity for government services at http://gov-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your tax account requires urgent action at http://tax-alert.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "A government payment is waiting. Visit http://payment-government.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "URGENT: Verify your account immediately at http://urgent-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Action required now. Visit http://account-action.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your service will be stopped today. Confirm at http://service-confirm.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Immediate verification required at http://verify-immediately.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account has an important alert. Check http://important-alert.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Confirm your information before midnight at http://midnight-confirm.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your profile requires urgent verification at http://profile-verify.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Security action is required now. Visit http://security-action.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Click http://verify-now.xyz to prevent account closure",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Your account requires confirmation. Visit http://confirm-account.xyz",
+        "category": "PHISHING"
+    },
+    {
+        "message": "Get 10 percent off on your next purchase.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy 20 percent discount on selected products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Save 30 percent when you shop today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get up to 50 percent off on selected items.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Limited time discount available now.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Special discount for all customers today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Save big with our exclusive discount.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Extra savings available on your favorite products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Unlock amazing discounts when you shop now.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Save more with our limited time sale.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get special prices on selected items.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Exclusive discount available for members.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop today and enjoy instant savings.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Save up to 40 percent on your purchase.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Special price reduction available now.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get great savings before the offer ends.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Discount prices available for a limited time.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Our weekend sale starts today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "The mega sale is now live.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop during our special seasonal sale.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Big sale available on selected products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "The year end sale has started.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy amazing prices during our sale.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Our flash sale ends tonight.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Special sale prices are available now.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "The holiday sale is now open.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Don't miss our special weekend sale.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "The clearance sale starts now.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Great deals are available in our sale.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Our special shopping event begins today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop more and save during the sale.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Sale prices available while stocks last.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Discover new deals in our latest sale.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Special sale offers are ending soon.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy reduced prices across selected products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Special offer available just for you.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Don't miss this limited time offer.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "A new exclusive offer is now available.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Claim our special shopping offer today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy this offer before it expires.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Limited time offer on selected products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get exclusive benefits with this special offer.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "A fantastic offer is waiting for you.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Today's special offer is now live.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Take advantage of our latest offer.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "An exclusive customer offer is available now.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop now to enjoy this special offer.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Your personalized offer is ready.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "New promotional offers are available today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Explore our special limited time offers.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop now and discover amazing deals.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Buy now and enjoy special savings.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop your favorite products today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Explore new products at great prices.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Buy today before the offer ends.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Start shopping and save more.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop now for exclusive deals.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Discover special products at discounted prices.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Buy your favorites at special prices.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Explore our latest collection now.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Find exciting deals when you shop today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Shop selected items at reduced prices.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Buy more and save more today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Start shopping before the promotion ends.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Use your coupon to save on your next order.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "A special coupon is available for you.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Apply the discount coupon at checkout.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get extra savings with our coupon code.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Your shopping voucher is now available.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Redeem your voucher on selected products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Use this promotional code to save more.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "A new voucher offer is available today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Apply your coupon before it expires.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get instant savings using our promo code.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Your exclusive coupon is ready to use.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Buy two products and get special savings.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Buy one and get another at a reduced price.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy bundle savings on selected products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Purchase more items and unlock extra discounts.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get more value with our product bundles.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Buy selected products together and save.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy extra savings when you buy multiple items.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Special multi buy offer available now.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get a bonus item with selected purchases.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Exclusive member deals are available today.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy special benefits as a valued customer.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Members can access exclusive shopping offers.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Unlock loyalty rewards on your next purchase.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Special customer deals are now available.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy exclusive savings as a registered member.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Your loyalty offer is ready to use.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Get member only prices on selected products.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Exclusive rewards are available for loyal customers.",
+        "category": "PROMOTION"
+    },
+    {
+        "message": "Enjoy special shopping benefits today.",
+        "category": "PROMOTION"
+    }
+]

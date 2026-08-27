@@ -1,0 +1,1549 @@
+{
+    "total_examples": 200,
+    "category_accuracy": 0.94,
+    "safety_accuracy": 0.54,
+    "risk_distribution": {
+        "LOW": 146,
+        "MEDIUM": 26,
+        "HIGH": 28
+    },
+    "critical_overrides": 28,
+    "false_negative_count": 127,
+    "dangerous_failure_count": 86,
+    "false_negatives": [
+        {
+            "message": "Your bank has requested additional identity documents for account verification.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 2
+        },
+        {
+            "message": "Please visit the branch to update your customer information.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 29
+        },
+        {
+            "message": "Your savings account requires verification before the review date.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 3
+        },
+        {
+            "message": "The bank has issued a new debit card for your account.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 8
+        },
+        {
+            "message": "Your account profile information has been successfully updated.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 6
+        },
+        {
+            "message": "Please review the latest terms for your current account.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 2
+        },
+        {
+            "message": "Your bank statement for the previous quarter is now available.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 15
+        },
+        {
+            "message": "The branch has scheduled an appointment regarding your account services.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 3
+        },
+        {
+            "message": "Your cheque book request has been approved by the bank.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 5
+        },
+        {
+            "message": "Your debit card replacement request has been processed.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 8
+        },
+        {
+            "message": "The bank has received your request for account modification.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 7
+        },
+        {
+            "message": "Your account maintenance details are available in mobile banking.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 4
+        },
+        {
+            "message": "Please confirm your registered address with the bank.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 30
+        },
+        {
+            "message": "Your banking profile requires an annual information review.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 2
+        },
+        {
+            "message": "The bank has completed verification of your submitted documents.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 3
+        },
+        {
+            "message": "Your savings account service request has been registered.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 7
+        },
+        {
+            "message": "A new banking service has been activated for your account.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 4
+        },
+        {
+            "message": "Please contact your branch regarding your account inquiry.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 28
+        },
+        {
+            "message": "Your account nominee details have been successfully updated.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 6
+        },
+        {
+            "message": "The bank has generated your annual account summary.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 5
+        },
+        {
+            "message": "Your courier has reached the final delivery hub.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "The delivery agent will arrive at your location this afternoon.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your order is currently moving between distribution centers.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "The package has been scanned at the destination warehouse.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your shipment is expected to reach you by Tuesday.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "The courier company has received your parcel from the seller.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your delivery window has been changed to tomorrow morning.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "GENERAL",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "The package is being sorted before final dispatch.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your order has arrived at the regional distribution center.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "The delivery agent was unable to contact you during the first attempt.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your parcel can be collected from the authorized pickup point.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 28
+        },
+        {
+            "message": "The shipment has departed from the central warehouse.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your package is scheduled for the next available delivery slot.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "The courier tracking status has been updated successfully.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 3
+        },
+        {
+            "message": "Your order is waiting for the delivery vehicle assignment.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "The package has reached the nearest courier office.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your shipment is currently travelling to your city.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 27
+        },
+        {
+            "message": "The delivery team will make another attempt tomorrow.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your parcel has been transferred to the local courier partner.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Your order has completed the dispatch process.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "I am calling from your bank security department, give me your verification code.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 39
+        },
+        {
+            "message": "I am your company administrator, send payment for urgent account approval.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "JOB",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 13
+        },
+        {
+            "message": "I am from customer support, install this software so I can fix your device.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 37
+        },
+        {
+            "message": "I represent a government agency and need your account information.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "JOB",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 32
+        },
+        {
+            "message": "I am calling from your mobile provider and need access to your account.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 39
+        },
+        {
+            "message": "Our company HR department requires payment before confirming your employment.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 35
+        },
+        {
+            "message": "I am from official support, give me control of your computer to resolve the issue.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 31
+        },
+        {
+            "message": "I am your bank executive, tell me your PIN for account verification.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "OTP",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 35
+        },
+        {
+            "message": "I am from the service center, download this application for assistance.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 5
+        },
+        {
+            "message": "I am an authorized officer and need your banking credentials for verification.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 6
+        },
+        {
+            "message": "Our trading platform promises exceptional returns with minimal risk.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 37
+        },
+        {
+            "message": "Join our trading group for assured daily earnings.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 34
+        },
+        {
+            "message": "Our experts guarantee consistent profits from the stock market.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 34
+        },
+        {
+            "message": "Earn passive income every day through this special investment plan.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 37
+        },
+        {
+            "message": "Our investment advisor promises fixed returns on every deposit.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 11
+        },
+        {
+            "message": "Limited seats remain for this high-profit trading program.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 9
+        },
+        {
+            "message": "Receive guaranteed monthly income from our investment package.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 39
+        },
+        {
+            "message": "This market strategy promises profit regardless of market conditions.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 5
+        },
+        {
+            "message": "Join the private investment group before registrations close.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 36
+        },
+        {
+            "message": "Your investment can generate extraordinary returns in a short time.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 36
+        },
+        {
+            "message": "Our automated trading system guarantees profitable transactions.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 32
+        },
+        {
+            "message": "Get assured returns from our special wealth growth program.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 31
+        },
+        {
+            "message": "Work from home opportunities are available after paying the registration charge.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 31
+        },
+        {
+            "message": "Complete the payment to receive your employment confirmation.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 36
+        },
+        {
+            "message": "Your job application has been approved, pay the required onboarding fee.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 11
+        },
+        {
+            "message": "Pay the training charge to begin your new job.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 39
+        },
+        {
+            "message": "A remote job is available with guaranteed income after registration payment.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 33
+        },
+        {
+            "message": "The company requires a deposit before starting your assigned role.",
+            "expected_category": "JOB",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 1
+        },
+        {
+            "message": "Submit the joining amount to activate your employment profile.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 33
+        },
+        {
+            "message": "Complete the payment to finish your recruitment procedure.",
+            "expected_category": "JOB",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 32
+        },
+        {
+            "message": "A government position is available after payment of the service charge.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 5
+        },
+        {
+            "message": "Your recruiter has approved the application, send the registration amount.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 7
+        },
+        {
+            "message": "Earn from home after paying the initial account activation fee.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 34
+        },
+        {
+            "message": "Your login verification code is 741852. Never share this code.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 14
+        },
+        {
+            "message": "Use security code 369147 to complete authentication.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 9
+        },
+        {
+            "message": "Your one-time verification number is 852963.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 7
+        },
+        {
+            "message": "The code for confirming your login is 147258.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 12
+        },
+        {
+            "message": "Your secure access code is 963852. Keep it private.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 29
+        },
+        {
+            "message": "Enter verification number 258741 to continue.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 31
+        },
+        {
+            "message": "Your authentication code is 654321.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 7
+        },
+        {
+            "message": "Do not disclose the security code 456123 to anyone.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 8
+        },
+        {
+            "message": "The one-time login code is 789456.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 10
+        },
+        {
+            "message": "Your account confirmation number is 321654.",
+            "expected_category": "OTP",
+            "predicted_category": "BANKING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 2
+        },
+        {
+            "message": "Tell me the verification code you received so I can complete the process.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 13
+        },
+        {
+            "message": "Share the security code sent to your mobile number.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 33
+        },
+        {
+            "message": "I need the OTP you received to verify your account.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 34
+        },
+        {
+            "message": "Forward the verification number from your message to complete the refund.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 31
+        },
+        {
+            "message": "Give me the code sent to your phone for confirmation.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 30
+        },
+        {
+            "message": "Share your verification number to complete account validation.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 33
+        },
+        {
+            "message": "Tell me the one-time code before it expires.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 12
+        },
+        {
+            "message": "An amount of Rs 1500 has been credited to your account.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 8
+        },
+        {
+            "message": "Your recent card transaction has been completed successfully.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 6
+        },
+        {
+            "message": "Rs 2750 was debited from your account.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 10
+        },
+        {
+            "message": "The payment of Rs 899 has been processed.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 12
+        },
+        {
+            "message": "Your bank has confirmed the successful transaction.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 4
+        },
+        {
+            "message": "A payment request for Rs 1200 is awaiting your approval.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 9
+        },
+        {
+            "message": "Your account received a credit of Rs 500.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 9
+        },
+        {
+            "message": "The transfer was completed successfully.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 8
+        },
+        {
+            "message": "Your card was charged Rs 320 for the purchase.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 3
+        },
+        {
+            "message": "Payment confirmation has been generated for your transaction.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 8
+        },
+        {
+            "message": "Approve the collect request to receive the refund amount.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 36
+        },
+        {
+            "message": "Your refund requires confirmation through a UPI request.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 5
+        },
+        {
+            "message": "A collect request has been sent to your UPI application.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 5
+        },
+        {
+            "message": "Approve the transaction request to claim your refund.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 32
+        },
+        {
+            "message": "Your wallet payment of Rs 650 was successful.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 10
+        },
+        {
+            "message": "The merchant payment has been completed.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 8
+        },
+        {
+            "message": "An urgent banking notice is available at http://banking-alert.xyz",
+            "expected_category": "PHISHING",
+            "predicted_category": "PHISHING",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 38
+        },
+        {
+            "message": "Flash sale begins today with discounts across selected items.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 10
+        },
+        {
+            "message": "Get special savings when you shop before the weekend.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "A new promotional offer is available for registered customers.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Save more with our limited-time shopping deal.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Enjoy discounted prices on selected products this week.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Special customer offers are now available in our store.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 10
+        },
+        {
+            "message": "Shop today and receive exciting discounts on popular items.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 36
+        },
+        {
+            "message": "Our seasonal sale includes deals on many products.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Buy selected items now and enjoy special savings.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 10
+        },
+        {
+            "message": "A limited promotional campaign starts this evening.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "GENERAL",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 25
+        },
+        {
+            "message": "Discover exclusive deals available for a short period.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Get extra savings on your next purchase.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Special prices are available while stock lasts.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Don't miss this week's featured shopping offers.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "GENERAL",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 26
+        },
+        {
+            "message": "New discounts have been added to our product collection.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SCAM",
+            "risk": "LOW",
+            "risk_score": 26
+        },
+        {
+            "message": "Enjoy a special deal on selected categories today.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 10
+        },
+        {
+            "message": "Our promotional event offers savings for all customers.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Shop the latest offers before the campaign ends.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Limited-time discounts are available on featured products.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        },
+        {
+            "message": "Take advantage of special prices during our current sale.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "predicted_safety": "SAFE",
+            "risk": "LOW",
+            "risk_score": 0
+        }
+    ],
+    "dangerous_failures": [
+        {
+            "message": "Your bank has requested additional identity documents for account verification.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 2
+        },
+        {
+            "message": "Your savings account requires verification before the review date.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 3
+        },
+        {
+            "message": "The bank has issued a new debit card for your account.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 8
+        },
+        {
+            "message": "Your account profile information has been successfully updated.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 6
+        },
+        {
+            "message": "Please review the latest terms for your current account.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 2
+        },
+        {
+            "message": "Your bank statement for the previous quarter is now available.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 15
+        },
+        {
+            "message": "The branch has scheduled an appointment regarding your account services.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 3
+        },
+        {
+            "message": "Your cheque book request has been approved by the bank.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 5
+        },
+        {
+            "message": "Your debit card replacement request has been processed.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 8
+        },
+        {
+            "message": "The bank has received your request for account modification.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 7
+        },
+        {
+            "message": "Your account maintenance details are available in mobile banking.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 4
+        },
+        {
+            "message": "Your banking profile requires an annual information review.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 2
+        },
+        {
+            "message": "The bank has completed verification of your submitted documents.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 3
+        },
+        {
+            "message": "Your savings account service request has been registered.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 7
+        },
+        {
+            "message": "A new banking service has been activated for your account.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 4
+        },
+        {
+            "message": "Your account nominee details have been successfully updated.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 6
+        },
+        {
+            "message": "The bank has generated your annual account summary.",
+            "expected_category": "BANKING",
+            "predicted_category": "BANKING",
+            "risk_score": 5
+        },
+        {
+            "message": "Your courier has reached the final delivery hub.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "The delivery agent will arrive at your location this afternoon.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "Your order is currently moving between distribution centers.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "The package has been scanned at the destination warehouse.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "Your shipment is expected to reach you by Tuesday.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "The courier company has received your parcel from the seller.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "Your delivery window has been changed to tomorrow morning.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "GENERAL",
+            "risk_score": 0
+        },
+        {
+            "message": "The package is being sorted before final dispatch.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "Your order has arrived at the regional distribution center.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "The delivery agent was unable to contact you during the first attempt.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "The shipment has departed from the central warehouse.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "Your package is scheduled for the next available delivery slot.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "The courier tracking status has been updated successfully.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "BANKING",
+            "risk_score": 3
+        },
+        {
+            "message": "Your order is waiting for the delivery vehicle assignment.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "The package has reached the nearest courier office.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "The delivery team will make another attempt tomorrow.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "Your parcel has been transferred to the local courier partner.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "Your order has completed the dispatch process.",
+            "expected_category": "DELIVERY",
+            "predicted_category": "DELIVERY",
+            "risk_score": 0
+        },
+        {
+            "message": "I am your company administrator, send payment for urgent account approval.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "JOB",
+            "risk_score": 13
+        },
+        {
+            "message": "I am from the service center, download this application for assistance.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "risk_score": 5
+        },
+        {
+            "message": "I am an authorized officer and need your banking credentials for verification.",
+            "expected_category": "IMPERSONATION",
+            "predicted_category": "IMPERSONATION",
+            "risk_score": 6
+        },
+        {
+            "message": "Our investment advisor promises fixed returns on every deposit.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "risk_score": 11
+        },
+        {
+            "message": "Limited seats remain for this high-profit trading program.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "risk_score": 9
+        },
+        {
+            "message": "This market strategy promises profit regardless of market conditions.",
+            "expected_category": "INVESTMENT",
+            "predicted_category": "INVESTMENT",
+            "risk_score": 5
+        },
+        {
+            "message": "Your job application has been approved, pay the required onboarding fee.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "risk_score": 11
+        },
+        {
+            "message": "The company requires a deposit before starting your assigned role.",
+            "expected_category": "JOB",
+            "predicted_category": "BANKING",
+            "risk_score": 1
+        },
+        {
+            "message": "A government position is available after payment of the service charge.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "risk_score": 5
+        },
+        {
+            "message": "Your recruiter has approved the application, send the registration amount.",
+            "expected_category": "JOB",
+            "predicted_category": "JOB",
+            "risk_score": 7
+        },
+        {
+            "message": "Your login verification code is 741852. Never share this code.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 14
+        },
+        {
+            "message": "Use security code 369147 to complete authentication.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 9
+        },
+        {
+            "message": "Your one-time verification number is 852963.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 7
+        },
+        {
+            "message": "The code for confirming your login is 147258.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 12
+        },
+        {
+            "message": "Your authentication code is 654321.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 7
+        },
+        {
+            "message": "Do not disclose the security code 456123 to anyone.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 8
+        },
+        {
+            "message": "The one-time login code is 789456.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 10
+        },
+        {
+            "message": "Your account confirmation number is 321654.",
+            "expected_category": "OTP",
+            "predicted_category": "BANKING",
+            "risk_score": 2
+        },
+        {
+            "message": "Tell me the verification code you received so I can complete the process.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 13
+        },
+        {
+            "message": "Tell me the one-time code before it expires.",
+            "expected_category": "OTP",
+            "predicted_category": "OTP",
+            "risk_score": 12
+        },
+        {
+            "message": "An amount of Rs 1500 has been credited to your account.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 8
+        },
+        {
+            "message": "Your recent card transaction has been completed successfully.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 6
+        },
+        {
+            "message": "Rs 2750 was debited from your account.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 10
+        },
+        {
+            "message": "The payment of Rs 899 has been processed.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 12
+        },
+        {
+            "message": "Your bank has confirmed the successful transaction.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 4
+        },
+        {
+            "message": "A payment request for Rs 1200 is awaiting your approval.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 9
+        },
+        {
+            "message": "Your account received a credit of Rs 500.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 9
+        },
+        {
+            "message": "The transfer was completed successfully.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 8
+        },
+        {
+            "message": "Your card was charged Rs 320 for the purchase.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 3
+        },
+        {
+            "message": "Payment confirmation has been generated for your transaction.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 8
+        },
+        {
+            "message": "Your refund requires confirmation through a UPI request.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 5
+        },
+        {
+            "message": "A collect request has been sent to your UPI application.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 5
+        },
+        {
+            "message": "Your wallet payment of Rs 650 was successful.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 10
+        },
+        {
+            "message": "The merchant payment has been completed.",
+            "expected_category": "PAYMENT",
+            "predicted_category": "PAYMENT",
+            "risk_score": 8
+        },
+        {
+            "message": "An urgent banking notice is available at http://banking-alert.xyz",
+            "expected_category": "PHISHING",
+            "predicted_category": "PHISHING",
+            "risk_score": 38
+        },
+        {
+            "message": "Flash sale begins today with discounts across selected items.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 10
+        },
+        {
+            "message": "Get special savings when you shop before the weekend.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "A new promotional offer is available for registered customers.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Save more with our limited-time shopping deal.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Enjoy discounted prices on selected products this week.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Special customer offers are now available in our store.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 10
+        },
+        {
+            "message": "Our seasonal sale includes deals on many products.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Buy selected items now and enjoy special savings.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 10
+        },
+        {
+            "message": "Discover exclusive deals available for a short period.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Get extra savings on your next purchase.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Special prices are available while stock lasts.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Enjoy a special deal on selected categories today.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 10
+        },
+        {
+            "message": "Our promotional event offers savings for all customers.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Shop the latest offers before the campaign ends.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Limited-time discounts are available on featured products.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        },
+        {
+            "message": "Take advantage of special prices during our current sale.",
+            "expected_category": "PROMOTION",
+            "predicted_category": "PROMOTION",
+            "risk_score": 0
+        }
+    ]
+}

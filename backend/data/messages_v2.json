@@ -1,0 +1,258 @@
+[
+  {
+    "message": "Your OTP is 123456. Do not share this code.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Use verification code 987654 to login.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Your one time password is 456789.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Security alert: enter OTP 111222 to verify.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Never share your verification code 333444.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Your account verification OTP is 555666.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Your bank account has been debited Rs 500.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Payment of Rs 1200 was successful.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Your account has been credited with Rs 3000.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Transaction successful. Amount Rs 750.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Rs 999 has been deducted from your account.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Payment received successfully.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Huge discount! Buy now and save 50 percent.",
+    "category": "PROMOTION"
+  },
+  {
+    "message": "Special offer available for a limited time.",
+    "category": "PROMOTION"
+  },
+  {
+    "message": "Sale starts today. Get amazing discounts.",
+    "category": "PROMOTION"
+  },
+  {
+    "message": "Buy one get one free on selected products.",
+    "category": "PROMOTION"
+  },
+  {
+    "message": "Exclusive promotion just for you.",
+    "category": "PROMOTION"
+  },
+  {
+    "message": "Shop now and save big on your favorite items.",
+    "category": "PROMOTION"
+  },
+  {
+    "message": "Hi, let's meet tomorrow for lunch.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Can you call me when you are free?",
+    "category": "NORMAL"
+  },
+  {
+    "message": "I will reach home by 7 PM.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Happy birthday! Have a wonderful day.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Please send me the meeting details.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Don't forget our appointment tomorrow.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "URGENT: Your bank account has been suspended. Verify immediately at http://secure-bank-update.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Your account will be blocked today. Update your KYC now: http://kyc-update-secure.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Congratulations! You have won a reward. Claim now at http://claim-reward-now.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Your password expires today. Reset immediately using http://secure-password-reset.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Dear customer, unusual activity detected. Secure your account here: http://account-security-alert.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Your parcel is waiting. Pay a small delivery fee here: http://delivery-fee.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Income tax refund approved. Submit bank details at http://tax-refund-claim.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Your social media account will be deleted in 24 hours. Verify now: http://social-verify.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Security alert: confirm your card details at http://card-secure-check.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Your subscription payment failed. Update payment details: http://payment-update.xyz",
+    "category": "PHISHING"
+  },
+  {
+    "message": "Share the OTP you just received so we can verify your bank account.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Your refund is ready. Send us the OTP to complete the transfer.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Our bank executive is calling you. Please provide the OTP for verification.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Tell me the OTP quickly or your account verification will fail.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "You received an OTP by mistake. Please forward it to me.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "To receive your prize money, share the OTP sent to your phone.",
+    "category": "OTP_OR_SECURITY"
+  },
+  {
+    "message": "Your OTP is 482913 for login. Do not share this OTP with anyone.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Use OTP 738291 to complete your login. It expires in 10 minutes. Do not share it.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your one-time password is 112233. Never share this code with anyone.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "OTP 928374 is required to verify your transaction. Do not disclose this OTP to anyone.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Enter your UPI PIN to receive ₹5,000 cashback.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Scan this QR code to receive your refund of ₹2,500.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "You won ₹10,000. Approve the collect request and enter your UPI PIN.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Your payment failed. Enter your UPI PIN again to receive a refund.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "We accidentally sent you money. Approve the request and enter your UPI PIN to return it.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "Complete this reward withdrawal by entering your UPI PIN.",
+    "category": "PAYMENT"
+  },
+  {
+    "message": "You have received ₹500 from Rahul via UPI.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your UPI payment of ₹250 to Merchant Store was successful.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "A payment request of ₹300 has been received. Review the request carefully before approving.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your UPI transaction was declined due to insufficient balance.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your bank account statement for August is now available in the official mobile banking app.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your electricity bill of ₹850 is due on 30 August. Pay using the official provider app or website.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your order has been dispatched and is expected to arrive tomorrow.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your interview is scheduled for Monday at 10 AM. Please join using the official meeting link sent by the recruiter.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your credit card payment of ₹4,500 was successfully received.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Reminder: Your appointment is scheduled for tomorrow at 3 PM.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your password was changed successfully. If this was not you, contact support through the official app.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your package is out for delivery today.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Your monthly mobile bill is ready. View and pay it through the official mobile operator app.",
+    "category": "NORMAL"
+  },
+  {
+    "message": "Thank you for your payment. Your transaction has been completed successfully.",
+    "category": "NORMAL"
+  }
+]

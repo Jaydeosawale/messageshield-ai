@@ -1,0 +1,23 @@
+{
+  "accuracy": 0.875,
+  "precision_weighted": 0.880357142857143,
+  "recall_weighted": 0.875,
+  "f1_weighted": 0.8761343012704175,
+  "classes": [
+    "SAFE",
+    "SCAM"
+  ],
+  "confusion_matrix": [
+    [
+      13,
+      2
+    ],
+    [
+      1,
+      8
+    ]
+  ],
+  "train_size": 70,
+  "test_size": 24,
+  "dataset_size": 94
+}

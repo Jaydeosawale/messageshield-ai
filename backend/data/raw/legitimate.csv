@@ -1,0 +1,11 @@
+id,text,label,category,severity,risk_signals,explanation,action,source
+1,"Your bank account statement for August is now available in the official mobile banking app.",SAFE,LEGITIMATE_BANK,LOW,"account_notification","Standard bank service notification.","Open the official banking app if needed.","seed"
+2,"Your electricity bill of ₹850 is due on 30 August. Pay using the official provider app or website.",SAFE,BILL_NOTIFICATION,LOW,"bill_notification","Routine bill reminder.","Use the official provider channel for payment.","seed"
+3,"Your order has been dispatched and is expected to arrive tomorrow.",SAFE,DELIVERY_UPDATE,LOW,"delivery_notification","Standard delivery status update.","Track the order through the official retailer or courier.","seed"
+4,"Your interview is scheduled for Monday at 10 AM. Please join using the official meeting link sent by the recruiter.",SAFE,JOB_NOTIFICATION,LOW,"job_notification","Standard interview communication.","Verify the sender if unexpected.","seed"
+5,"Your credit card payment of ₹4,500 was successfully received.",SAFE,BANK_TRANSACTION,LOW,"payment_confirmation","Standard payment confirmation.","Review it if you do not recognize the payment.","seed"
+6,"Reminder: Your appointment is scheduled for tomorrow at 3 PM.",SAFE,PERSONAL_NOTIFICATION,LOW,"reminder","Routine appointment reminder.","No action is required unless you need to reschedule.","seed"
+7,"Your password was changed successfully. If this was not you, contact support through the official app.",SAFE,SECURITY_NOTIFICATION,MEDIUM,"security_notification","Legitimate security notifications can warn about account changes.","Verify through the official app if you did not make the change.","seed"
+8,"Your package is out for delivery today.",SAFE,DELIVERY_UPDATE,LOW,"delivery_notification","Routine delivery update.","Track through the official courier if necessary.","seed"
+9,"Your monthly mobile bill is ready. View and pay it through the official mobile operator app.",SAFE,BILL_NOTIFICATION,LOW,"bill_notification","Routine billing notification.","Use official channels for payment.","seed"
+10,"Thank you for your payment. Your transaction has been completed successfully.",SAFE,PAYMENT_CONFIRMATION,LOW,"payment_confirmation","Standard payment confirmation.","Keep the transaction reference for your records.","seed"

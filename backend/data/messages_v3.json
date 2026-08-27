@@ -1,0 +1,322 @@
+[
+  {
+    "message": "Your OTP is 123456. Do not share this code.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Use verification code 987654 to login.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your one time password is 456789.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Security alert: enter OTP 111222 to verify.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Never share your verification code 333444.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your account verification OTP is 555666.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your bank account has been debited Rs 500.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Payment of Rs 1200 was successful.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your account has been credited with Rs 3000.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Transaction successful. Amount Rs 750.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Rs 999 has been deducted from your account.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Payment received successfully.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Huge discount! Buy now and save 50 percent.",
+    "category": "PROMOTION",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Special offer available for a limited time.",
+    "category": "PROMOTION",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Sale starts today. Get amazing discounts.",
+    "category": "PROMOTION",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Buy one get one free on selected products.",
+    "category": "PROMOTION",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Exclusive promotion just for you.",
+    "category": "PROMOTION",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Shop now and save big on your favorite items.",
+    "category": "PROMOTION",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Hi, let's meet tomorrow for lunch.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Can you call me when you are free?",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "I will reach home by 7 PM.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Happy birthday! Have a wonderful day.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Please send me the meeting details.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Don't forget our appointment tomorrow.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "URGENT: Your bank account has been suspended. Verify immediately at http://secure-bank-update.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Your account will be blocked today. Update your KYC now: http://kyc-update-secure.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Congratulations! You have won a reward. Claim now at http://claim-reward-now.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Your password expires today. Reset immediately using http://secure-password-reset.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Dear customer, unusual activity detected. Secure your account here: http://account-security-alert.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Your parcel is waiting. Pay a small delivery fee here: http://delivery-fee.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Income tax refund approved. Submit bank details at http://tax-refund-claim.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Your social media account will be deleted in 24 hours. Verify now: http://social-verify.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Security alert: confirm your card details at http://card-secure-check.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Your subscription payment failed. Update payment details: http://payment-update.xyz",
+    "category": "PHISHING",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Share the OTP you just received so we can verify your bank account.",
+    "category": "OTP",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Your refund is ready. Send us the OTP to complete the transfer.",
+    "category": "OTP",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Our bank executive is calling you. Please provide the OTP for verification.",
+    "category": "OTP",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Tell me the OTP quickly or your account verification will fail.",
+    "category": "OTP",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "You received an OTP by mistake. Please forward it to me.",
+    "category": "OTP",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "To receive your prize money, share the OTP sent to your phone.",
+    "category": "OTP",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Your OTP is 482913 for login. Do not share this OTP with anyone.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Use OTP 738291 to complete your login. It expires in 10 minutes. Do not share it.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your one-time password is 112233. Never share this code with anyone.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "OTP 928374 is required to verify your transaction. Do not disclose this OTP to anyone.",
+    "category": "OTP",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Enter your UPI PIN to receive ₹5,000 cashback.",
+    "category": "PAYMENT",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Scan this QR code to receive your refund of ₹2,500.",
+    "category": "PAYMENT",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "You won ₹10,000. Approve the collect request and enter your UPI PIN.",
+    "category": "PAYMENT",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Your payment failed. Enter your UPI PIN again to receive a refund.",
+    "category": "PAYMENT",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "We accidentally sent you money. Approve the request and enter your UPI PIN to return it.",
+    "category": "PAYMENT",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "Complete this reward withdrawal by entering your UPI PIN.",
+    "category": "PAYMENT",
+    "safety_label": "SCAM"
+  },
+  {
+    "message": "You have received ₹500 from Rahul via UPI.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your UPI payment of ₹250 to Merchant Store was successful.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "A payment request of ₹300 has been received. Review the request carefully before approving.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your UPI transaction was declined due to insufficient balance.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your bank account statement for August is now available in the official mobile banking app.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your electricity bill of ₹850 is due on 30 August. Pay using the official provider app or website.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your order has been dispatched and is expected to arrive tomorrow.",
+    "category": "DELIVERY",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your interview is scheduled for Monday at 10 AM. Please join using the official meeting link sent by the recruiter.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your credit card payment of ₹4,500 was successfully received.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Reminder: Your appointment is scheduled for tomorrow at 3 PM.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your password was changed successfully. If this was not you, contact support through the official app.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your package is out for delivery today.",
+    "category": "DELIVERY",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Your monthly mobile bill is ready. View and pay it through the official mobile operator app.",
+    "category": "GENERAL",
+    "safety_label": "SAFE"
+  },
+  {
+    "message": "Thank you for your payment. Your transaction has been completed successfully.",
+    "category": "PAYMENT",
+    "safety_label": "SAFE"
+  }
+]

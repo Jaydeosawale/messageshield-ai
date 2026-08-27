@@ -1,0 +1,11 @@
+id,text,label,category,severity,risk_signals,explanation,action,source
+1,"Share the OTP you just received so we can verify your bank account.",SCAM,OTP_FRAUD,CRITICAL,"otp_request|impersonation","A legitimate bank should not ask you to share your OTP.","Never share OTPs with anyone.","seed"
+2,"Your refund is ready. Send us the OTP to complete the transfer.",SCAM,OTP_FRAUD,CRITICAL,"otp_request|refund","Attempts to use a refund as a reason to obtain an OTP.","Do not share the OTP.","seed"
+3,"Our bank executive is calling you. Please provide the OTP for verification.",SCAM,OTP_FRAUD,CRITICAL,"otp_request|impersonation","Bank employees should not request your OTP.","Do not disclose the OTP and contact the bank officially.","seed"
+4,"Tell me the OTP quickly or your account verification will fail.",SCAM,OTP_FRAUD,HIGH,"urgency|otp_request","Uses urgency to pressure the user into sharing an OTP.","Never share OTPs.","seed"
+5,"You received an OTP by mistake. Please forward it to me.",SCAM,OTP_FRAUD,HIGH,"otp_request|social_engineering","Attempts to obtain an authentication OTP through social engineering.","Do not forward the OTP.","seed"
+6,"To receive your prize money, share the OTP sent to your phone.",SCAM,OTP_FRAUD,CRITICAL,"otp_request|lottery","Uses a prize claim to steal an OTP.","Do not share the OTP.","seed"
+7,"Your OTP is 482913 for login. Do not share this OTP with anyone.",SAFE,OTP_NOTIFICATION,LOW,"otp_notification","This is a standard OTP notification that explicitly warns not to share it.","Keep the OTP private.","seed"
+8,"Use OTP 738291 to complete your login. It expires in 10 minutes. Do not share it.",SAFE,OTP_NOTIFICATION,LOW,"otp_notification","Provides an OTP for the user's authentication and warns against sharing it.","Use it only for your intended login.","seed"
+9,"Your one-time password is 112233. Never share this code with anyone.",SAFE,OTP_NOTIFICATION,LOW,"otp_notification","Standard authentication notification.","Keep the code private.","seed"
+10,"OTP 928374 is required to verify your transaction. Do not disclose this OTP to anyone.",SAFE,OTP_NOTIFICATION,LOW,"otp_notification","A legitimate automated OTP notification.","Do not share the code.","seed"

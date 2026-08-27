@@ -1,0 +1,27 @@
+{
+    "model_name": "MessageShieldCategoryModel",
+    "model_version": "3",
+    "dataset": "messages_v5.json",
+    "total_examples": 169,
+    "categories": {
+        "OTP": 16,
+        "PAYMENT": 18,
+        "PROMOTION": 6,
+        "GENERAL": 17,
+        "PHISHING": 10,
+        "DELIVERY": 32,
+        "BANKING": 20,
+        "JOB": 20,
+        "INVESTMENT": 20,
+        "IMPERSONATION": 10
+    },
+    "train_examples": 126,
+    "test_examples": 43,
+    "accuracy": 0.5348837209302325,
+    "precision_weighted": 0.5636011275546159,
+    "recall_weighted": 0.5348837209302325,
+    "f1_weighted": 0.5088190878888553,
+    "precision_macro": 0.4888636363636364,
+    "recall_macro": 0.4575,
+    "f1_macro": 0.4330844155844155
+}
