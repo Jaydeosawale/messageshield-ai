@@ -3,7 +3,6 @@
 Revision ID: 57f1216aedb3
 Revises: 5eff4dc172e9
 Create Date: 2026-08-27
-
 """
 
 from typing import Sequence, Union
@@ -17,20 +16,9 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    """
-    These columns already exist in the database:
-
-    - safety_probabilities
-    - safety_model_name
-    - safety_model_version
-
-    This revision only synchronizes Alembic migration history.
-    """
+    """Columns already exist; mark this revision as applied."""
     pass
 
 
 def downgrade() -> None:
-    """
-    No database schema changes are performed by this revision.
-    """
     pass
