@@ -1,450 +1,505 @@
-from typing import Any
+import logging
+import re
 
 
-def contains_any(text: str, phrases: list[str]) -> bool:
-    return any(phrase in text for phrase in phrases)
+logger = logging.getLogger(__name__)
 
 
 def assess_risk(
     message: str,
     category: str,
     confidence: float,
-) -> dict[str, Any]:
+    safety_label: str,
+    safety_confidence: float,
+):
+    """
+    Combine:
 
-    text = message.lower().strip()
+    1. Safety ML model
+    2. Category ML model
+    3. Rule-based security signals
+    4. Critical scam pattern detection
+    5. Risk overrides
 
-    score = 0
-    signals: list[str] = []
+    Returns final risk level and score.
+    """
 
-    # =========================================
-    # 1. LEGITIMATE / PROTECTIVE CONTEXT
-    # =========================================
+    message_lower = message.lower()
 
-    protective_phrases = [
-        "do not share",
-        "don't share",
-        "never share",
-        "never disclose",
-        "do not disclose",
-        "don't disclose",
-        "keep your otp confidential",
-        "keep your pin confidential",
-        "keep your password confidential",
-        "we will never ask for",
-        "no bank will ask for",
-        "for your security",
-        "beware of fraud",
-        "beware of scams",
-        "protect yourself from fraud",
-        "do not click suspicious links",
-        "ignore suspicious messages",
-    ]
+    signals = []
 
-    has_protective_context = contains_any(
-        text,
-        protective_phrases,
+    risk_score = 0
+
+    detected_flags = set()
+
+
+    # ==================================================
+    # 1. SAFETY MODEL SIGNAL
+    # ==================================================
+
+    if safety_label == "SCAM":
+
+        safety_score = int(
+            safety_confidence * 50
+        )
+
+        risk_score += safety_score
+
+        detected_flags.add(
+            "SCAM"
+        )
+
+        signals.append({
+            "type": "SAFETY_MODEL",
+            "message": (
+                "Safety model detected potential scam"
+            ),
+            "score": safety_score,
+        })
+
+    else:
+
+        signals.append({
+            "type": "SAFETY_MODEL",
+            "message": (
+                "Safety model classified message as safe"
+            ),
+            "score": 0,
+        })
+
+
+    # ==================================================
+    # 2. CATEGORY RISK SIGNAL
+    # ==================================================
+
+    risky_categories = {
+        "PHISHING": 20,
+        "IMPERSONATION": 20,
+        "INVESTMENT": 15,
+        "OTP": 15,
+        "PAYMENT": 15,
+        "BANKING": 10,
+        "JOB": 15,
+    }
+
+    category_score = 0
+
+    if category in risky_categories:
+
+        category_score = int(
+            risky_categories[category]
+            * confidence
+        )
+
+        risk_score += category_score
+
+        detected_flags.add(
+            category
+        )
+
+        signals.append({
+            "type": "CATEGORY",
+            "message": (
+                f"Potentially risky category detected: "
+                f"{category}"
+            ),
+            "score": category_score,
+        })
+
+
+    # ==================================================
+    # 3. URL DETECTION
+    # ==================================================
+
+    url_pattern = (
+        r"(https?://\S+|www\.\S+)"
     )
 
-    if has_protective_context:
-        signals.append("protective_security_context")
+    if re.search(
+        url_pattern,
+        message_lower,
+    ):
 
-    # =========================================
-    # 2. URL DETECTION
-    # =========================================
+        risk_score += 15
 
-    url_indicators = [
-        "http://",
-        "https://",
-        "www.",
-        "bit.ly",
-        "tinyurl",
-        "goo.gl",
-        "t.co/",
-    ]
+        detected_flags.add(
+            "URL"
+        )
 
-    has_url = contains_any(
-        text,
-        url_indicators,
-    )
+        signals.append({
+            "type": "URL",
+            "message": (
+                "Message contains a link"
+            ),
+            "score": 15,
+        })
 
-    if has_url:
-        score += 2
-        signals.append("contains_url")
 
-    # =========================================
-    # 3. URGENCY / PRESSURE
-    # =========================================
+    # ==================================================
+    # 4. URGENCY DETECTION
+    # ==================================================
 
     urgency_words = [
         "urgent",
-        "urgently",
         "immediately",
-        "act now",
-        "action required",
-        "limited time",
-        "hurry",
-        "right now",
-        "within 24 hours",
-        "within 1 hour",
-        "last chance",
+        "immediate",
+        "now",
+        "today",
+        "quickly",
+        "within",
+        "avoid closure",
+        "will be blocked",
+        "suspended",
         "final warning",
-        "without delay",
-        "as soon as possible",
     ]
 
-    has_urgency = contains_any(
-        text,
-        urgency_words,
-    )
-
-    if has_urgency and not has_protective_context:
-        score += 2
-        signals.append("urgency_language")
-
-    # =========================================
-    # 4. ACCOUNT / CONSEQUENCE THREATS
-    # =========================================
-
-    threat_words = [
-        "account blocked",
-        "account suspended",
-        "account disabled",
-        "account closed",
-        "account will be blocked",
-        "account will be suspended",
-        "service will be stopped",
-        "service suspended",
-        "card blocked",
-        "card suspended",
-        "kyc expired",
-        "kyc will expire",
-        "legal action",
-        "police action",
-        "arrest warrant",
-        "you will be arrested",
-        "penalty",
-        "fine",
+    detected_urgency = [
+        word
+        for word in urgency_words
+        if word in message_lower
     ]
 
-    has_threat = contains_any(
-        text,
-        threat_words,
-    )
+    if detected_urgency:
 
-    if has_threat and not has_protective_context:
-        score += 2
-        signals.append("account_or_consequence_threat")
+        risk_score += 10
 
-    # =========================================
-    # 5. SENSITIVE INFORMATION
-    # =========================================
-
-    sensitive_items = {
-        "otp": [
-            "otp",
-            "one time password",
-            "one-time password",
-            "verification code",
-            "security code",
-        ],
-        "cvv": [
-            "cvv",
-            "cvc",
-            "card security code",
-        ],
-        "pin": [
-            "upi pin",
-            "atm pin",
-            "debit card pin",
-            "credit card pin",
-            "mpin",
-            "m-pin",
-        ],
-        "password": [
-            "password",
-            "passcode",
-            "login password",
-        ],
-        "bank_details": [
-            "bank details",
-            "account number",
-            "bank account number",
-            "ifsc code",
-        ],
-        "card_details": [
-            "card number",
-            "credit card number",
-            "debit card number",
-            "card details",
-            "expiry date",
-        ],
-    }
-
-    detected_sensitive_items = []
-
-    for item_name, phrases in sensitive_items.items():
-        if contains_any(text, phrases):
-            detected_sensitive_items.append(item_name)
-
-    # =========================================
-    # 6. REQUEST / DISCLOSURE ACTIONS
-    # =========================================
-
-    request_words = [
-        "share",
-        "send",
-        "provide",
-        "give",
-        "reveal",
-        "disclose",
-        "forward",
-        "tell us",
-        "tell me",
-        "enter your",
-        "submit your",
-        "confirm your",
-        "verify your",
-        "reply with",
-        "type your",
-    ]
-
-    has_request_action = contains_any(
-        text,
-        request_words,
-    )
-
-    # Dangerous combination:
-    # requesting sensitive information
-    if (
-        detected_sensitive_items
-        and has_request_action
-        and not has_protective_context
-    ):
-        score += 4
-        signals.append(
-            "requests_sensitive_information"
+        detected_flags.add(
+            "URGENCY"
         )
 
-        for item in detected_sensitive_items:
-            signals.append(
-                f"requests_{item}"
-            )
+        signals.append({
+            "type": "URGENCY",
+            "message": (
+                "Message uses urgency or pressure"
+            ),
+            "keywords": detected_urgency,
+            "score": 10,
+        })
 
-    # =========================================
-    # 7. GENUINE OTP DELIVERY CONTEXT
-    # =========================================
 
-    otp_delivery_phrases = [
-        "your otp is",
-        "otp is",
-        "your verification code is",
-        "verification code is",
-        "use this otp",
-        "use the otp",
-        "do not share this otp",
-        "don't share this otp",
-        "never share this otp",
+    # ==================================================
+    # 5. OTP REQUEST DETECTION
+    # ==================================================
+
+    otp_request_patterns = [
+        "share the otp",
+        "send the otp",
+        "provide the otp",
+        "tell me the otp",
+        "forward the otp",
+        "share otp",
+        "send otp",
+        "provide otp",
+        "tell me otp",
+        "share the verification code",
+        "send the verification code",
+        "provide the verification code",
+        "share the code",
+        "send the code",
     ]
 
-    is_otp_delivery = (
-        "otp" in text
-        and contains_any(
-            text,
-            otp_delivery_phrases,
-        )
+    detected_otp_request = any(
+        pattern in message_lower
+        for pattern in otp_request_patterns
     )
 
-    if is_otp_delivery:
-        signals.append(
-            "otp_delivery_context"
+    if detected_otp_request:
+
+        risk_score += 25
+
+        detected_flags.add(
+            "OTP_REQUEST"
         )
 
-    # =========================================
-    # 8. MONEY / PAYMENT REQUESTS
-    # =========================================
+        signals.append({
+            "type": "OTP_REQUEST",
+            "message": (
+                "Message requests an OTP or "
+                "verification code"
+            ),
+            "score": 25,
+        })
 
-    payment_request_words = [
+
+    # ==================================================
+    # 6. UPI PIN REQUEST DETECTION
+    # ==================================================
+
+    upi_pin_patterns = [
+        "enter your upi pin",
+        "share your upi pin",
+        "provide your upi pin",
+        "tell us your upi pin",
+        "enter upi pin",
+        "share upi pin",
+        "provide upi pin",
+    ]
+
+    detected_upi_request = any(
+        pattern in message_lower
+        for pattern in upi_pin_patterns
+    )
+
+    if detected_upi_request:
+
+        risk_score += 25
+
+        detected_flags.add(
+            "UPI_PIN_REQUEST"
+        )
+
+        signals.append({
+            "type": "UPI_PIN_REQUEST",
+            "message": (
+                "Message requests a UPI PIN"
+            ),
+            "score": 25,
+        })
+
+
+    # ==================================================
+    # 7. PAYMENT REQUEST DETECTION
+    # ==================================================
+
+    payment_patterns = [
+        "pay now",
+        "processing fee",
+        "redelivery fee",
+        "re-delivery fee",
+        "delivery fee",
+        "registration fee",
+        "joining fee",
+        "verification fee",
+        "pay a fee",
+        "pay rs",
+        "pay ₹",
         "transfer money",
         "send money",
-        "pay immediately",
         "make payment",
-        "pay now",
         "pay the fee",
-        "processing fee",
-        "registration fee",
-        "release fee",
-        "transfer the amount",
-        "upi payment",
-        "scan qr code",
-        "scan the qr",
-        "pay using upi",
     ]
 
-    has_payment_request = contains_any(
-        text,
-        payment_request_words,
+    detected_payment_request = any(
+        pattern in message_lower
+        for pattern in payment_patterns
     )
 
-    if has_payment_request and not has_protective_context:
-        score += 3
-        signals.append(
-            "requests_payment"
+    if detected_payment_request:
+
+        risk_score += 15
+
+        detected_flags.add(
+            "PAYMENT_REQUEST"
         )
 
-    # =========================================
-    # 9. FINANCIAL FRAUD PROMISES
-    # =========================================
+        signals.append({
+            "type": "PAYMENT_REQUEST",
+            "message": (
+                "Message requests money or payment"
+            ),
+            "score": 15,
+        })
 
-    fraud_promise_words = [
-        "guaranteed return",
-        "guaranteed profit",
-        "double your money",
-        "triple your money",
-        "earn money quickly",
-        "instant profit",
-        "risk free investment",
-        "risk-free investment",
-        "100% return",
-        "assured return",
-        "lottery winner",
+
+    # ==================================================
+    # 8. REWARD / PRIZE DETECTION
+    # ==================================================
+
+    reward_patterns = [
         "you have won",
-        "claim your prize",
-        "claim your reward",
-        "cash prize",
+        "congratulations",
+        "cashback",
+        "reward",
+        "prize",
+        "guaranteed returns",
+        "guaranteed profit",
+        "risk free investment",
+        "double your money",
+        "exclusive opportunity",
     ]
 
-    if (
-        contains_any(text, fraud_promise_words)
-        and not has_protective_context
-    ):
-        score += 3
-        signals.append(
-            "fraudulent_financial_promise"
-        )
-
-    # =========================================
-    # 10. SUSPICIOUS LINK ACTION
-    # =========================================
-
-    link_action_words = [
-        "click here",
-        "click the link",
-        "open the link",
-        "visit the link",
-        "tap the link",
-        "login here",
-    ]
-
-    has_link_action = contains_any(
-        text,
-        link_action_words,
+    detected_reward = any(
+        pattern in message_lower
+        for pattern in reward_patterns
     )
 
-    if (
-        has_url
-        and has_link_action
-        and not has_protective_context
-    ):
-        score += 2
-        signals.append(
-            "requests_link_interaction"
+    if detected_reward:
+
+        risk_score += 10
+
+        detected_flags.add(
+            "REWARD"
         )
 
-    # =========================================
-    # 11. IMPERSONATION LANGUAGE
-    # =========================================
+        signals.append({
+            "type": "REWARD_OR_PRIZE",
+            "message": (
+                "Message contains reward, prize, "
+                "or guaranteed return language"
+            ),
+            "score": 10,
+        })
 
-    impersonation_words = [
-        "rbi",
-        "reserve bank",
-        "bank security team",
-        "customer care",
-        "income tax department",
-        "police department",
-        "cyber crime",
-        "government officer",
-        "courier company",
-        "customs department",
-    ]
 
-    has_impersonation = contains_any(
-        text,
-        impersonation_words,
+    # ==================================================
+    # 9. CRITICAL RISK COMBINATIONS
+    # ==================================================
+
+    critical_patterns = []
+
+
+    # --------------------------------------------------
+    # SCAM + OTP REQUEST
+    # --------------------------------------------------
+
+    if (
+        "SCAM" in detected_flags
+        and "OTP_REQUEST" in detected_flags
+    ):
+
+        critical_patterns.append(
+            "SCAM + OTP_REQUEST"
+        )
+
+
+    # --------------------------------------------------
+    # SCAM + UPI PIN REQUEST
+    # --------------------------------------------------
+
+    if (
+        "SCAM" in detected_flags
+        and "UPI_PIN_REQUEST" in detected_flags
+    ):
+
+        critical_patterns.append(
+            "SCAM + UPI_PIN_REQUEST"
+        )
+
+
+    # --------------------------------------------------
+    # SCAM + PAYMENT + URGENCY
+    # --------------------------------------------------
+
+    if (
+        "SCAM" in detected_flags
+        and "PAYMENT_REQUEST"
+        in detected_flags
+        and "URGENCY"
+        in detected_flags
+    ):
+
+        critical_patterns.append(
+            "SCAM + PAYMENT_REQUEST + URGENCY"
+        )
+
+
+    # --------------------------------------------------
+    # SCAM + URL
+    # --------------------------------------------------
+
+    if (
+        "SCAM" in detected_flags
+        and "URL" in detected_flags
+    ):
+
+        critical_patterns.append(
+            "SCAM + URL"
+        )
+
+
+    # --------------------------------------------------
+    # SCAM + INVESTMENT + GUARANTEED RETURN
+    # --------------------------------------------------
+
+    if (
+        "SCAM" in detected_flags
+        and category == "INVESTMENT"
+        and "REWARD" in detected_flags
+    ):
+
+        critical_patterns.append(
+            "SCAM + INVESTMENT + "
+            "GUARANTEED_RETURN"
+        )
+
+
+    # ==================================================
+    # 10. APPLY CRITICAL OVERRIDE
+    # ==================================================
+
+    critical_override = False
+
+    if critical_patterns:
+
+        critical_override = True
+
+        risk_score = max(
+            risk_score,
+            70,
+        )
+
+        signals.append({
+            "type": "CRITICAL_PATTERN",
+            "message": (
+                "Critical scam pattern detected"
+            ),
+            "patterns": critical_patterns,
+            "score": 0,
+        })
+
+
+    # ==================================================
+    # 11. CAP RISK SCORE
+    # ==================================================
+
+    risk_score = min(
+        risk_score,
+        100,
     )
 
-    # Important:
-    # Do NOT mark impersonation alone as scam.
-    # Add risk only when combined with another
-    # suspicious action.
-    if (
-        has_impersonation
-        and (
-            has_request_action
-            or has_payment_request
-            or has_threat
-        )
-        and not has_protective_context
-    ):
-        score += 2
-        signals.append(
-            "possible_impersonation"
-        )
 
-    # =========================================
-    # 12. ML CATEGORY CONTRIBUTION
-    # =========================================
+    # ==================================================
+    # 12. DETERMINE FINAL RISK LEVEL
+    # ==================================================
 
-    suspicious_categories = [
-        "OTP_OR_SECURITY",
-        "BANKING_OR_FINANCE",
-        "SCAM",
-        "FRAUD",
-    ]
+    if critical_override:
 
-    if (
-        category in suspicious_categories
-        and not is_otp_delivery
-        and not has_protective_context
-    ):
-        score += 1
-        signals.append(
-            "suspicious_ml_category"
-        )
+        risk = "HIGH"
 
-    # =========================================
-    # 13. LOW MODEL CONFIDENCE
-    # =========================================
+    elif risk_score >= 70:
 
-    if confidence < 0.45:
-        signals.append(
-            "low_model_confidence"
-        )
+        risk = "HIGH"
 
-    # =========================================
-    # 14. RISK REDUCTION FOR GENUINE CONTEXT
-    # =========================================
+    elif risk_score >= 40:
 
-    if has_protective_context:
-        score = max(0, score - 4)
-
-    if is_otp_delivery:
-        score = max(0, score - 2)
-
-    # =========================================
-    # 15. FINAL RISK DECISION
-    # =========================================
-
-    if score >= 6:
-     risk = "HIGH"
-
-    elif score >= 3:
-     risk = "MEDIUM"
+        risk = "MEDIUM"
 
     else:
-     risk = "LOW"
+
+        risk = "LOW"
+
+
+    # ==================================================
+    # 13. LOG RESULT
+    # ==================================================
+
+    logger.info(
+        "Risk assessment completed | "
+        "risk=%s | score=%s | critical=%s",
+        risk,
+        risk_score,
+        critical_override,
+    )
+
+
+    # ==================================================
+    # 14. RETURN RESULT
+    # ==================================================
 
     return {
-     "risk": risk,
-     "risk_score": score,
-     "signals": signals,
-}
+        "risk": risk,
+        "risk_score": risk_score,
+        "signals": signals,
+        "critical_override": critical_override,
+        "critical_patterns": critical_patterns,
+    }

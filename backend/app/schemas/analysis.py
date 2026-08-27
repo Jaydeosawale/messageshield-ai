@@ -1,6 +1,5 @@
 from datetime import datetime
-from typing import Dict, List
-
+from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -28,6 +27,64 @@ class ModelInfo(BaseModel):
 
 
 # =====================================
+# Category prediction
+# =====================================
+
+class CategoryResult(BaseModel):
+
+    label: str
+
+    confidence: float
+
+    probabilities: Dict[str, float]
+
+    model: ModelInfo
+
+
+# =====================================
+# Safety prediction
+# =====================================
+
+class SafetyResult(BaseModel):
+
+    label: str
+
+    confidence: float
+
+    probabilities: Dict[str, float]
+
+    model: ModelInfo
+
+
+# =====================================
+# Risk signal
+# =====================================
+
+class RiskSignal(BaseModel):
+
+    type: str
+
+    message: str
+
+    score: int
+
+    keywords: Optional[List[str]] = None
+
+
+# =====================================
+# Risk result
+# =====================================
+
+class RiskResult(BaseModel):
+
+    level: str
+
+    score: int
+
+    signals: List[RiskSignal]
+
+
+# =====================================
 # Single analysis response
 # =====================================
 
@@ -37,19 +94,11 @@ class AnalysisResponse(BaseModel):
 
     safe_message: str
 
-    category: str
+    category: CategoryResult
 
-    confidence: float
+    safety: SafetyResult
 
-    risk: str
-
-    risk_score: int
-
-    signals: List[str]
-
-    probabilities: Dict[str, float]
-
-    model: ModelInfo
+    risk: RiskResult
 
     created_at: datetime
 
