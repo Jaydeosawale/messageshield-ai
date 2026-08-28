@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Dict, List, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -28,6 +29,7 @@ class ModelInfo(BaseModel):
 
 # =====================================
 # Category prediction
+# Used by POST /analyze
 # =====================================
 
 class CategoryResult(BaseModel):
@@ -43,6 +45,7 @@ class CategoryResult(BaseModel):
 
 # =====================================
 # Safety prediction
+# Used by POST /analyze
 # =====================================
 
 class SafetyResult(BaseModel):
@@ -58,6 +61,7 @@ class SafetyResult(BaseModel):
 
 # =====================================
 # Risk signal
+# Used by POST /analyze
 # =====================================
 
 class RiskSignal(BaseModel):
@@ -73,6 +77,7 @@ class RiskSignal(BaseModel):
 
 # =====================================
 # Risk result
+# Used by POST /analyze
 # =====================================
 
 class RiskResult(BaseModel):
@@ -85,7 +90,9 @@ class RiskResult(BaseModel):
 
 
 # =====================================
-# Single analysis response
+# LIVE ANALYSIS RESPONSE
+#
+# POST /api/v1/analyze
 # =====================================
 
 class AnalysisResponse(BaseModel):
@@ -103,8 +110,48 @@ class AnalysisResponse(BaseModel):
     created_at: datetime
 
 
+# =====================================================
+# HISTORY / DATABASE ANALYSIS RESPONSE
+#
+# GET /api/v1/analyses
+# GET /api/v1/analyses/{analysis_id}
+#
+# Matches the actual MessageAnalysis database fields.
+# =====================================================
+
+class AnalysisHistoryItem(BaseModel):
+
+    id: int
+
+    safe_message: str
+
+    # Flat database value
+    category: str
+
+    confidence: float
+
+    # Flat database value
+    risk: str
+
+    risk_score: int
+
+    signals: List[RiskSignal] = Field(
+        default_factory=list
+    )
+
+    probabilities: Dict[str, float] = Field(
+        default_factory=dict
+    )
+
+    model: ModelInfo
+
+    created_at: datetime
+
+
 # =====================================
 # Analysis list response
+#
+# GET /api/v1/analyses
 # =====================================
 
 class AnalysisListResponse(BaseModel):
@@ -117,7 +164,7 @@ class AnalysisListResponse(BaseModel):
 
     returned: int
 
-    items: List[AnalysisResponse]
+    items: List[AnalysisHistoryItem]
 
 
 # =====================================
