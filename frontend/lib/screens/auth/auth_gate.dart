@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/message_analysis.dart';
 import '../../providers/auth_provider.dart';
 import '../home/home_screen.dart';
 import 'login_screen.dart';
@@ -12,7 +13,7 @@ class AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
 
-    // App is checking whether a saved JWT exists
+
     if (!auth.isInitialized) {
       return const Scaffold(
         body: Center(
@@ -21,12 +22,18 @@ class AuthGate extends StatelessWidget {
       );
     }
 
-    // User is authenticated
+
     if (auth.isAuthenticated) {
-      return const HomeScreen();
+      return HomeScreen(
+        onAnalysisComplete: (MessageAnalysis analysis) {
+          // Callback required by HomeScreen.
+          // Global refresh logic can be added here later.
+        },
+      );
     }
 
-    // No valid session
+
     return const LoginScreen();
   }
 }
+

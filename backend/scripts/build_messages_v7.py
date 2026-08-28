@@ -11,13 +11,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 INPUT_PATH = (
     BASE_DIR
     / "data"
-    / "messages_v7.json"
+    / "messages_v6.json"
 )
 
 OUTPUT_PATH = (
     BASE_DIR
     / "data"
-    / "messages_v8.json"
+    / "messages_v7.json"
 )
 
 
@@ -27,7 +27,7 @@ OUTPUT_PATH = (
 
 print()
 print("=" * 60)
-print("MESSAGE SHIELD DATASET V8 BUILDER")
+print("MESSAGE SHIELD DATASET V7 BUILDER")
 print("=" * 60)
 
 with open(
@@ -39,113 +39,88 @@ with open(
 
 
 # ==========================================================
-# NEW GENERAL EXAMPLES
+# NEW DELIVERY EXAMPLES
 # ==========================================================
 
-new_general_messages = [
+new_delivery_messages = [
 
     # ------------------------------------------------------
-    # PERSONAL CONVERSATION
+    # NORMAL / LEGITIMATE DELIVERY
     # ------------------------------------------------------
 
-    "Hi, how are you doing today?",
-    "Good morning, have a nice day.",
-    "Good night, sleep well.",
-    "Can we talk later?",
-    "Please call me when you are free.",
-    "I will call you after work.",
-    "Let us meet this weekend.",
-    "Are you available this evening?",
-    "I am on my way home.",
-    "I will reach there soon.",
-    "Please let me know when you arrive.",
-    "I reached home safely.",
-    "See you tomorrow.",
-    "Talk to you soon.",
-    "Take care and stay safe.",
-    "Thank you for your help.",
-    "Sorry, I missed your call.",
-    "I will reply later.",
-    "Can you send me the details?",
-    "Please remind me tomorrow.",
-    "What time should we meet?",
-    "I am running a little late.",
-    "The meeting has been postponed.",
-    "Let's have lunch tomorrow.",
-    "Can we reschedule our appointment?",
-    "I will be there at 6 PM.",
-    "Please wait for me.",
-    "I have sent you the document.",
-    "Did you receive my message?",
-    "Let me know your decision.",
+    "Your order has been shipped and is expected to arrive tomorrow.",
+    "Your package has been dispatched successfully.",
+    "Your parcel is currently out for delivery.",
+    "Your shipment will arrive within the next two days.",
+    "Your order has reached the nearest delivery center.",
+    "Your package has arrived at the local sorting facility.",
+    "Your courier is scheduled for delivery today.",
+    "Your order was successfully delivered to your address.",
+    "Your package was delivered to your registered address.",
+    "Your shipment is currently being processed for delivery.",
+    "Your order has left the warehouse.",
+    "Your parcel is on the way to your location.",
+    "Your delivery is scheduled between 2 PM and 6 PM.",
+    "Your order will be delivered by tomorrow evening.",
+    "Your shipment has reached your city.",
+    "Your package is waiting at the local delivery center.",
+    "Your courier has been assigned to a delivery agent.",
+    "Your order status has been updated to dispatched.",
+    "Your package is being prepared for delivery.",
+    "Your shipment has been successfully handed to the courier.",
+    "Your order is expected to arrive on Monday.",
+    "Your parcel will arrive within three working days.",
+    "Your package has reached the destination facility.",
+    "Your delivery has been rescheduled for tomorrow.",
+    "Your courier could not be delivered and will be attempted again tomorrow.",
+    "Your package delivery attempt was unsuccessful because no one was available.",
+    "Your order is available for pickup at the official delivery center.",
+    "Your parcel has been received at the regional warehouse.",
+    "Your shipment is moving to the next delivery facility.",
+    "Track your order using the official tracking number.",
+    "Your delivery address has been confirmed successfully.",
+    "Your order is scheduled for dispatch today.",
+    "Your parcel is expected to arrive before 8 PM.",
+    "Your shipment has cleared the sorting center.",
 
     # ------------------------------------------------------
-    # FAMILY AND FRIENDS
+    # DELIVERY SCAMS
     # ------------------------------------------------------
 
-    "Happy birthday! Hope you have a wonderful day.",
-    "Congratulations on your success.",
-    "Wishing you a happy anniversary.",
-    "Have a safe journey.",
-    "Welcome back home.",
-    "How is everyone at home?",
-    "Please give my regards to your family.",
-    "I hope you are feeling better today.",
-    "We had a great time yesterday.",
-    "Let's plan a trip together.",
-    "Are you coming to the party?",
-    "The family dinner is at 8 PM.",
-    "Please bring your friend along.",
-    "I will see you at the celebration.",
-    "Thank you for inviting me.",
-    "It was nice meeting you.",
-    "Please wish her happy birthday from me.",
-    "We should catch up sometime.",
-    "I miss talking with you.",
-    "Let's meet for coffee tomorrow.",
-
-    # ------------------------------------------------------
-    # WORK AND DAILY LIFE
-    # ------------------------------------------------------
-
-    "The meeting starts at 10 AM tomorrow.",
-    "Please join the meeting on time.",
-    "I have completed the assigned task.",
-    "Can you review the document?",
-    "Please send the report by evening.",
-    "The project deadline is next Friday.",
-    "I will share the update shortly.",
-    "Let's discuss this in tomorrow's meeting.",
-    "The presentation has been prepared.",
-    "Please check your email for the details.",
-    "The office will be closed tomorrow.",
-    "I am working from home today.",
-    "Can we schedule a quick call?",
-    "Please confirm your availability.",
-    "The interview has been moved to Monday.",
-    "Your appointment is confirmed for 3 PM.",
-    "The doctor is available tomorrow morning.",
-    "Your reservation has been confirmed.",
-    "The class starts at 9 AM.",
-    "Don't forget to attend the session.",
-
-    # ------------------------------------------------------
-    # NEUTRAL NOTIFICATIONS
-    # ------------------------------------------------------
-
-    "Your electricity service will undergo maintenance tomorrow.",
-    "Water supply will be temporarily unavailable this morning.",
-    "The school will remain closed due to heavy rain.",
-    "Your train is scheduled to arrive at 7 PM.",
-    "The bus will depart in ten minutes.",
-    "Your table reservation is confirmed.",
-    "The event starts at 6 PM today.",
-    "Your library books are due next week.",
-    "The maintenance work has been completed.",
-    "Your internet service is now restored.",
-    "The building lift is under maintenance.",
-    "The weather is expected to be cloudy today.",
-    "The road is closed due to construction.",
+    "Your parcel is on hold. Pay Rs 30 immediately to release it.",
+    "Your package cannot be delivered until you pay the pending charge.",
+    "Pay a small delivery fee now to receive your parcel.",
+    "Your shipment is waiting. Pay Rs 50 immediately.",
+    "Your package will be returned unless you pay the delivery charge.",
+    "Pay the customs fee immediately to receive your international package.",
+    "Your courier is blocked. Make a payment now to continue delivery.",
+    "Your parcel requires a Rs 25 payment before delivery.",
+    "A delivery charge is pending. Pay now to avoid cancellation.",
+    "Your package has been stopped. Transfer the handling fee immediately.",
+    "Pay the redelivery fee now to schedule another delivery attempt.",
+    "Your shipment will be cancelled if the pending fee is not paid today.",
+    "Your parcel is waiting for payment confirmation.",
+    "A small processing charge is required to release your package.",
+    "Pay Rs 99 immediately to prevent your order from being returned.",
+    "Your delivery has failed. Send payment to arrange redelivery.",
+    "Your package is held due to an unpaid delivery fee.",
+    "Transfer money immediately to receive your courier.",
+    "Your parcel is blocked. Pay now to avoid permanent cancellation.",
+    "Your shipment cannot continue until the service fee is paid.",
+    "Pay the delivery charge urgently to avoid losing your package.",
+    "Your order is suspended. Complete the payment immediately.",
+    "Your parcel requires immediate payment for final delivery.",
+    "Send Rs 40 now to release your shipment.",
+    "Your courier will be returned today unless payment is completed.",
+    "Pay the urgent handling charge to receive your package.",
+    "Your package is waiting. Complete the payment to continue delivery.",
+    "A final delivery fee is required. Pay immediately.",
+    "Your parcel is pending because the delivery charge has not been paid.",
+    "Make payment now to prevent your shipment from being cancelled.",
+    "Your order is held at the warehouse. Pay the release fee immediately.",
+    "Your package requires payment verification before it can be delivered.",
+    "Pay now to unlock your parcel delivery.",
+    "Your shipment will be destroyed unless the pending fee is paid today.",
 
 ]
 
@@ -154,18 +129,18 @@ new_general_messages = [
 # VALIDATE NEW EXAMPLES
 # ==========================================================
 
-EXPECTED_NEW_EXAMPLES = 83
+EXPECTED_NEW_EXAMPLES = 68
 
 print()
 print(
-    f"New GENERAL examples: "
-    f"{len(new_general_messages)}"
+    f"New DELIVERY examples: "
+    f"{len(new_delivery_messages)}"
 )
 
-if len(new_general_messages) != EXPECTED_NEW_EXAMPLES:
+if len(new_delivery_messages) != EXPECTED_NEW_EXAMPLES:
     raise ValueError(
         f"Expected exactly "
-        f"{EXPECTED_NEW_EXAMPLES} new GENERAL examples."
+        f"{EXPECTED_NEW_EXAMPLES} new DELIVERY examples."
     )
 
 
@@ -180,7 +155,7 @@ existing_messages = {
 
 duplicates = []
 
-for message in new_general_messages:
+for message in new_delivery_messages:
 
     normalized = message.strip().lower()
 
@@ -206,12 +181,12 @@ if duplicates:
 # ADD NEW DATA
 # ==========================================================
 
-for message in new_general_messages:
+for message in new_delivery_messages:
 
     data.append(
         {
             "message": message,
-            "category": "GENERAL",
+            "category": "DELIVERY",
         }
     )
 
@@ -220,21 +195,21 @@ for message in new_general_messages:
 # VALIDATE FINAL COUNT
 # ==========================================================
 
-general_count = sum(
+delivery_count = sum(
     1
     for item in data
-    if item["category"] == "GENERAL"
+    if item["category"] == "DELIVERY"
 )
 
 print()
 print(
-    f"Final GENERAL count: "
-    f"{general_count}"
+    f"Final DELIVERY count: "
+    f"{delivery_count}"
 )
 
-if general_count != 100:
+if delivery_count != 100:
     raise ValueError(
-        "Expected final GENERAL count "
+        "Expected final DELIVERY count "
         "to be exactly 100."
     )
 

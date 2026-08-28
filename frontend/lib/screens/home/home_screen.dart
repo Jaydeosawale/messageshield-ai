@@ -1,12 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../core/services/analysis_service.dart';
+import '../../core/theme/app_theme.dart';
 import '../../models/message_analysis.dart';
-import '../../providers/auth_provider.dart';
-import '../history/history_screen.dart';
+import '../../widgets/app_background.dart';
+import '../../widgets/analysis_result_card.dart';
+
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final void Function(MessageAnalysis analysis) onAnalysisComplete;
+  final VoidCallback? onOpenSafety;
+
+  // Text received from Scan/OCR.
+  final String? scannedText;
+
+  // Called after scanned text is inserted into the input field.
+  final VoidCallback? onScannedTextConsumed;
+
+  const HomeScreen({
+    super.key,
+    required this.onAnalysisComplete,
+    this.onOpenSafety,
+    this.scannedText,
+    this.onScannedTextConsumed,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -16,12 +32,37 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _messageController =
       TextEditingController();
 
-  bool _isAnalyzing = false;
+  bool _isLoading = false;
   String? _errorMessage;
   MessageAnalysis? _analysis;
- 
+
+  @override
+  void initState() {
+    super.initState();
+    _messageController.addListener(_refresh);
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.scannedText != null &&
+        widget.scannedText != oldWidget.scannedText) {
+      _messageController.text = widget.scannedText!;
+
+      widget.onScannedTextConsumed?.call();
+    }
+  }
+
+  void _refresh() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void dispose() {
+    _messageController.removeListener(_refresh);
     _messageController.dispose();
     super.dispose();
   }
@@ -31,176 +72,169 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (message.isEmpty) {
       setState(() {
-        _errorMessage =
-            'Please enter a message to analyze.';
+        _errorMessage = 'Paste or scan a message first.';
       });
-
       return;
     }
 
     setState(() {
-      _isAnalyzing = true;
+      _isLoading = true;
       _errorMessage = null;
-      _analysis = null;
     });
 
     try {
-      final result =
-          await AnalysisService.analyze(
+      final analysis = await AnalysisService.analyze(
         message: message,
       );
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       setState(() {
-        _analysis = result;
+        _analysis = analysis;
       });
+
+      widget.onAnalysisComplete(analysis);
     } catch (error) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       setState(() {
         _errorMessage =
-            error.toString().replaceFirst(
-          'Exception: ',
-          '',
-        );
+            error.toString().replaceFirst('Exception: ', '');
       });
     } finally {
       if (mounted) {
         setState(() {
-          _isAnalyzing = false;
+          _isLoading = false;
         });
       }
     }
   }
 
-  void _clearAnalysis() {
+  void _clearMessage() {
+    _messageController.clear();
+
     setState(() {
-      _messageController.clear();
-      _analysis = null;
       _errorMessage = null;
+      _analysis = null;
     });
+  }
+
+  void _openSafety() {
+    if (widget.onOpenSafety != null) {
+      widget.onOpenSafety!();
+      return;
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const SafetyGuidelinesScreen(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthProvider>();
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                color: const Color(0xFF1A315F),
-                borderRadius:
-                    BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.shield_rounded,
-                color: Color(0xFF6EA8FF),
-              ),
+        final isPhone = width < 700;
+        final isNarrowPhone = width < 380;
+
+        final pagePadding = isNarrowPhone
+            ? 14.0
+            : isPhone
+                ? 18.0
+                : 32.0;
+
+        // Keep the Home content pinned to the TOP.
+        // Center() was vertically centering the whole scrollable screen on
+        // tall mobile displays, which created the large empty space above
+        // the MessageShield AI header.
+        return Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 900,
             ),
-
-            const SizedBox(width: 12),
-
-            const Text(
-              'MessageShield',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: _clearAnalysis,
-            icon: const Icon(
-              Icons.refresh_rounded,
-            ),
-            tooltip: 'Clear',
-          ),
-
-          IconButton(
-            onPressed: () {
-             Navigator.push(
-              context,
-              MaterialPageRoute(
-               builder: (_) => const HistoryScreen(),
-             ),
-        );
-       },
-       icon: const Icon(Icons.history_outlined),
-       tooltip: 'Analysis History',
-        ),
-
-
-          IconButton(
-            onPressed: auth.isLoading
-                ? null
-                : () async {
-                    await context
-                        .read<AuthProvider>()
-                        .logout();
-                  },
-            icon: const Icon(
-              Icons.logout_rounded,
-            ),
-            tooltip: 'Logout',
-          ),
-
-          const SizedBox(width: 8),
-        ],
-      ),
-
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 820,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.fromLTRB(
+                pagePadding,
+                isPhone ? 18 : 28,
+                pagePadding,
+                isPhone ? 28 : 40,
               ),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildHero(),
+                  _buildHeader(
+                    isPhone: isPhone,
+                    isNarrowPhone: isNarrowPhone,
+                  ),
 
-                  const SizedBox(height: 28),
+                  // Keep the original Home-screen spacing after the header.
+                  SizedBox(
+                    height: isPhone ? 24 : 38,
+                  ),
 
-                  _buildAnalyzerCard(),
+                  Text(
+                    'Stay protected.',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: isNarrowPhone
+                          ? 27
+                          : isPhone
+                              ? 30
+                              : 38,
+                      fontWeight: FontWeight.w800,
+                      height: 1.1,
+                    ),
+                  ),
 
-                  if (_errorMessage != null) ...[
-                    const SizedBox(height: 20),
-                    _buildErrorCard(),
-                  ],
+                  const SizedBox(height: 6),
+
+                  Text(
+                    'Check suspicious messages safely before you act.',
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: isPhone ? 14 : 17,
+                      fontWeight: FontWeight.w500,
+                      height: 1.4,
+                    ),
+                  ),
+
+                  // Extra breathing room on mobile keeps the message/analyze
+                  // area visually centered without changing the Home design.
+                  SizedBox(
+                    height: isPhone ? 46 : 30,
+                  ),
+
+                  _buildMessageCard(
+                    isPhone: isPhone,
+                    isNarrowPhone: isNarrowPhone,
+                  ),
 
                   if (_analysis != null) ...[
-                    const SizedBox(height: 24),
-
-                    _AnalysisResultCard(
+                    SizedBox(
+                      height: isPhone ? 16 : 20,
+                    ),
+                    AnalysisResultCard(
                       analysis: _analysis!,
+                      isPhone: isPhone,
                     ),
                   ],
 
-                  const SizedBox(height: 32),
+                  SizedBox(
+                    height: isPhone ? 16 : 20,
+                  ),
 
-                  _buildSecurityNote(),
-
-                  const SizedBox(height: 24),
-
-                  Text(
-                    auth.user?.email ?? '',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(
-                          color: Colors.white54,
-                        ),
+                  _buildSafetyCard(
+                    isPhone: isPhone,
                   ),
 
                   const SizedBox(height: 12),
@@ -208,608 +242,437 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHero() {
-    return Column(
+  Widget _buildHeader({
+    required bool isPhone,
+    required bool isNarrowPhone,
+  }) {
+    return Row(
       children: [
         Container(
-          width: 84,
-          height: 84,
+          width: isPhone ? 46 : 52,
+          height: isPhone ? 46 : 52,
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [
-                Color(0xFF315EFB),
-                Color(0xFF00B8D9),
+                AppColors.teal,
+                AppColors.green,
               ],
             ),
-            borderRadius:
-                BorderRadius.circular(26),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x55315EFB),
-                blurRadius: 28,
-                spreadRadius: 2,
-              ),
-            ],
+            borderRadius: BorderRadius.circular(14),
           ),
           child: const Icon(
             Icons.shield_rounded,
-            size: 46,
             color: Colors.white,
+            size: 26,
           ),
         ),
 
-        const SizedBox(height: 20),
+        const SizedBox(width: 12),
 
-        Text(
-          'Check before you trust',
-          textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .headlineMedium
-              ?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+        Expanded(
+          child: Text.rich(
+            TextSpan(
+              children: const [
+                TextSpan(
+                  text: 'Message',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                TextSpan(
+                  text: 'Shield',
+                  style: TextStyle(
+                    color: AppColors.tealSoft,
+                  ),
+                ),
+                TextSpan(
+                  text: ' AI',
+                  style: TextStyle(
+                    color: AppColors.teal,
+                  ),
+                ),
+              ],
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: isNarrowPhone
+                  ? 20
+                  : isPhone
+                      ? 22
+                      : 26,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
         ),
 
-        const SizedBox(height: 10),
-
-        Text(
-          'Analyze suspicious messages and identify potential fraud, scams, and security threats.',
-          textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(
-                color: Colors.white60,
-                height: 1.5,
-              ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.notifications_none_rounded,
+            color: AppColors.textPrimary,
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildAnalyzerCard() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(22),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.search_rounded,
-                  color: Color(0xFF6EA8FF),
-                ),
+  Widget _buildMessageCard({
+    required bool isPhone,
+    required bool isNarrowPhone,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(
+        isPhone ? 16 : 24,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.backgroundSoft.withValues(
+          alpha: 0.88,
+        ),
+        borderRadius: BorderRadius.circular(
+          isPhone ? 18 : 24,
+        ),
+        border: Border.all(
+          color: AppColors.teal.withValues(
+            alpha: 0.16,
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // No Scan icon.
+          // No "Scan a message" title.
+          // Input starts directly.
 
-                const SizedBox(width: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF102B34),
 
-                Text(
-                  'Analyze Message',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
+              // Less curved input box.
+              borderRadius: BorderRadius.circular(8),
 
-            const SizedBox(height: 8),
-
-            Text(
-              'Paste a message below. Sensitive information is handled safely.',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(
-                    color: Colors.white54,
-                  ),
-            ),
-
-            const SizedBox(height: 20),
-
-            TextField(
-              controller: _messageController,
-              minLines: 6,
-              maxLines: 10,
-              maxLength: 5000,
-              enabled: !_isAnalyzing,
-              decoration:
-                  const InputDecoration(
-                labelText: 'Message',
-                hintText:
-                    'Paste or type a message here...\n\nExample: Your account will be blocked. Share your OTP immediately.',
-                alignLabelWithHint: true,
+              border: Border.all(
+                color: const Color(0xFF1D4A56),
               ),
             ),
+            child: TextField(
+              controller: _messageController,
+              minLines: isPhone ? 5 : 4,
+              maxLines: isPhone ? 8 : 7,
+              enabled: !_isLoading,
+              keyboardType: TextInputType.multiline,
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 14,
+                height: 1.4,
+              ),
+              decoration: const InputDecoration(
+                hintText:
+                    'Paste the message you received here...',
+                hintStyle: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
+                ),
+                contentPadding: EdgeInsets.all(14),
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+              ),
+            ),
+          ),
 
-            const SizedBox(height: 18),
+          if (_errorMessage != null) ...[
+            const SizedBox(height: 10),
 
-            ElevatedButton.icon(
-              onPressed: _isAnalyzing
+            Text(
+              _errorMessage!,
+              style: const TextStyle(
+                color: AppColors.danger,
+                fontSize: 13,
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 14),
+
+          SizedBox(
+            height: isPhone ? 58 : 58,
+            child: ElevatedButton.icon(
+              onPressed: _isLoading
                   ? null
                   : _analyzeMessage,
-              icon: _isAnalyzing
+              icon: _isLoading
                   ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child:
-                          CircularProgressIndicator(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
                         strokeWidth: 2,
                         color: Colors.white,
                       ),
                     )
                   : const Icon(
-                      Icons.security_rounded,
+                      Icons.shield_rounded,
+                      size: 20,
                     ),
               label: Text(
-                _isAnalyzing
-                    ? 'Analyzing Message...'
-                    : 'Analyze Message',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildErrorCard() {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF3A1720),
-        borderRadius:
-            BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0xFF8F3045),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.error_outline_rounded,
-            color: Color(0xFFFF7185),
-          ),
-
-          const SizedBox(width: 12),
-
-          Expanded(
-            child: Text(
-              _errorMessage!,
-              style: const TextStyle(
-                color: Color(0xFFFFC1CA),
+                _isLoading
+                    ? 'ANALYZING...'
+                    : 'ANALYZE MESSAGE',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.5,
+                ),
               ),
             ),
           ),
+
+          if (_messageController.text.isNotEmpty)
+            Center(
+              child: TextButton(
+                onPressed: _isLoading
+                    ? null
+                    : _clearMessage,
+                child: const Text(
+                  'Clear message',
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildSecurityNote() {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: const Color(0xFF101C32),
-        borderRadius:
-            BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0xFF263A5D),
-        ),
-      ),
-      child: const Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-        children: [
-          Icon(
-            Icons.info_outline_rounded,
-            color: Color(0xFF6EA8FF),
+  Widget _buildSafetyCard({
+    required bool isPhone,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: _openSafety,
+        borderRadius: BorderRadius.circular(16),
+        child: Ink(
+          padding: EdgeInsets.all(
+            isPhone ? 14 : 18,
           ),
-
-          SizedBox(width: 12),
-
-          Expanded(
-            child: Text(
-              'MessageShield provides a risk assessment using machine learning and security signals. Always verify important requests independently.',
-              style: TextStyle(
-                color: Colors.white70,
-                height: 1.45,
+          decoration: BoxDecoration(
+            color: AppColors.backgroundSoft.withValues(
+              alpha: 0.75,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.teal.withValues(
+                alpha: 0.14,
               ),
             ),
           ),
-        ],
+          child: const Row(
+            children: [
+              Icon(
+                Icons.shield_outlined,
+                color: AppColors.tealSoft,
+                size: 26,
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Safety guidelines',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: AppColors.textSecondary,
+                size: 16,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class _AnalysisResultCard extends StatelessWidget {
-  final MessageAnalysis analysis;
+// ============================================================================
+// SAFETY GUIDELINES
+// ============================================================================
 
-  const _AnalysisResultCard({
-    required this.analysis,
+class SafetyGuidelinesScreen extends StatelessWidget {
+  final bool embedded;
+
+  const SafetyGuidelinesScreen({
+    super.key,
+    this.embedded = false,
   });
-
-  Color get _riskColor {
-    switch (analysis.risk.toUpperCase()) {
-      case 'HIGH':
-        return const Color(0xFFFF5C70);
-
-      case 'MEDIUM':
-        return const Color(0xFFFFB454);
-
-      case 'LOW':
-        return const Color(0xFF42D392);
-
-      default:
-        return const Color(0xFF6EA8FF);
-    }
-  }
-
-  IconData get _riskIcon {
-    switch (analysis.risk.toUpperCase()) {
-      case 'HIGH':
-        return Icons.warning_rounded;
-
-      case 'MEDIUM':
-        return Icons.error_outline_rounded;
-
-      case 'LOW':
-        return Icons.verified_user_rounded;
-
-      default:
-        return Icons.security_rounded;
-    }
-  }
-
-  String get _riskMessage {
-    switch (analysis.risk.toUpperCase()) {
-      case 'HIGH':
-        return 'This message contains strong indicators of potential fraud or security risk.';
-
-      case 'MEDIUM':
-        return 'This message contains suspicious patterns. Verify the request before taking action.';
-
-      case 'LOW':
-        return 'No strong scam indicators were detected. Continue to use normal caution.';
-
-      default:
-        return 'Risk assessment completed.';
-    }
-  }
-
-  String _formatSignal(String signal) {
-    return signal
-        .replaceAll('_', ' ')
-        .split(' ')
-        .map(
-          (word) =>
-              word.isEmpty
-                  ? word
-                  : '${word[0].toUpperCase()}${word.substring(1)}',
-        )
-        .join(' ');
-  }
 
   @override
   Widget build(BuildContext context) {
-    final confidencePercent =
-        (analysis.confidence * 100)
-            .toStringAsFixed(1);
+    final content = _SafetyContent(
+      embedded: embedded,
+    );
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(22),
-        child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: _riskColor.withValues(
-                  alpha: 0.12,
-                ),
-                borderRadius:
-                    BorderRadius.circular(18),
-                border: Border.all(
-                  color: _riskColor.withValues(
-                    alpha: 0.5,
-                  ),
-                ),
-              ),
-              child: Row(
+    if (embedded) {
+      return content;
+    }
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: AppBackground(
+        child: SafeArea(
+          child: content,
+        ),
+      ),
+    );
+  }
+}
+
+class _SafetyContent extends StatelessWidget {
+  final bool embedded;
+
+  const _SafetyContent({
+    required this.embedded,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final items = const [
+      (
+        Icons.password_rounded,
+        'OTP and passwords',
+        'Never share OTPs, passwords, PINs or CVV values.'
+      ),
+      (
+        Icons.link_rounded,
+        'Suspicious links',
+        'Avoid unknown links and verify organisations through official channels.'
+      ),
+      (
+        Icons.payments_outlined,
+        'Payment scams',
+        'Verify payment requests before sending money.'
+      ),
+      (
+        Icons.person_search_outlined,
+        'Verify the sender',
+        'A familiar name does not guarantee that a message is genuine.'
+      ),
+    ];
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 760,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Container(
-                    width: 54,
-                    height: 54,
-                    decoration: BoxDecoration(
-                      color: _riskColor.withValues(
-                        alpha: 0.18,
+                  if (!embedded)
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_rounded,
+                        color: AppColors.textPrimary,
                       ),
-                      shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      _riskIcon,
-                      color: _riskColor,
-                      size: 30,
-                    ),
-                  ),
 
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 8),
 
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${analysis.risk} RISK',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(
-                                color: _riskColor,
-                                fontWeight:
-                                    FontWeight.bold,
-                              ),
-                        ),
-
-                        const SizedBox(height: 4),
-
-                        Text(
-                          _riskMessage,
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            height: 1.35,
-                          ),
-                        ),
-                      ],
+                  const Text(
+                    'Safety guidelines',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ],
               ),
-            ),
 
-            const SizedBox(height: 22),
+              const SizedBox(height: 20),
 
-            _buildSectionTitle(
-              context,
-              icon: Icons.category_outlined,
-              title: 'Classification',
-            ),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: items.length,
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final item = items[index];
 
-            const SizedBox(height: 10),
-
-            _buildInfoRow(
-              context,
-              label: 'Category',
-              value: analysis.category,
-            ),
-
-            const SizedBox(height: 20),
-
-            _buildSectionTitle(
-              context,
-              icon: Icons.speed_rounded,
-              title: 'Risk Score',
-            ),
-
-            const SizedBox(height: 10),
-
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    '${analysis.riskScore}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall
-                        ?.copyWith(
-                          color: _riskColor,
-                          fontWeight:
-                              FontWeight.bold,
-                        ),
-                  ),
-                ),
-
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: _riskColor.withValues(
-                      alpha: 0.12,
-                    ),
-                    borderRadius:
-                        BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    analysis.risk,
-                    style: TextStyle(
-                      color: _riskColor,
-                      fontWeight:
-                          FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            _buildSectionTitle(
-              context,
-              icon: Icons.psychology_outlined,
-              title: 'Model Confidence',
-            ),
-
-            const SizedBox(height: 12),
-
-            Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Prediction confidence',
-                  style: TextStyle(
-                    color: Colors.white60,
-                  ),
-                ),
-
-                Text(
-                  '$confidencePercent%',
-                  style: const TextStyle(
-                    fontWeight:
-                        FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 8),
-
-            ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(10),
-              child: LinearProgressIndicator(
-                value: analysis.confidence.clamp(
-                  0.0,
-                  1.0,
-                ),
-                minHeight: 10,
-                backgroundColor:
-                    Colors.white10,
-                color: const Color(0xFF4F8CFF),
-              ),
-            ),
-
-            if (analysis.signals.isNotEmpty) ...[
-              const SizedBox(height: 24),
-
-              _buildSectionTitle(
-                context,
-                icon:
-                    Icons.fact_check_outlined,
-                title: 'Detected Signals',
-              ),
-
-              const SizedBox(height: 12),
-
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: analysis.signals.map(
-                  (signal) {
                     return Container(
-                      padding:
-                          const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color:
-                            const Color(0xFF1D2942),
-                        borderRadius:
-                            BorderRadius.circular(
-                          20,
+                        color: AppColors.backgroundSoft.withValues(
+                          alpha: 0.8,
                         ),
-                        border: Border.all(
-                          color:
-                              const Color(0xFF30415F),
-                        ),
+                        borderRadius: BorderRadius.circular(14),
                       ),
-                      child: Text(
-                        _formatSignal(signal),
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.white70,
-                        ),
+                      child: Row(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            item.$1,
+                            color: AppColors.tealSoft,
+                          ),
+
+                          const SizedBox(width: 14),
+
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.$2,
+                                  style: const TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 5),
+
+                                Text(
+                                  item.$3,
+                                  style: const TextStyle(
+                                    color:
+                                        AppColors.textSecondary,
+                                    fontSize: 14,
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
-                ).toList(),
+                ),
               ),
             ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-  }) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 20,
-          color: const Color(0xFF6EA8FF),
-        ),
-
-        const SizedBox(width: 8),
-
-        Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInfoRow(
-    BuildContext context, {
-    required String label,
-    required String value,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: const Color(0xFF101828),
-        borderRadius:
-            BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white54,
-            ),
           ),
-
-          const Spacer(),
-
-          Flexible(
-            child: Text(
-              value.replaceAll('_', ' '),
-              textAlign: TextAlign.right,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -18,18 +18,32 @@ class AnalysisHistoryResponse {
   factory AnalysisHistoryResponse.fromJson(
     Map<String, dynamic> json,
   ) {
+    final rawItems = json['items'];
+
     return AnalysisHistoryResponse(
-      total: json['total'] as int,
-      skip: json['skip'] as int,
-      limit: json['limit'] as int,
-      returned: json['returned'] as int,
-      items: (json['items'] as List)
-          .map(
-            (item) => MessageAnalysis.fromJson(
-              item as Map<String, dynamic>,
-            ),
-          )
-          .toList(),
+      total: _asInt(json['total']),
+      skip: _asInt(json['skip']),
+      limit: _asInt(json['limit']),
+      returned: _asInt(json['returned']),
+      items: rawItems is List
+          ? rawItems
+              .whereType<Map>()
+              .map(
+                (item) => MessageAnalysis.fromJson(
+                  Map<String, dynamic>.from(item),
+                ),
+              )
+              .toList()
+          : const [],
     );
   }
+}
+
+
+int _asInt(dynamic value) {
+  if (value is int) return value;
+
+  if (value is num) return value.toInt();
+
+  return int.tryParse(value?.toString() ?? '') ?? 0;
 }

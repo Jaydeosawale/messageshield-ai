@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/auth_provider.dart';
+import '../../core/theme/app_theme.dart';
+import '../../widgets/app_background.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -75,19 +77,9 @@ class _RegisterScreenState
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF07111F),
-                Color(0xFF0B1F33),
-                Color(0xFF07111F),
-              ],
-            ),
-          ),
+      backgroundColor: AppColors.background,
+      body: AppBackground(
+        child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24),
@@ -99,10 +91,10 @@ class _RegisterScreenState
                   child: Container(
                     padding: const EdgeInsets.all(28),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF101C2C),
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
-                        color: Colors.blueAccent.withOpacity(
+                        color: AppColors.teal.withValues(alpha: 
                           0.25,
                         ),
                       ),
@@ -127,7 +119,7 @@ class _RegisterScreenState
                               },
                               icon: const Icon(
                                 Icons.arrow_back,
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -136,7 +128,7 @@ class _RegisterScreenState
                               style: theme
                                   .textTheme.headlineSmall
                                   ?.copyWith(
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                                 fontWeight:
                                     FontWeight.bold,
                               ),
@@ -154,14 +146,14 @@ class _RegisterScreenState
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
                                 colors: [
-                                  Color(0xFF2563EB),
-                                  Color(0xFF06B6D4),
+                                  AppColors.teal,
+                                  AppColors.green,
                                 ],
                               ),
                             ),
                             child: const Icon(
                               Icons.person_add_alt_1,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               size: 34,
                             ),
                           ),
@@ -175,7 +167,7 @@ class _RegisterScreenState
                           style: theme
                               .textTheme.headlineSmall
                               ?.copyWith(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -187,7 +179,7 @@ class _RegisterScreenState
                           textAlign: TextAlign.center,
                           style: theme.textTheme.bodyMedium
                               ?.copyWith(
-                            color: Colors.blueGrey.shade300,
+                            color: AppColors.textSecondary,
                           ),
                         ),
 
@@ -198,7 +190,7 @@ class _RegisterScreenState
                           keyboardType:
                               TextInputType.emailAddress,
                           style:
-                              const TextStyle(color: Colors.white),
+                              const TextStyle(color: AppColors.textPrimary),
                           decoration: _inputDecoration(
                             label: 'Email address',
                             icon: Icons.email_outlined,
@@ -223,7 +215,7 @@ class _RegisterScreenState
                           controller: _passwordController,
                           obscureText: _obscurePassword,
                           style:
-                              const TextStyle(color: Colors.white),
+                              const TextStyle(color: AppColors.textPrimary),
                           decoration: _inputDecoration(
                             label: 'Password',
                             icon: Icons.lock_outline,
@@ -234,7 +226,7 @@ class _RegisterScreenState
                                     ? Icons.visibility_outlined
                                     : Icons
                                         .visibility_off_outlined,
-                                color: Colors.blueGrey.shade300,
+                                color: AppColors.textSecondary,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -261,7 +253,7 @@ class _RegisterScreenState
                               _confirmPasswordController,
                           obscureText: _obscurePassword,
                           style:
-                              const TextStyle(color: Colors.white),
+                              const TextStyle(color: AppColors.textPrimary),
                           decoration: _inputDecoration(
                             label: 'Confirm password',
                             icon: Icons.lock_outline,
@@ -291,7 +283,7 @@ class _RegisterScreenState
                                 : _register,
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                                  const Color(0xFF2563EB),
+                                  AppColors.teal,
                               foregroundColor: Colors.white,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
@@ -329,7 +321,7 @@ class _RegisterScreenState
                             Icon(
                               Icons.shield_outlined,
                               size: 16,
-                              color: Colors.green.shade300,
+                              color: AppColors.green,
                             ),
                             const SizedBox(width: 6),
                             Text(
@@ -337,7 +329,7 @@ class _RegisterScreenState
                               style: TextStyle(
                                 fontSize: 12,
                                 color:
-                                    Colors.blueGrey.shade400,
+                                    AppColors.textSecondary.withValues(alpha: 0.75),
                               ),
                             ),
                           ],
@@ -361,30 +353,30 @@ class _RegisterScreenState
     return InputDecoration(
       labelText: label,
       labelStyle: TextStyle(
-        color: Colors.blueGrey.shade300,
+        color: AppColors.textSecondary,
       ),
       prefixIcon: Icon(
         icon,
-        color: const Color(0xFF60A5FA),
+        color: AppColors.teal,
       ),
       filled: true,
-      fillColor: const Color(0xFF07111F),
+      fillColor: AppColors.background,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide(
-          color: Colors.blueGrey.shade800,
+          color: AppColors.border,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide(
-          color: Colors.blueGrey.shade800,
+          color: AppColors.border,
         ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: const BorderSide(
-          color: Color(0xFF3B82F6),
+          color: AppColors.teal,
           width: 1.5,
         ),
       ),

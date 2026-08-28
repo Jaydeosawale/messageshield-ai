@@ -35,29 +35,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Color _riskColor(String risk) {
     switch (risk.toUpperCase()) {
       case 'HIGH':
-        return Colors.red;
+        return const Color(0xFFFF5C70);
       case 'MEDIUM':
-        return Colors.orange;
+        return const Color(0xFFFFB020);
       case 'LOW':
-        return Colors.green;
+        return const Color(0xFF32D583);
       default:
-        return Colors.grey;
+        return const Color(0xFF8FA3BF);
     }
   }
 
   IconData _riskIcon(String risk) {
     switch (risk.toUpperCase()) {
       case 'HIGH':
-        return Icons.dangerous_outlined;
-
+        return Icons.dangerous_rounded;
       case 'MEDIUM':
         return Icons.warning_amber_rounded;
-
       case 'LOW':
         return Icons.verified_user_outlined;
-
       default:
-        return Icons.help_outline;
+        return Icons.help_outline_rounded;
     }
   }
 
@@ -79,16 +76,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return category
         .toLowerCase()
         .split('_')
-        .map(
-          (word) {
-            if (word.isEmpty) {
-              return word;
-            }
+        .map((word) {
+          if (word.isEmpty) {
+            return word;
+          }
 
-            return '${word[0].toUpperCase()}'
-                '${word.substring(1)}';
-          },
-        )
+          return '${word[0].toUpperCase()}'
+              '${word.substring(1)}';
+        })
         .join(' ');
   }
 
@@ -96,21 +91,37 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Analysis History'),
-        centerTitle: true,
+        centerTitle: false,
+        titleSpacing: 24,
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Analysis History',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            SizedBox(height: 2),
+            Text(
+              'Your recent message safety checks',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+                color: Color(0xFF8FA3BF),
+              ),
+            ),
+          ],
+        ),
       ),
       body: FutureBuilder<List<MessageAnalysis>>(
         future: _historyFuture,
         builder: (context, snapshot) {
-          // Loading
-          if (snapshot.connectionState ==
-              ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const _LoadingState();
           }
 
-          // Error
           if (snapshot.hasError) {
             return _ErrorState(
               message: snapshot.error
@@ -122,18 +133,31 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
           final analyses = snapshot.data ?? [];
 
-          // Empty
           if (analyses.isEmpty) {
-            return const _EmptyState();
+            return RefreshIndicator(
+              onRefresh: _refresh,
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: const [
+                  SizedBox(height: 120),
+                  _EmptyState(),
+                ],
+              ),
+            );
           }
 
-          // History list
           return RefreshIndicator(
             onRefresh: _refresh,
+            color: const Color(0xFF4F8CFF),
+            backgroundColor: const Color(0xFF18263D),
             child: ListView.separated(
-              physics:
-                  const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(16),
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(
+                16,
+                12,
+                16,
+                32,
+              ),
               itemCount: analyses.length,
               separatorBuilder: (_, __) =>
                   const SizedBox(height: 12),
@@ -182,132 +206,149 @@ class _HistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final confidencePercent =
-        (analysis.confidence * 100)
-            .toStringAsFixed(0);
+        (analysis.confidence * 100).toStringAsFixed(0);
 
     return Card(
-      elevation: 1,
+      elevation: 0,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) =>
-                  AnalysisDetailScreen(
+              builder: (_) => AnalysisDetailScreen(
                 analysis: analysis,
               ),
             ),
           );
         },
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(18),
           child: Row(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Risk icon
-              CircleAvatar(
-                radius: 24,
-                backgroundColor:
-                    riskColor.withOpacity(0.12),
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: riskColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: riskColor.withValues(alpha: 0.28),
+                  ),
+                ),
                 child: Icon(
                   riskIcon,
                   color: riskColor,
+                  size: 27,
                 ),
               ),
 
               const SizedBox(width: 14),
 
-              // Content
               Expanded(
                 child: Column(
                   crossAxisAlignment:
                       CrossAxisAlignment.start,
                   children: [
-                    // Risk + arrow
                     Row(
                       children: [
-                        Expanded(
+                        Container(
+                          padding:
+                              const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: riskColor.withValues(
+                              alpha: 0.12,
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(20),
+                          ),
                           child: Text(
-                            '${analysis.risk} RISK',
-                            style:
-                                Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(
-                                      fontWeight:
-                                          FontWeight.bold,
-                                      color: riskColor,
-                                    ),
+                            '${analysis.risk.toUpperCase()} RISK',
+                            style: TextStyle(
+                              color: riskColor,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5,
+                            ),
                           ),
                         ),
+
+                        const Spacer(),
+
                         const Icon(
-                          Icons.chevron_right_rounded,
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    // Message
-                    Text(
-                      analysis.safeMessage,
-                      maxLines: 3,
-                      overflow:
-                          TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge,
-                    ),
-
-                    const SizedBox(height: 14),
-
-                    // Metadata
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _InfoChip(
-                          icon:
-                              Icons.category_outlined,
-                          label:
-                              formattedCategory,
-                        ),
-                        _InfoChip(
-                          icon:
-                              Icons.speed_outlined,
-                          label:
-                              'Score ${analysis.riskScore}',
-                        ),
-                        _InfoChip(
-                          icon:
-                              Icons.analytics_outlined,
-                          label:
-                              '$confidencePercent%',
+                          Icons.arrow_forward_ios_rounded,
+                          size: 16,
+                          color: Color(0xFF8FA3BF),
                         ),
                       ],
                     ),
 
                     const SizedBox(height: 12),
 
-                    // Date
+                    Text(
+                      analysis.safeMessage,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(
+                            height: 1.45,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _InfoChip(
+                          icon: Icons.category_outlined,
+                          label: formattedCategory,
+                        ),
+                        _InfoChip(
+                          icon: Icons.speed_outlined,
+                          label: 'Score ${analysis.riskScore}',
+                        ),
+                        _InfoChip(
+                          icon:
+                              Icons.analytics_outlined,
+                          label: '$confidencePercent%',
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    Container(
+                      height: 1,
+                      color: const Color(0xFF20314D),
+                    ),
+
+                    const SizedBox(height: 12),
+
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.access_time_outlined,
                           size: 15,
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.color,
+                          color: Color(0xFF8FA3BF),
                         ),
+
                         const SizedBox(width: 6),
+
                         Text(
                           formattedDate,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF8FA3BF),
+                          ),
                         ),
                       ],
                     ),
@@ -333,19 +374,70 @@ class _InfoChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      avatar: Icon(
-        icon,
-        size: 16,
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 7,
       ),
-      label: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 12,
+      decoration: BoxDecoration(
+        color: const Color(0xFF0C1728),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: const Color(0xFF20314D),
         ),
       ),
-      visualDensity:
-          VisualDensity.compact,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 15,
+            color: const Color(0xFF4F8CFF),
+          ),
+
+          const SizedBox(width: 6),
+
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFFB7C6DA),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LoadingState extends StatelessWidget {
+  const _LoadingState();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 42,
+            height: 42,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+            ),
+          ),
+
+          SizedBox(height: 18),
+
+          Text(
+            'Loading your analysis history...',
+            style: TextStyle(
+              color: Color(0xFF8FA3BF),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -357,35 +449,50 @@ class _EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 32,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.history_outlined,
-              size: 72,
-              color: Theme.of(context)
-                  .colorScheme
-                  .primary,
+            Container(
+              width: 88,
+              height: 88,
+              decoration: BoxDecoration(
+                color: const Color(0xFF4F8CFF)
+                    .withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(
+                  color: const Color(0xFF4F8CFF)
+                      .withValues(alpha: 0.25),
+                ),
+              ),
+              child: const Icon(
+                Icons.history_rounded,
+                size: 42,
+                color: Color(0xFF4F8CFF),
+              ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
-            Text(
+            const Text(
               'No analyses yet',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
 
-            Text(
-              'Messages you analyze will appear here.',
+            const Text(
+              'Your analyzed messages will appear here so you can review their safety results anytime.',
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium,
+              style: TextStyle(
+                color: Color(0xFF8FA3BF),
+                height: 1.5,
+              ),
             ),
           ],
         ),
@@ -411,40 +518,52 @@ class _ErrorState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
+            Container(
+              width: 76,
+              height: 76,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFF5C70)
+                    .withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: const Icon(
+                Icons.cloud_off_outlined,
+                size: 38,
+                color: Color(0xFFFF5C70),
+              ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 22),
 
-            Text(
-              'Could not load history',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall,
+            const Text(
+              'Unable to load history',
+              style: TextStyle(
+                fontSize: 21,
+                fontWeight: FontWeight.w700,
+              ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
 
             Text(
               message,
               textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Color(0xFF8FA3BF),
+                height: 1.4,
+              ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
-            ElevatedButton.icon(
-              onPressed: () {
-                onRetry();
-              },
-              icon: const Icon(
-                Icons.refresh_rounded,
-              ),
-              label: const Text(
-                'Try Again',
+            SizedBox(
+              width: 180,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  onRetry();
+                },
+                icon: const Icon(Icons.refresh_rounded),
+                label: const Text('Try Again'),
               ),
             ),
           ],

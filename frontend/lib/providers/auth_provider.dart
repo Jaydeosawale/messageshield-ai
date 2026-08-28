@@ -6,8 +6,10 @@ import '../models/user.dart';
 
 class AuthProvider extends ChangeNotifier {
   User? _user;
+
   bool _isLoading = false;
   bool _isInitialized = false;
+
   String? _error;
 
   User? get user => _user;
@@ -20,25 +22,41 @@ class AuthProvider extends ChangeNotifier {
 
   String? get error => _error;
 
+  // ==========================================
   // Restore session when app starts
+  // ==========================================
+
   Future<void> initialize() async {
-    _setLoading(true);
+    if (_isInitialized) return;
+
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
 
     try {
       final token = await TokenStorage.getToken();
 
-      if (token != null && token.isNotEmpty) {
-        _user = await AuthService.getCurrentUser();
+      if (token == null || token.trim().isEmpty) {
+        _user = null;
+        return;
       }
+
+      // Verify saved token with backend.
+      _user = await AuthService.getCurrentUser();
     } catch (_) {
+      // Token expired, invalid, or backend rejected it.
       await TokenStorage.deleteToken();
       _user = null;
     } finally {
-      _isInitialized = true;
       _isLoading = false;
+      _isInitialized = true;
       notifyListeners();
     }
   }
+
+  // ==========================================
+  // Register
+  // ==========================================
 
   Future<void> register({
     required String email,
@@ -54,15 +72,16 @@ class AuthProvider extends ChangeNotifier {
         password: password,
       );
     } catch (error) {
-      _error = error.toString().replaceFirst(
-        'Exception: ',
-        '',
-      );
+      _error = _cleanError(error);
       rethrow;
     } finally {
       _setLoading(false);
     }
   }
+
+  // ==========================================
+  // Login
+  // ==========================================
 
   Future<void> login({
     required String email,
@@ -73,30 +92,40 @@ class AuthProvider extends ChangeNotifier {
     try {
       _error = null;
 
+      // Login saves JWT token.
       await AuthService.login(
         email: email,
         password: password,
       );
 
+      // Verify token and get current user.
       _user = await AuthService.getCurrentUser();
 
       notifyListeners();
     } catch (error) {
-      _error = error.toString().replaceFirst(
-        'Exception: ',
-        '',
-      );
+      // Important: remove bad/partial token if anything fails.
+      await TokenStorage.deleteToken();
+
+      _user = null;
+      _error = _cleanError(error);
+
+      notifyListeners();
       rethrow;
     } finally {
       _setLoading(false);
     }
   }
 
+  // ==========================================
+  // Logout
+  // ==========================================
+
   Future<void> logout() async {
     _setLoading(true);
 
     try {
       await AuthService.logout();
+
       _user = null;
       _error = null;
     } finally {
@@ -104,8 +133,29 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // ==========================================
+  // Clear error
+  // ==========================================
+
+  void clearError() {
+    if (_error == null) return;
+
+    _error = null;
+    notifyListeners();
+  }
+
+  // ==========================================
+  // Helpers
+  // ==========================================
+
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
+  }
+
+  String _cleanError(Object error) {
+    return error
+        .toString()
+        .replaceFirst('Exception: ', '');
   }
 }
