@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/auth_provider.dart';
 import '../../core/theme/app_theme.dart';
+import '../../providers/auth_provider.dart';
 import '../../widgets/app_background.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -23,6 +23,7 @@ class _RegisterScreenState
       TextEditingController();
 
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
@@ -37,6 +38,8 @@ class _RegisterScreenState
       return;
     }
 
+    FocusScope.of(context).unfocus();
+
     try {
       await context.read<AuthProvider>().register(
             email: _emailController.text.trim(),
@@ -50,6 +53,7 @@ class _RegisterScreenState
           content: Text(
             'Account created successfully. Please log in.',
           ),
+          backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -58,17 +62,43 @@ class _RegisterScreenState
     } catch (_) {
       if (!mounted) return;
 
-      final error =
+      final rawError =
           context.read<AuthProvider>().error ??
               'Registration failed';
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(error),
+          content: Text(
+            _friendlyRegisterError(rawError),
+          ),
+          backgroundColor: AppColors.danger,
           behavior: SnackBarBehavior.floating,
         ),
       );
     }
+  }
+
+  String _friendlyRegisterError(String error) {
+    final message = error.toLowerCase();
+
+    if (message.contains('already registered') ||
+        message.contains('already exists') ||
+        message.contains('already in use') ||
+        message.contains('duplicate')) {
+      return 'An account with this email already exists.';
+    }
+
+    if (message.contains('network') ||
+        message.contains('socket') ||
+        message.contains('connection')) {
+      return 'Unable to connect to the server. Please check your internet connection.';
+    }
+
+    if (message.contains('timeout')) {
+      return 'The request timed out. Please try again.';
+    }
+
+    return 'Unable to create your account. Please try again.';
   }
 
   @override
@@ -91,19 +121,23 @@ class _RegisterScreenState
                   child: Container(
                     padding: const EdgeInsets.all(28),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(24),
+                      color: AppColors.backgroundSoft.withValues(
+                        alpha: 0.96,
+                      ),
+                      borderRadius:
+                          BorderRadius.circular(24),
                       border: Border.all(
-                        color: AppColors.teal.withValues(alpha: 
-                          0.25,
+                        color: AppColors.teal.withValues(
+                          alpha: 0.28,
                         ),
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              Colors.black.withOpacity(0.35),
-                          blurRadius: 30,
-                          offset: const Offset(0, 12),
+                          color: Colors.black.withValues(
+                            alpha: 0.38,
+                          ),
+                          blurRadius: 32,
+                          offset: const Offset(0, 14),
                         ),
                       ],
                     ),
@@ -114,46 +148,67 @@ class _RegisterScreenState
                         Row(
                           children: [
                             IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                              tooltip: 'Back',
+                              onPressed: auth.isLoading
+                                  ? null
+                                  : () {
+                                      Navigator.pop(context);
+                                    },
                               icon: const Icon(
-                                Icons.arrow_back,
+                                Icons.arrow_back_rounded,
                                 color: AppColors.textPrimary,
                               ),
                             ),
+
                             const SizedBox(width: 8),
+
                             Text(
                               'Create Account',
                               style: theme
                                   .textTheme.headlineSmall
                                   ?.copyWith(
-                                color: AppColors.textPrimary,
+                                color:
+                                    AppColors.textPrimary,
                                 fontWeight:
-                                    FontWeight.bold,
+                                    FontWeight.w800,
                               ),
                             ),
                           ],
                         ),
 
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 16),
 
                         Center(
                           child: Container(
-                            width: 72,
-                            height: 72,
-                            decoration: const BoxDecoration(
+                            width: 76,
+                            height: 76,
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              gradient: LinearGradient(
+                              gradient:
+                                  const LinearGradient(
+                                begin:
+                                    Alignment.topLeft,
+                                end:
+                                    Alignment.bottomRight,
                                 colors: [
                                   AppColors.teal,
                                   AppColors.green,
                                 ],
                               ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.teal
+                                      .withValues(
+                                    alpha: 0.22,
+                                  ),
+                                  blurRadius: 22,
+                                  spreadRadius: 1,
+                                ),
+                              ],
                             ),
                             child: const Icon(
                               Icons.person_add_alt_1,
-                              color: AppColors.textPrimary,
+                              color: Colors.white,
                               size: 34,
                             ),
                           ),
@@ -168,18 +223,19 @@ class _RegisterScreenState
                               .textTheme.headlineSmall
                               ?.copyWith(
                             color: AppColors.textPrimary,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
 
                         const SizedBox(height: 8),
 
-                        Text(
+                        const Text(
                           'Create your secure account and start analyzing suspicious messages.',
                           textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyMedium
-                              ?.copyWith(
+                          style: TextStyle(
                             color: AppColors.textSecondary,
+                            fontSize: 14,
+                            height: 1.45,
                           ),
                         ),
 
@@ -189,20 +245,29 @@ class _RegisterScreenState
                           controller: _emailController,
                           keyboardType:
                               TextInputType.emailAddress,
-                          style:
-                              const TextStyle(color: AppColors.textPrimary),
+                          textInputAction:
+                              TextInputAction.next,
+                          autofillHints: const [
+                            AutofillHints.newUsername,
+                            AutofillHints.email,
+                          ],
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                          ),
                           decoration: _inputDecoration(
                             label: 'Email address',
                             icon: Icons.email_outlined,
                           ),
                           validator: (value) {
-                            if (value == null ||
-                                value.trim().isEmpty) {
+                            final email = value?.trim() ?? '';
+
+                            if (email.isEmpty) {
                               return 'Email is required';
                             }
 
-                            if (!value.contains('@')) {
-                              return 'Enter a valid email';
+                            if (!email.contains('@') ||
+                                !email.contains('.')) {
+                              return 'Enter a valid email address';
                             }
 
                             return null;
@@ -214,19 +279,30 @@ class _RegisterScreenState
                         TextFormField(
                           controller: _passwordController,
                           obscureText: _obscurePassword,
-                          style:
-                              const TextStyle(color: AppColors.textPrimary),
+                          textInputAction:
+                              TextInputAction.next,
+                          autofillHints: const [
+                            AutofillHints.newPassword,
+                          ],
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                          ),
                           decoration: _inputDecoration(
                             label: 'Password',
                             icon: Icons.lock_outline,
                           ).copyWith(
                             suffixIcon: IconButton(
+                              tooltip: _obscurePassword
+                                  ? 'Show password'
+                                  : 'Hide password',
                               icon: Icon(
                                 _obscurePassword
-                                    ? Icons.visibility_outlined
+                                    ? Icons
+                                        .visibility_outlined
                                     : Icons
                                         .visibility_off_outlined,
-                                color: AppColors.textSecondary,
+                                color:
+                                    AppColors.textSecondary,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -251,14 +327,45 @@ class _RegisterScreenState
                         TextFormField(
                           controller:
                               _confirmPasswordController,
-                          obscureText: _obscurePassword,
-                          style:
-                              const TextStyle(color: AppColors.textPrimary),
+                          obscureText:
+                              _obscureConfirmPassword,
+                          textInputAction:
+                              TextInputAction.done,
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                          ),
                           decoration: _inputDecoration(
                             label: 'Confirm password',
                             icon: Icons.lock_outline,
+                          ).copyWith(
+                            suffixIcon: IconButton(
+                              tooltip:
+                                  _obscureConfirmPassword
+                                      ? 'Show password'
+                                      : 'Hide password',
+                              icon: Icon(
+                                _obscureConfirmPassword
+                                    ? Icons
+                                        .visibility_outlined
+                                    : Icons
+                                        .visibility_off_outlined,
+                                color:
+                                    AppColors.textSecondary,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureConfirmPassword =
+                                      !_obscureConfirmPassword;
+                                });
+                              },
+                            ),
                           ),
                           validator: (value) {
+                            if (value == null ||
+                                value.isEmpty) {
+                              return 'Please confirm your password';
+                            }
+
                             if (value !=
                                 _passwordController.text) {
                               return 'Passwords do not match';
@@ -281,14 +388,23 @@ class _RegisterScreenState
                             onPressed: auth.isLoading
                                 ? null
                                 : _register,
-                            style: ElevatedButton.styleFrom(
+                            style:
+                                ElevatedButton.styleFrom(
                               backgroundColor:
                                   AppColors.teal,
-                              foregroundColor: Colors.white,
+                              foregroundColor:
+                                  Colors.white,
+                              disabledBackgroundColor:
+                                  AppColors.teal.withValues(
+                                alpha: 0.45,
+                              ),
                               elevation: 0,
-                              shape: RoundedRectangleBorder(
+                              shape:
+                                  RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.circular(14),
+                                    BorderRadius.circular(
+                                  14,
+                                ),
                               ),
                             ),
                             child: auth.isLoading
@@ -306,7 +422,7 @@ class _RegisterScreenState
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight:
-                                          FontWeight.w600,
+                                          FontWeight.w700,
                                     ),
                                   ),
                           ),
@@ -314,22 +430,24 @@ class _RegisterScreenState
 
                         const SizedBox(height: 20),
 
-                        Row(
+                        const Row(
                           mainAxisAlignment:
                               MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.shield_outlined,
                               size: 16,
-                              color: AppColors.green,
+                              color: AppColors.greenSoft,
                             ),
-                            const SizedBox(width: 6),
+
+                            SizedBox(width: 7),
+
                             Text(
                               'Your account is protected',
                               style: TextStyle(
                                 fontSize: 12,
                                 color:
-                                    AppColors.textSecondary.withValues(alpha: 0.75),
+                                    AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -352,27 +470,37 @@ class _RegisterScreenState
   }) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(
+
+      labelStyle: const TextStyle(
         color: AppColors.textSecondary,
       ),
+
+      floatingLabelStyle: const TextStyle(
+        color: AppColors.tealSoft,
+      ),
+
       prefixIcon: Icon(
         icon,
-        color: AppColors.teal,
+        color: AppColors.tealSoft,
       ),
+
       filled: true,
-      fillColor: AppColors.background,
+      fillColor: AppColors.inputBackground,
+
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(
-          color: AppColors.border,
+        borderSide: const BorderSide(
+          color: AppColors.inputBorder,
         ),
       ),
+
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(
-          color: AppColors.border,
+        borderSide: const BorderSide(
+          color: AppColors.inputBorder,
         ),
       ),
+
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: const BorderSide(
@@ -380,6 +508,26 @@ class _RegisterScreenState
           width: 1.5,
         ),
       ),
+
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(
+          color: AppColors.danger,
+        ),
+      ),
+
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(
+          color: AppColors.danger,
+          width: 1.5,
+        ),
+      ),
+
+      errorStyle: const TextStyle(
+        color: AppColors.danger,
+      ),
     );
   }
 }
+

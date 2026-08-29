@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/auth_provider.dart';
 import '../../core/theme/app_theme.dart';
+import '../../providers/auth_provider.dart';
+
 import '../../widgets/app_background.dart';
 import 'register_screen.dart';
 
@@ -28,7 +29,13 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  // ============================================================
+  // LOGIN
+  // ============================================================
+
   Future<void> _login() async {
+    FocusScope.of(context).unfocus();
+
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -41,150 +48,258 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (_) {
       if (!mounted) return;
 
-      final error =
-          context.read<AuthProvider>().error ??
-              'Login failed';
+      final providerError =
+          context.read<AuthProvider>().error ?? 'Login failed';
+
+      final message = _friendlyError(providerError);
+
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(error),
+          content: Row(
+            children: [
+              const Icon(
+                Icons.error_outline_rounded,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(message),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.danger,
           behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
   }
 
+  // ============================================================
+  // USER-FRIENDLY BACKEND ERRORS
+  // ============================================================
+
+  String _friendlyError(String error) {
+    final value = error.toLowerCase();
+
+    if (value.contains('invalid credentials') ||
+        value.contains('incorrect email') ||
+        value.contains('incorrect password') ||
+        value.contains('invalid email or password') ||
+        value.contains('unauthorized')) {
+      return 'Invalid email or password.';
+    }
+
+    if (value.contains('network') ||
+        value.contains('connection') ||
+        value.contains('socket')) {
+      return 'Unable to connect to the server. Please try again.';
+    }
+
+    if (value.contains('timeout')) {
+      return 'The request timed out. Please try again.';
+    }
+
+    if (value.contains('inactive')) {
+      return 'Your account is currently inactive.';
+    }
+
+    return error.isNotEmpty
+        ? error
+        : 'Unable to sign in. Please try again.';
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
-    final theme = Theme.of(context);
 
     return Scaffold(
       backgroundColor: AppColors.background,
+
       body: AppBackground(
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24),
+
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
-                  maxWidth: 450,
+                  maxWidth: 460,
                 ),
+
                 child: Form(
                   key: _formKey,
+
                   child: Container(
-                    padding: const EdgeInsets.all(28),
+                    padding: const EdgeInsets.all(30),
+
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(24),
+                      // DARK CARD - MATCHES APPLICATION THEME
+                      color: AppColors.backgroundSoft,
+
+                      borderRadius: BorderRadius.circular(28),
+
                       border: Border.all(
-                        color: AppColors.teal.withValues(alpha: 0.22),
+                        color: AppColors.teal.withValues(
+                          alpha: 0.22,
+                        ),
                       ),
+
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.35),
-                          blurRadius: 30,
-                          offset: const Offset(0, 12),
+                          color: Colors.black.withValues(
+                            alpha: 0.32,
+                          ),
+                          blurRadius: 32,
+                          offset: const Offset(0, 14),
                         ),
                       ],
                     ),
+
                     child: Column(
                       crossAxisAlignment:
                           CrossAxisAlignment.stretch,
+
                       children: [
+                        // ==================================================
+                        // LOGO
+                        // ==================================================
+
                         Center(
                           child: Container(
-                            width: 82,
-                            height: 82,
+                            width: 86,
+                            height: 86,
+
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
+
                               gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                                 colors: [
                                   AppColors.teal,
                                   AppColors.green,
                                 ],
                               ),
+
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.teal
-                                      .withValues(alpha: 0.22),
-                                  blurRadius: 25,
+                                  color: AppColors.teal.withValues(
+                                    alpha: 0.24,
+                                  ),
+                                  blurRadius: 28,
+                                  spreadRadius: 1,
                                 ),
                               ],
                             ),
+
                             child: const Icon(
                               Icons.shield_outlined,
-                              color: AppColors.textPrimary,
+                              color: Colors.white,
                               size: 44,
                             ),
                           ),
                         ),
 
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 22),
 
-                        Text(
+                        // ==================================================
+                        // BRAND
+                        // ==================================================
+
+                        const Text(
                           'MessageShield',
                           textAlign: TextAlign.center,
-                          style: theme.textTheme.headlineMedium
-                              ?.copyWith(
-                            fontWeight: FontWeight.bold,
+
+                          style: TextStyle(
                             color: AppColors.textPrimary,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
                           ),
                         ),
 
                         const SizedBox(height: 8),
 
-                        Text(
+                        const Text(
                           'AI-powered message security',
                           textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyMedium
-                              ?.copyWith(
+
+                          style: TextStyle(
                             color: AppColors.textSecondary,
+                            fontSize: 14,
+                            letterSpacing: 0.3,
                           ),
                         ),
 
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 34),
 
-                        Text(
+                        // ==================================================
+                        // LOGIN TITLE
+                        // ==================================================
+
+                        const Text(
                           'Welcome back',
-                          style: theme.textTheme.headlineSmall
-                              ?.copyWith(
-                            fontWeight: FontWeight.w600,
+
+                          style: TextStyle(
                             color: AppColors.textPrimary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
 
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 8),
 
-                        Text(
+                        const Text(
                           'Sign in to protect and analyze your messages.',
-                          style: theme.textTheme.bodyMedium
-                              ?.copyWith(
+
+                          style: TextStyle(
                             color: AppColors.textSecondary,
+                            fontSize: 14,
+                            height: 1.4,
                           ),
                         ),
 
                         const SizedBox(height: 28),
 
+                        // ==================================================
+                        // EMAIL
+                        // ==================================================
+
                         TextFormField(
                           controller: _emailController,
+
                           keyboardType:
                               TextInputType.emailAddress,
+
+                          autofillHints: const [
+                            AutofillHints.email,
+                          ],
+
                           style: const TextStyle(
                             color: AppColors.textPrimary,
                           ),
+
+                          cursorColor: AppColors.teal,
+
                           decoration: _inputDecoration(
                             label: 'Email address',
                             icon: Icons.email_outlined,
                           ),
+
                           validator: (value) {
-                            if (value == null ||
-                                value.trim().isEmpty) {
+                            final email = value?.trim() ?? '';
+
+                            if (email.isEmpty) {
                               return 'Email is required';
                             }
 
-                            if (!value.contains('@')) {
-                              return 'Enter a valid email';
+                            if (!email.contains('@') ||
+                                !email.contains('.')) {
+                              return 'Enter a valid email address';
                             }
 
                             return null;
@@ -193,24 +308,42 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         const SizedBox(height: 18),
 
+                        // ==================================================
+                        // PASSWORD
+                        // ==================================================
+
                         TextFormField(
                           controller: _passwordController,
+
                           obscureText: _obscurePassword,
+
+                          autofillHints: const [
+                            AutofillHints.password,
+                          ],
+
                           style: const TextStyle(
                             color: AppColors.textPrimary,
                           ),
+
+                          cursorColor: AppColors.teal,
+
                           decoration: _inputDecoration(
                             label: 'Password',
                             icon: Icons.lock_outline,
                           ).copyWith(
                             suffixIcon: IconButton(
+                              tooltip: _obscurePassword
+                                  ? 'Show password'
+                                  : 'Hide password',
+
                               icon: Icon(
                                 _obscurePassword
                                     ? Icons.visibility_outlined
-                                    : Icons
-                                        .visibility_off_outlined,
+                                    : Icons.visibility_off_outlined,
+
                                 color: AppColors.textSecondary,
                               ),
+
                               onPressed: () {
                                 setState(() {
                                   _obscurePassword =
@@ -219,6 +352,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                             ),
                           ),
+
                           validator: (value) {
                             if (value == null ||
                                 value.isEmpty) {
@@ -227,6 +361,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             return null;
                           },
+
                           onFieldSubmitted: (_) {
                             if (!auth.isLoading) {
                               _login();
@@ -236,25 +371,44 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         const SizedBox(height: 28),
 
+                        // ==================================================
+                        // LOGIN BUTTON
+                        // ==================================================
+
                         SizedBox(
                           height: 54,
+
                           child: ElevatedButton(
                             onPressed:
-                                auth.isLoading ? null : _login,
+                                auth.isLoading
+                                    ? null
+                                    : _login,
+
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   AppColors.teal,
-                              foregroundColor: Colors.white,
+
+                              foregroundColor:
+                                  Colors.white,
+
+                              disabledBackgroundColor:
+                                  AppColors.teal.withValues(
+                                alpha: 0.45,
+                              ),
+
                               elevation: 0,
+
                               shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(14),
                               ),
                             ),
+
                             child: auth.isLoading
                                 ? const SizedBox(
-                                    width: 24,
-                                    height: 24,
+                                    width: 23,
+                                    height: 23,
+
                                     child:
                                         CircularProgressIndicator(
                                       strokeWidth: 2.5,
@@ -263,28 +417,37 @@ class _LoginScreenState extends State<LoginScreen> {
                                   )
                                 : const Text(
                                     'Secure Login',
+
                                     style: TextStyle(
-                                      fontWeight:
-                                          FontWeight.w600,
                                       fontSize: 16,
+                                      fontWeight:
+                                          FontWeight.w700,
                                     ),
                                   ),
                           ),
                         ),
 
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 22),
+
+                        // ==================================================
+                        // REGISTER
+                        // ==================================================
 
                         Row(
                           mainAxisAlignment:
                               MainAxisAlignment.center,
+
                           children: [
-                            Text(
+                            const Text(
                               "Don't have an account?",
+
                               style: TextStyle(
                                 color:
                                     AppColors.textSecondary,
+                                fontSize: 14,
                               ),
                             ),
+
                             TextButton(
                               onPressed: auth.isLoading
                                   ? null
@@ -297,12 +460,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                       );
                                     },
+
                               child: const Text(
                                 'Create account',
+
                                 style: TextStyle(
                                   color: AppColors.teal,
                                   fontWeight:
-                                      FontWeight.w600,
+                                      FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -311,22 +476,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         const SizedBox(height: 8),
 
+                        // ==================================================
+                        // SECURITY FOOTER
+                        // ==================================================
+
                         Row(
                           mainAxisAlignment:
                               MainAxisAlignment.center,
+
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.verified_user_outlined,
                               size: 16,
                               color: AppColors.green,
                             ),
-                            const SizedBox(width: 6),
+
+                            const SizedBox(width: 7),
+
                             Text(
                               'Secure AI-powered protection',
+
                               style: TextStyle(
                                 fontSize: 12,
                                 color:
-                                    AppColors.textSecondary.withValues(alpha: 0.75),
+                                    AppColors.textSecondary
+                                        .withValues(
+                                  alpha: 0.8,
+                                ),
                               ),
                             ),
                           ],
@@ -343,37 +519,79 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // ============================================================
+  // INPUT DECORATION
+  // ============================================================
+
   InputDecoration _inputDecoration({
     required String label,
     required IconData icon,
   }) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(
+
+      labelStyle: const TextStyle(
         color: AppColors.textSecondary,
       ),
+
+      floatingLabelStyle: const TextStyle(
+        color: AppColors.teal,
+        fontWeight: FontWeight.w600,
+      ),
+
       prefixIcon: Icon(
         icon,
         color: AppColors.teal,
       ),
+
       filled: true,
-      fillColor: AppColors.background,
+
+      // DARK INPUT - CONSISTENT WITH THEME
+      fillColor: AppColors.inputBackground,
+
+      errorStyle: const TextStyle(
+        color: AppColors.danger,
+        fontSize: 12,
+      ),
+
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(
-          color: AppColors.border,
+
+        borderSide: const BorderSide(
+          color: AppColors.inputBorder,
         ),
       ),
+
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(
-          color: AppColors.border,
+
+        borderSide: const BorderSide(
+          color: AppColors.inputBorder,
         ),
       ),
+
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
+
         borderSide: const BorderSide(
           color: AppColors.teal,
+          width: 1.6,
+        ),
+      ),
+
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+
+        borderSide: const BorderSide(
+          color: AppColors.danger,
+        ),
+      ),
+
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+
+        borderSide: const BorderSide(
+          color: AppColors.danger,
           width: 1.5,
         ),
       ),

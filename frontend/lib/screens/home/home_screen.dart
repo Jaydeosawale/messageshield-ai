@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   Text(
-                    'Stay protected.',
+                    'Stay Protected.',
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: isNarrowPhone

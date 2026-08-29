@@ -1,59 +1,58 @@
-from datetime import datetime
-from typing import TYPE_CHECKING
+from pydantic import BaseModel, EmailStr, Field
 
 
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Boolean, DateTime, Integer, String, func, text
+# ==========================================
+# Register request
+# ==========================================
 
-from app.db.base import Base
+class RegisterRequest(BaseModel):
+    email: EmailStr
 
-
-if TYPE_CHECKING:
-    from app.models.role import Role
-
-
-class User(Base):
-    __tablename__ = "users"
-
-    id: Mapped[int] = mapped_column(
-        Integer,
-        primary_key=True,
+    password: str = Field(
+        min_length=8,
+        max_length=128,
     )
 
-    email: Mapped[str] = mapped_column(
-        String(255),
-        unique=True,
-        nullable=False,
-        index=True,
+
+# ==========================================
+# Login request
+# ==========================================
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+
+    password: str = Field(
+        min_length=1,
+        max_length=128,
     )
 
-    password_hash: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False,
-    )
 
-    is_active: Mapped[bool] = mapped_column(
-        Boolean,
-        nullable=False,
-        default=True,
-        server_default=text("true"),
+# ==========================================
+# Token response
+# ==========================================
 
-    )
+class TokenResponse(BaseModel):
+    access_token: str
 
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
+    token_type: str = "bearer"
 
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
-    )
 
-    roles: Mapped[list["Role"]] = relationship(
-        secondary="user_roles",
-        back_populates="users",
-    )
+# ==========================================
+# User response
+# ==========================================
+
+class UserResponse(BaseModel):
+    id: int
+
+    email: EmailStr
+
+    is_active: bool
+
+    roles: list[str] = []
+
+    @property
+    def is_admin(self) -> bool:
+        return "admin" in [
+            role.lower()
+            for role in self.roles
+        ]

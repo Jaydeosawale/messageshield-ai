@@ -12,6 +12,10 @@ class AuthProvider extends ChangeNotifier {
 
   String? _error;
 
+  // ==========================================
+  // Getters
+  // ==========================================
+
   User? get user => _user;
 
   bool get isLoading => _isLoading;
@@ -23,7 +27,7 @@ class AuthProvider extends ChangeNotifier {
   String? get error => _error;
 
   // ==========================================
-  // Restore session when app starts
+  // Initialize app session
   // ==========================================
 
   Future<void> initialize() async {
@@ -36,15 +40,16 @@ class AuthProvider extends ChangeNotifier {
     try {
       final token = await TokenStorage.getToken();
 
+      // No token -> user is not logged in.
       if (token == null || token.trim().isEmpty) {
         _user = null;
         return;
       }
 
-      // Verify saved token with backend.
+      // Token exists -> verify with backend.
       _user = await AuthService.getCurrentUser();
     } catch (_) {
-      // Token expired, invalid, or backend rejected it.
+      // Invalid or expired token.
       await TokenStorage.deleteToken();
       _user = null;
     } finally {
@@ -98,18 +103,19 @@ class AuthProvider extends ChangeNotifier {
         password: password,
       );
 
-      // Verify token and get current user.
+      // Verify token and get logged-in user.
       _user = await AuthService.getCurrentUser();
 
       notifyListeners();
     } catch (error) {
-      // Important: remove bad/partial token if anything fails.
+      // Remove invalid/partial token.
       await TokenStorage.deleteToken();
 
       _user = null;
       _error = _cleanError(error);
 
       notifyListeners();
+
       rethrow;
     } finally {
       _setLoading(false);
@@ -124,12 +130,30 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(true);
 
     try {
-      await AuthService.logout();
+      // Clear local JWT token.
+      await TokenStorage.deleteToken();
 
       _user = null;
       _error = null;
     } finally {
       _setLoading(false);
+    }
+  }
+
+  // ==========================================
+  // Refresh current user
+  // ==========================================
+
+  Future<void> refreshUser() async {
+    try {
+      _user = await AuthService.getCurrentUser();
+      _error = null;
+
+      notifyListeners();
+    } catch (error) {
+      _error = _cleanError(error);
+
+      notifyListeners();
     }
   }
 

@@ -1,32 +1,35 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
-from app.core.config import settings
+from starlette.exceptions import (
+    HTTPException as StarletteHTTPException,
+)
 
-
-# Import models so SQLAlchemy registers all tables
 from app import models
 
 from app.api.v1 import admin, analysis, analyses, auth
+
+from app.core.app_config import (
+    APP_NAME,
+    APP_VERSION,
+)
+from app.core.config import settings
 from app.core.exception_handlers import (
     app_exception_handler,
     http_exception_handler,
     unhandled_exception_handler,
 )
 from app.core.exceptions import AppException
-from fastapi.middleware.cors import CORSMiddleware
 from app.core.logging import configure_logging
 from app.core.middleware import request_logging_middleware
 from app.core.rate_limit import limiter
+
 from app.db.base import Base
 from app.db.session import engine
-
-from starlette.exceptions import (
-    HTTPException as StarletteHTTPException,
-)
 
 
 # ==========================================
@@ -40,27 +43,38 @@ configure_logging()
 # Create application
 # ==========================================
 
-from app.core.app_config import (
-    APP_NAME,
-    APP_VERSION,
-)
-
 app = FastAPI(
     title=APP_NAME,
     version=APP_VERSION,
 )
 
+
+# ==========================================
+# CORS
+# ==========================================
+
 app.add_middleware(
     CORSMiddleware,
+
+    # Explicit production origins from config.
     allow_origins=settings.cors_origins_list,
-   allow_origin_regex=(
-    r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$"
-    r"|^https://([a-z0-9-]+\.)?vercel\.app$"
-),
+
+    # Allow all localhost / 127.0.0.1 ports
+    # and Vercel deployments.
+    allow_origin_regex=(
+        r"^https?://"
+        r"("
+        r"(localhost|127\.0\.0\.1)(:\d+)?"
+        r"|"
+        r"([a-z0-9-]+\.)?vercel\.app"
+        r")$"
+    ),
+
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # ==========================================
 # Rate limiting

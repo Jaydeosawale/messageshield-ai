@@ -8,7 +8,7 @@ import 'screens/auth/login_screen.dart';
 import 'screens/history/history_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'widgets/app_background.dart';
-
+import 'screens/profile/profile_screen.dart';
 // ============================================================
 // APP START
 // ============================================================
@@ -391,7 +391,7 @@ class _AppShellState extends State<AppShell> {
         );
 
       case AppSection.profile:
-        return const ProfilePlaceholderScreen();
+        return const ProfileScreen();
     }
   }
 
@@ -570,11 +570,8 @@ class _AppShellState extends State<AppShell> {
 
 class _SideNavigation extends StatelessWidget {
   final AppSection selected;
-
   final ValueChanged<AppSection> onSelected;
-
   final VoidCallback onScan;
-
   final bool extended;
 
   const _SideNavigation({
@@ -587,9 +584,41 @@ class _SideNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
+      // ========================================================
+      // SIDEBAR THEME
+      // ========================================================
+      backgroundColor: AppColors.backgroundSoft,
+
       extended: extended,
       minWidth: 76,
       minExtendedWidth: 220,
+
+      // ========================================================
+      // SELECTION COLORS
+      // ========================================================
+      indicatorColor: AppColors.teal.withValues(
+        alpha: 0.18,
+      ),
+
+      selectedIconTheme: const IconThemeData(
+        color: AppColors.teal,
+      ),
+
+      unselectedIconTheme: const IconThemeData(
+        color: AppColors.textSecondary,
+      ),
+
+      selectedLabelTextStyle: const TextStyle(
+        color: AppColors.teal,
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+      ),
+
+      unselectedLabelTextStyle: const TextStyle(
+        color: AppColors.textSecondary,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      ),
 
       selectedIndex: switch (selected) {
         AppSection.home => 0,
@@ -609,52 +638,37 @@ class _SideNavigation extends StatelessWidget {
             break;
 
           case 2:
-            onSelected(
-              AppSection.history,
-            );
+            onSelected(AppSection.history);
             break;
 
           case 3:
-            onSelected(
-              AppSection.profile,
-            );
+            onSelected(AppSection.profile);
             break;
         }
       },
 
       destinations: const [
         NavigationRailDestination(
-          icon:
-              Icon(Icons.home_outlined),
-          selectedIcon:
-              Icon(Icons.home_rounded),
+          icon: Icon(Icons.home_outlined),
+          selectedIcon: Icon(Icons.home_rounded),
           label: Text('Home'),
         ),
 
         NavigationRailDestination(
-          icon: Icon(
-            Icons.document_scanner_outlined,
-          ),
-          selectedIcon: Icon(
-            Icons.document_scanner_rounded,
-          ),
+          icon: Icon(Icons.document_scanner_outlined),
+          selectedIcon: Icon(Icons.document_scanner_rounded),
           label: Text('Scan'),
         ),
 
         NavigationRailDestination(
-          icon:
-              Icon(Icons.history_outlined),
-          selectedIcon:
-              Icon(Icons.history_rounded),
+          icon: Icon(Icons.history_outlined),
+          selectedIcon: Icon(Icons.history_rounded),
           label: Text('History'),
         ),
 
         NavigationRailDestination(
-          icon: Icon(
-            Icons.person_outline_rounded,
-          ),
-          selectedIcon:
-              Icon(Icons.person_rounded),
+          icon: Icon(Icons.person_outline_rounded),
+          selectedIcon: Icon(Icons.person_rounded),
           label: Text('Profile'),
         ),
       ],

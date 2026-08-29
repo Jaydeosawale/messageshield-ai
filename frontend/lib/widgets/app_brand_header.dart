@@ -16,15 +16,27 @@ class AppBrandHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logoSize = compact ? 72.0 : 92.0;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+
+    final logoSize = compact
+        ? 64.0
+        : screenWidth < 500
+            ? 76.0
+            : 84.0;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
+        // ==========================================
+        // MessageShield Logo
+        // ==========================================
         Container(
           width: logoSize,
           height: logoSize,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
+            borderRadius: BorderRadius.circular(
+              compact ? 20 : 24,
+            ),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -33,33 +45,41 @@ class AppBrandHeader extends StatelessWidget {
                 AppColors.green,
               ],
             ),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.12),
+            ),
             boxShadow: [
               BoxShadow(
                 color: AppColors.teal.withValues(alpha: 0.22),
-                blurRadius: 28,
-                spreadRadius: 2,
+                blurRadius: 24,
+                spreadRadius: 1,
               ),
             ],
           ),
-          child: const Icon(
-            Icons.shield_outlined,
+          child: Icon(
+            Icons.shield_rounded,
             color: Colors.white,
-            size: 46,
+            size: compact ? 34 : 44,
           ),
         ),
 
-        SizedBox(height: compact ? 16 : 20),
+        SizedBox(
+          height: compact ? 14 : 18,
+        ),
 
+        // ==========================================
+        // Brand Name
+        // ==========================================
         RichText(
           textAlign: TextAlign.center,
-          text: const TextSpan(
+          text: TextSpan(
             style: TextStyle(
-              fontSize: 30,
+              fontSize: compact ? 25 : 30,
               fontWeight: FontWeight.w800,
               letterSpacing: -0.8,
               color: AppColors.textPrimary,
             ),
-            children: [
+            children: const [
               TextSpan(
                 text: 'Message',
               ),
@@ -72,8 +92,9 @@ class AppBrandHeader extends StatelessWidget {
               TextSpan(
                 text: ' AI',
                 style: TextStyle(
-                  color: AppColors.teal,
-                  fontSize: 18,
+                  color: AppColors.textSecondary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: 0,
                 ),
               ),
@@ -81,20 +102,29 @@ class AppBrandHeader extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 8),
+        const SizedBox(height: 7),
 
+        // ==========================================
+        // Tagline
+        // ==========================================
         const Text(
           'Smart. Private. Protected.',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.textSecondary,
-            fontSize: 14,
-            letterSpacing: 1.2,
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.8,
           ),
         ),
 
+        // ==========================================
+        // Optional Screen Title
+        // ==========================================
         if (title != null) ...[
-          SizedBox(height: compact ? 22 : 28),
+          SizedBox(
+            height: compact ? 20 : 26,
+          ),
           Text(
             title!,
             textAlign: TextAlign.center,
@@ -102,10 +132,14 @@ class AppBrandHeader extends StatelessWidget {
               color: AppColors.textPrimary,
               fontSize: 24,
               fontWeight: FontWeight.w700,
+              letterSpacing: -0.4,
             ),
           ),
         ],
 
+        // ==========================================
+        // Optional Subtitle
+        // ==========================================
         if (subtitle != null) ...[
           const SizedBox(height: 8),
           Text(
