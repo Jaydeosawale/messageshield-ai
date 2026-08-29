@@ -67,33 +67,41 @@ class AuthService {
         ApiService.decodeResponse(response)
             as Map<String, dynamic>;
 
-    final token = data['access_token'] as String;
+    final token = data['access_token'];
+
+    if (token == null || token is! String) {
+      throw Exception(
+        'Invalid authentication response',
+      );
+    }
 
     await TokenStorage.saveToken(token);
   }
 
   // ==========================================
-  // Firebase / Google login
+  // Firebase / Google LOGIN
   // ==========================================
+  //
+  // Existing MessageShield user only.
   //
   // Flow:
   //
-  // Google/Firebase login
+  // Google/Firebase
   //        ↓
   // Firebase ID Token
   //        ↓
-  // MessageShield backend
+  // POST /auth/firebase/login
   //        ↓
-  // Backend verifies Firebase token
+  // Backend verifies user exists
   //        ↓
-  // Backend returns MessageShield JWT
+  // MessageShield JWT
   // ==========================================
 
   static Future<void> loginWithFirebaseUser(
     firebase_auth.User firebaseUser,
   ) async {
     final idToken =
-    await firebaseUser.getIdToken();
+        await firebaseUser.getIdToken();
 
     if (idToken == null || idToken.isEmpty) {
       throw Exception(
@@ -114,6 +122,64 @@ class AuthService {
       );
     }
 
+    await _saveAccessToken(response);
+  }
+
+  // ==========================================
+  // Firebase / Google REGISTER
+  // ==========================================
+  //
+  // New MessageShield user.
+  //
+  // Flow:
+  //
+  // Google/Firebase
+  //        ↓
+  // Firebase ID Token
+  //        ↓
+  // POST /auth/firebase/register
+  //        ↓
+  // Backend creates MessageShield user
+  //        ↓
+  // MessageShield JWT
+  // ==========================================
+
+  static Future<void> registerWithFirebaseUser(
+    firebase_auth.User firebaseUser,
+  ) async {
+    final idToken =
+        await firebaseUser.getIdToken();
+
+    if (idToken == null || idToken.isEmpty) {
+      throw Exception(
+        'Unable to get authentication token',
+      );
+    }
+
+    final response = await ApiService.post(
+      ApiConstants.firebaseRegister,
+      body: {
+        'id_token': idToken,
+      },
+    );
+
+    if (response.statusCode != 200 &&
+        response.statusCode != 201) {
+      throw Exception(
+        ApiService.getErrorMessage(response),
+      );
+    }
+
+    await _saveAccessToken(response);
+  }
+
+  // ==========================================
+  // Save MessageShield JWT
+  // ==========================================
+
+  static Future<void> _saveAccessToken(
+    dynamic response,
+  ) async {
     final data =
         ApiService.decodeResponse(response)
             as Map<String, dynamic>;
@@ -193,7 +259,8 @@ class AuthService {
 
     await user.reload();
 
-    final refreshedUser = _firebaseAuth.currentUser;
+    final refreshedUser =
+        _firebaseAuth.currentUser;
 
     return refreshedUser?.emailVerified ?? false;
   }

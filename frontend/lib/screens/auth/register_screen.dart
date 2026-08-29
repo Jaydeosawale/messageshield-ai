@@ -123,16 +123,16 @@ class _RegisterScreenState
       // MessageShield JWT
       // ------------------------------------------
 
-      await authProvider.loginWithFirebaseUser(
-        firebaseUser,
-      );
+      await authProvider.registerWithFirebaseUser(
+  firebaseUser,
+);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Successfully signed in with Google.',
+            'Account created successfully with Google.',
           ),
           backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,

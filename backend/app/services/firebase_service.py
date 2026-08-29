@@ -23,7 +23,7 @@ def get_firebase_app():
     Use FIREBASE_SERVICE_ACCOUNT_JSON environment variable.
 
     Local development:
-    You can also use FIREBASE_SERVICE_ACCOUNT_FILE.
+    Use FIREBASE_SERVICE_ACCOUNT_FILE.
     """
 
     if firebase_admin._apps:
@@ -38,10 +38,19 @@ def get_firebase_app():
     )
 
     try:
-        # ------------------------------------------
-        # Production: JSON stored as environment var
-        # ------------------------------------------
+
+        # ==========================================
+        # Production:
+        # JSON stored in environment variable
+        # ==========================================
+
         if service_account_json:
+
+            logger.info(
+                "Initializing Firebase from "
+                "FIREBASE_SERVICE_ACCOUNT_JSON"
+            )
+
             service_account_info = json.loads(
                 service_account_json
             )
@@ -54,10 +63,27 @@ def get_firebase_app():
                 credential
             )
 
-        # ------------------------------------------
-        # Local development: JSON file
-        # ------------------------------------------
+        # ==========================================
+        # Local development:
+        # JSON service-account file
+        # ==========================================
+
         if service_account_file:
+
+            logger.info(
+                "Initializing Firebase from file: %s",
+                service_account_file,
+            )
+
+            if not os.path.exists(
+                service_account_file
+            ):
+                raise FirebaseConfigurationError(
+                    "Firebase service account file "
+                    f"does not exist: "
+                    f"{service_account_file}"
+                )
+
             credential = credentials.Certificate(
                 service_account_file
             )
@@ -67,28 +93,34 @@ def get_firebase_app():
             )
 
         raise FirebaseConfigurationError(
-            "Firebase credentials are not configured"
+            "Firebase credentials are not configured. "
+            "Set FIREBASE_SERVICE_ACCOUNT_JSON or "
+            "FIREBASE_SERVICE_ACCOUNT_FILE."
         )
 
     except json.JSONDecodeError as error:
+
         logger.exception(
-            "Invalid FIREBASE_SERVICE_ACCOUNT_JSON"
+            "Firebase service account JSON is invalid"
         )
 
         raise FirebaseConfigurationError(
-            "FIREBASE_SERVICE_ACCOUNT_JSON contains invalid JSON"
+            "FIREBASE_SERVICE_ACCOUNT_JSON "
+            "contains invalid JSON"
         ) from error
 
     except FirebaseConfigurationError:
         raise
 
     except Exception as error:
+
         logger.exception(
-            "Firebase Admin initialization failed"
+            "Firebase Admin SDK initialization failed"
         )
 
         raise FirebaseConfigurationError(
-            "Firebase Admin initialization failed"
+            f"Firebase initialization failed: "
+            f"{type(error).__name__}"
         ) from error
 
 
@@ -96,35 +128,52 @@ def verify_firebase_token(
     id_token: str,
 ) -> dict:
     """
-    Verify a Firebase ID token.
+    Verify Firebase ID token.
 
-    Never trust:
-        email
-        UID
-        email_verified
+    Never trust email, UID, or verification
+    status sent directly from Flutter.
 
-    directly from Flutter.
-
-    All identity information must come
-    from the verified Firebase token.
+    All identity information comes from
+    the verified Firebase token.
     """
 
     if not id_token or not id_token.strip():
+
+        logger.warning(
+            "Firebase token verification attempted "
+            "without an ID token"
+        )
+
         raise ValueError(
             "Firebase ID token is required"
         )
 
     try:
+
         get_firebase_app()
+
+        logger.info(
+            "Verifying Firebase ID token"
+        )
 
         decoded_token = auth.verify_id_token(
             id_token.strip(),
             check_revoked=True,
         )
 
+        uid = decoded_token.get("uid")
+        email = decoded_token.get("email")
+
+        logger.info(
+            "Firebase token verified successfully "
+            "for uid=%s email=%s",
+            uid,
+            email,
+        )
+
         return {
-            "uid": decoded_token.get("uid"),
-            "email": decoded_token.get("email"),
+            "uid": uid,
+            "email": email,
             "email_verified": decoded_token.get(
                 "email_verified",
                 False,
@@ -132,19 +181,19 @@ def verify_firebase_token(
             "firebase": decoded_token,
         }
 
-    except FirebaseConfigurationError:
-        logger.exception(
-            "Firebase configuration error"
-        )
-
-        raise
-
     except Exception as error:
+
+        # IMPORTANT:
+        # This prints the REAL Firebase error
+        # in Docker / Render logs.
+
         logger.exception(
-            "Firebase token verification failed"
+            "Firebase token verification failed. "
+            "Error type=%s Error=%s",
+            type(error).__name__,
+            str(error),
         )
 
         raise ValueError(
             "Invalid Firebase authentication token"
         ) from error
-        

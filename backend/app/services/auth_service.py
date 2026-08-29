@@ -40,6 +40,10 @@ class AccountProviderConflictError(Exception):
     pass
 
 
+class FirebaseUserNotRegisteredError(Exception):
+    pass
+
+
 # ==========================================
 # Get or create default USER role
 # ==========================================
@@ -150,6 +154,25 @@ def authenticate_user(
     return user
 
 
+
+
+# ==========================================
+# Find existing Firebase / Google user
+# ==========================================
+
+def find_firebase_user(
+    db: Session,
+    *,
+    firebase_uid: str,
+) -> User | None:
+    return db.scalar(
+        select(User).where(
+            User.provider_uid == firebase_uid
+        )
+    )
+
+
+    
 # ==========================================
 # Find or create Firebase / Google user
 # ==========================================
@@ -160,7 +183,20 @@ def get_or_create_firebase_user(
     email: str,
     firebase_uid: str,
     email_verified: bool,
+    create_if_missing: bool,
 ) -> User:
+    """
+    Find an existing Google/Firebase user.
+
+    create_if_missing=False:
+        Used for Google LOGIN.
+        The user must already have a MessageShield account.
+
+    create_if_missing=True:
+        Used for Google REGISTER.
+        A new MessageShield account is created if needed.
+    """
+
     normalized_email = email.strip().lower()
 
     # ------------------------------------------
@@ -188,24 +224,42 @@ def get_or_create_firebase_user(
 
     if existing_email_user is not None:
 
-        # Existing Google/Firebase account
-        # but UID mismatch should not happen normally.
+        # --------------------------------------
+        # Existing Google account
+        # --------------------------------------
+
         if existing_email_user.auth_provider == "google":
 
+            # Firebase UID should normally match.
+            # Do not silently connect a different UID.
             raise AccountProviderConflictError(
                 "Google account identity does not match"
             )
 
-        # Existing password account.
-        #
-        # Do NOT silently attach Google login.
+        # --------------------------------------
+        # Existing password account
+        # --------------------------------------
+
         raise AccountProviderConflictError(
-            "This email is already registered "
-            "with password sign-in"
+            "An account with this email already exists "
+            "using email and password sign-in."
         )
 
     # ------------------------------------------
-    # 3. Create new Google user
+    # 3. User does not exist
+    # ------------------------------------------
+
+    # Google LOGIN:
+    # Do not automatically create an account.
+    if not create_if_missing:
+        raise FirebaseUserNotRegisteredError(
+            "No MessageShield account found. "
+            "Please create an account first."
+        )
+
+    # ------------------------------------------
+    # 4. Google REGISTER:
+    # Create new user
     # ------------------------------------------
 
     user_role = get_default_user_role(db)

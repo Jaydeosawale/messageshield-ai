@@ -65,7 +65,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // ==========================================
-  // Register
+  // Email / Password Register
   // ==========================================
 
   Future<void> register({
@@ -93,7 +93,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // ==========================================
-  // Email/password login
+  // Email / Password Login
   // ==========================================
 
   Future<void> login({
@@ -110,6 +110,7 @@ class AuthProvider extends ChangeNotifier {
         password: password,
       );
 
+      // Load current MessageShield user.
       _user = await AuthService.getCurrentUser();
 
       notifyListeners();
@@ -129,7 +130,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // ==========================================
-  // Firebase / Google login
+  // Firebase / Google LOGIN
   // ==========================================
 
   Future<void> loginWithFirebaseUser(
@@ -140,20 +141,60 @@ class AuthProvider extends ChangeNotifier {
     try {
       _error = null;
 
-      // Send verified Firebase ID token
-      // to MessageShield backend.
+      // Existing MessageShield user only.
+      //
+      // Backend endpoint:
+      // POST /api/v1/auth/firebase/login
       await AuthService.loginWithFirebaseUser(
         firebaseUser,
       );
 
-      // Get local MessageShield user.
+      // Load local MessageShield user.
       _user = await AuthService.getCurrentUser();
 
       notifyListeners();
     } catch (error) {
-      // Important:
-      // Backend authentication failed,
-      // so remove local MessageShield JWT.
+      await TokenStorage.deleteToken();
+
+      _user = null;
+
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // ==========================================
+  // Firebase / Google REGISTER
+  // ==========================================
+
+  Future<void> registerWithFirebaseUser(
+    firebase_auth.User firebaseUser,
+  ) async {
+    _setLoading(true);
+
+    try {
+      _error = null;
+
+      // Create a new MessageShield user.
+      //
+      // Backend endpoint:
+      // POST /api/v1/auth/firebase/register
+      await AuthService.registerWithFirebaseUser(
+        firebaseUser,
+      );
+
+      // Backend returns/stores MessageShield JWT.
+      // Load the new local user.
+      _user = await AuthService.getCurrentUser();
+
+      notifyListeners();
+    } catch (error) {
+      // Registration failed.
       await TokenStorage.deleteToken();
 
       _user = null;

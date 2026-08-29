@@ -18,8 +18,13 @@ class ApiConstants {
   static const String login =
       '$baseUrl/auth/login';
 
+  // Google / Firebase LOGIN
   static const String firebaseLogin =
-      '$baseUrl/auth/firebase';
+      '$baseUrl/auth/firebase/login';
+
+  // Google / Firebase REGISTER
+  static const String firebaseRegister =
+      '$baseUrl/auth/firebase/register';
 
   static const String me =
       '$baseUrl/auth/me';
