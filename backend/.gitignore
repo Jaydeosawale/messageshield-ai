@@ -56,3 +56,6 @@ mlartifacts/
 build/
 dist/
 *.egg-info/
+
+firebase-service-account.json
+*.firebase-adminsdk-*.json

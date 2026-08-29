@@ -1,39 +1,55 @@
 class User {
   final int id;
+
   final String email;
+
   final bool isActive;
 
-  // Roles received from backend.
-  final List<String> roles;
+  final bool isAdmin;
+
+  final bool emailVerified;
+
+  final String authProvider;
 
   const User({
     required this.id,
     required this.email,
     required this.isActive,
-    required this.roles,
+    required this.isAdmin,
+    required this.emailVerified,
+    required this.authProvider,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(
+    Map<String, dynamic> json,
+  ) {
     return User(
       id: json['id'] as int,
+
       email: json['email'] as String,
-      isActive: json['is_active'] as bool? ?? false,
-      roles: (json['roles'] as List?)
-              ?.map((role) => role.toString())
-              .toList() ??
-          const [],
+
+      isActive:
+          json['is_active'] as bool? ?? false,
+
+      isAdmin:
+          json['is_admin'] as bool? ?? false,
+
+      emailVerified:
+          json['email_verified'] as bool? ?? false,
+
+      authProvider:
+          json['auth_provider'] as String? ??
+              'password',
     );
   }
 
   // ==========================================
-  // Role helpers
+  // Authentication helpers
   // ==========================================
 
-  bool get isAdmin {
-    return roles.any(
-      (role) => role.toLowerCase() == 'admin',
-    );
-  }
+  bool get isGoogleUser =>
+      authProvider == 'google';
 
-  bool get hasRoles => roles.isNotEmpty;
+  bool get isPasswordUser =>
+      authProvider == 'password';
 }

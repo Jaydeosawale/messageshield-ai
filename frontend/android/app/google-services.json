@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "361867576556",
+    "project_id": "messageshield-ai",
+    "storage_bucket": "messageshield-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361867576556:android:c3af4c15d7a88f44d8d1c9",
+        "android_client_info": {
+          "package_name": "com.example.messageshield"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "361867576556-g9jiqskd1e5h7qkcpuht71fuqqk611cr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA7Y-gL5rDfnRPXg1OeD3k3QFcsFdB1vY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361867576556-g9jiqskd1e5h7qkcpuht71fuqqk611cr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

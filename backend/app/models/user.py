@@ -1,58 +1,93 @@
-from pydantic import BaseModel, EmailStr, Field
+from datetime import datetime
+from typing import TYPE_CHECKING, Optional
+
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    Integer,
+    String,
+    func,
+    text,
+)
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    relationship,
+)
+
+from app.db.base import Base
 
 
-# ==========================================
-# Register request
-# ==========================================
+if TYPE_CHECKING:
+    from app.models.role import Role
 
-class RegisterRequest(BaseModel):
-    email: EmailStr
 
-    password: str = Field(
-        min_length=8,
-        max_length=128,
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
     )
 
-
-# ==========================================
-# Login request
-# ==========================================
-
-class LoginRequest(BaseModel):
-    email: EmailStr
-
-    password: str = Field(
-        min_length=1,
-        max_length=128,
+    email: Mapped[str] = mapped_column(
+        String(255),
+        unique=True,
+        nullable=False,
+        index=True,
     )
 
+    # Nullable because Google users may not have
+    # a local MessageShield password.
+    password_hash: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+    )
 
-# ==========================================
-# Token response
-# ==========================================
+    # password / google
+    auth_provider: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        default="password",
+        server_default=text("'password'"),
+    )
 
-class TokenResponse(BaseModel):
-    access_token: str
+    # Firebase UID / Google identity UID.
+    provider_uid: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        unique=True,
+        nullable=True,
+        index=True,
+    )
 
-    token_type: str = "bearer"
+    email_verified: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default=text("false"),
+    )
 
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=True,
+        server_default=text("true"),
+    )
 
-# ==========================================
-# User response
-# ==========================================
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
 
-class UserResponse(BaseModel):
-    id: int
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
 
-    email: EmailStr
-
-    is_active: bool
-
-    roles: list[str] = []
-
-    @property
-    def is_admin(self) -> bool:
-        return "admin" in [
-            role.lower()
-            for role in self.roles
-        ]
+    roles: Mapped[list["Role"]] = relationship(
+        secondary="user_roles",
+        back_populates="users",
+    )

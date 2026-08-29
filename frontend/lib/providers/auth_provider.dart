@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart'
+    as firebase_auth;
 import 'package:flutter/material.dart';
 
 import '../core/services/auth_service.dart';
@@ -35,26 +37,29 @@ class AuthProvider extends ChangeNotifier {
 
     _isLoading = true;
     _error = null;
+
     notifyListeners();
 
     try {
       final token = await TokenStorage.getToken();
 
-      // No token -> user is not logged in.
+      // No MessageShield JWT.
       if (token == null || token.trim().isEmpty) {
         _user = null;
         return;
       }
 
-      // Token exists -> verify with backend.
+      // Verify token with backend.
       _user = await AuthService.getCurrentUser();
     } catch (_) {
-      // Invalid or expired token.
+      // Invalid or expired JWT.
       await TokenStorage.deleteToken();
+
       _user = null;
     } finally {
       _isLoading = false;
       _isInitialized = true;
+
       notifyListeners();
     }
   }
@@ -78,6 +83,9 @@ class AuthProvider extends ChangeNotifier {
       );
     } catch (error) {
       _error = _cleanError(error);
+
+      notifyListeners();
+
       rethrow;
     } finally {
       _setLoading(false);
@@ -85,7 +93,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // ==========================================
-  // Login
+  // Email/password login
   // ==========================================
 
   Future<void> login({
@@ -97,26 +105,126 @@ class AuthProvider extends ChangeNotifier {
     try {
       _error = null;
 
-      // Login saves JWT token.
       await AuthService.login(
         email: email,
         password: password,
       );
 
-      // Verify token and get logged-in user.
       _user = await AuthService.getCurrentUser();
 
       notifyListeners();
     } catch (error) {
-      // Remove invalid/partial token.
       await TokenStorage.deleteToken();
 
       _user = null;
+
       _error = _cleanError(error);
 
       notifyListeners();
 
       rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // ==========================================
+  // Firebase / Google login
+  // ==========================================
+
+  Future<void> loginWithFirebaseUser(
+    firebase_auth.User firebaseUser,
+  ) async {
+    _setLoading(true);
+
+    try {
+      _error = null;
+
+      // Send verified Firebase ID token
+      // to MessageShield backend.
+      await AuthService.loginWithFirebaseUser(
+        firebaseUser,
+      );
+
+      // Get local MessageShield user.
+      _user = await AuthService.getCurrentUser();
+
+      notifyListeners();
+    } catch (error) {
+      // Important:
+      // Backend authentication failed,
+      // so remove local MessageShield JWT.
+      await TokenStorage.deleteToken();
+
+      _user = null;
+
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // ==========================================
+  // Refresh current user
+  // ==========================================
+
+  Future<void> refreshUser() async {
+    try {
+      _user = await AuthService.getCurrentUser();
+
+      _error = null;
+
+      notifyListeners();
+    } catch (error) {
+      _error = _cleanError(error);
+
+      notifyListeners();
+    }
+  }
+
+  // ==========================================
+  // Firebase email verification
+  // ==========================================
+
+  Future<void> sendFirebaseVerificationEmail() async {
+    _setLoading(true);
+
+    try {
+      _error = null;
+
+      await AuthService.sendEmailVerification();
+    } catch (error) {
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // ==========================================
+  // Check Firebase email verification
+  // ==========================================
+
+  Future<bool> checkFirebaseEmailVerification() async {
+    _setLoading(true);
+
+    try {
+      _error = null;
+
+      return await AuthService.reloadFirebaseUser();
+    } catch (error) {
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      return false;
     } finally {
       _setLoading(false);
     }
@@ -130,30 +238,18 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(true);
 
     try {
-      // Clear local JWT token.
-      await TokenStorage.deleteToken();
+      await AuthService.logout();
 
       _user = null;
       _error = null;
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  // ==========================================
-  // Refresh current user
-  // ==========================================
-
-  Future<void> refreshUser() async {
-    try {
-      _user = await AuthService.getCurrentUser();
-      _error = null;
-
-      notifyListeners();
     } catch (error) {
       _error = _cleanError(error);
 
       notifyListeners();
+
+      rethrow;
+    } finally {
+      _setLoading(false);
     }
   }
 
@@ -165,6 +261,7 @@ class AuthProvider extends ChangeNotifier {
     if (_error == null) return;
 
     _error = null;
+
     notifyListeners();
   }
 
@@ -174,12 +271,16 @@ class AuthProvider extends ChangeNotifier {
 
   void _setLoading(bool value) {
     _isLoading = value;
+
     notifyListeners();
   }
 
   String _cleanError(Object error) {
     return error
         .toString()
-        .replaceFirst('Exception: ', '');
+        .replaceFirst(
+          'Exception: ',
+          '',
+        );
   }
 }
