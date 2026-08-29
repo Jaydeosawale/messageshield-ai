@@ -16,7 +16,16 @@ class GoogleAuthService {
   // ==========================================
 
   static Future<void> initialize() async {
-    if (_initialized) return;
+    // Web uses Firebase signInWithPopup().
+    // GoogleSignIn.initialize() is not needed
+    // and requires a web OAuth Client ID.
+    if (kIsWeb) {
+      return;
+    }
+
+    if (_initialized) {
+      return;
+    }
 
     await _googleSignIn.initialize();
 
@@ -28,14 +37,39 @@ class GoogleAuthService {
   // ==========================================
 
   static Future<firebase_auth.User> signIn() async {
-    await initialize();
+    // ------------------------------------------
+    // Web
+    // ------------------------------------------
+
+    if (kIsWeb) {
+      final provider =
+          firebase_auth.GoogleAuthProvider();
+
+      provider.addScope('email');
+      provider.addScope('profile');
+
+      final userCredential =
+          await firebase_auth.FirebaseAuth.instance
+              .signInWithPopup(provider);
+
+      final user = userCredential.user;
+
+      if (user == null) {
+        throw Exception(
+          'Google sign-in did not return a user',
+        );
+      }
+
+      return user;
+    }
 
     // ------------------------------------------
     // Mobile / supported platforms
     // ------------------------------------------
 
-    if (!kIsWeb &&
-        _googleSignIn.supportsAuthenticate()) {
+    await initialize();
+
+    if (_googleSignIn.supportsAuthenticate()) {
       final GoogleSignInAccount googleAccount =
           await _googleSignIn.authenticate();
 
@@ -52,29 +86,6 @@ class GoogleAuthService {
               .signInWithCredential(
         credential,
       );
-
-      final user = userCredential.user;
-
-      if (user == null) {
-        throw Exception(
-          'Google sign-in did not return a user',
-        );
-      }
-
-      return user;
-    }
-
-    // ------------------------------------------
-    // Web
-    // ------------------------------------------
-
-    if (kIsWeb) {
-      final provider =
-          firebase_auth.GoogleAuthProvider();
-
-      final userCredential =
-          await firebase_auth.FirebaseAuth.instance
-              .signInWithPopup(provider);
 
       final user = userCredential.user;
 

@@ -74,13 +74,19 @@ class AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
 
+
+
     if (!auth.isInitialized) {
       return const AppLoadingScreen();
     }
 
+
+
     if (!auth.isAuthenticated) {
       return const LoginScreen();
     }
+
+
 
     return const AppShell();
   }
@@ -132,6 +138,8 @@ class _AppShellState extends State<AppShell> {
   AppSection _selected = AppSection.home;
 
   MessageAnalysis? _latestAnalysis;
+
+
 
   String? _scannedText;
 
@@ -634,3 +642,6 @@ class _SideNavigation extends StatelessWidget {
     );
   }
 }
+
+
+

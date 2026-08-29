@@ -5,6 +5,7 @@ import '../../core/services/google_auth_service.dart';
 import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/app_background.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -142,22 +143,31 @@ class _RegisterScreenState
       //
       // Go back to previous screen.
       Navigator.of(context).pop();
-    } catch (error) {
-      if (!mounted) return;
+    } 
+  catch (error, stackTrace) {
+  debugPrint('========================================');
+  debugPrint('GOOGLE SIGN-IN ERROR:');
+  debugPrint(error.toString());
+  debugPrint('GOOGLE SIGN-IN STACK TRACE:');
+  debugPrint(stackTrace.toString());
+  debugPrint('========================================');
 
-      final message =
-          _friendlyGoogleError(error.toString());
+  if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.danger,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
-  }
+  final message =
+      _friendlyGoogleError(error.toString());
 
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        'Google error: ${error.toString()}',
+      ),
+      backgroundColor: AppColors.danger,
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}
+}
   // ==========================================
   // Friendly Email Registration Errors
   // ==========================================
@@ -420,9 +430,9 @@ class _RegisterScreenState
                                 auth.isLoading
                                     ? null
                                     : _continueWithGoogle,
-                            icon: const Icon(
-                              Icons.g_mobiledata_rounded,
-                              size: 30,
+                            icon: const FaIcon(
+                              FontAwesomeIcons.google,
+                              size: 20,
                             ),
                             label: const Text(
                               'Continue with Google',
