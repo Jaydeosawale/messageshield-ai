@@ -1,9 +1,13 @@
 import json
+import logging
 import os
 from functools import lru_cache
 
 import firebase_admin
 from firebase_admin import auth, credentials
+
+
+logger = logging.getLogger(__name__)
 
 
 class FirebaseConfigurationError(Exception):
@@ -67,8 +71,24 @@ def get_firebase_app():
         )
 
     except json.JSONDecodeError as error:
+        logger.exception(
+            "Invalid FIREBASE_SERVICE_ACCOUNT_JSON"
+        )
+
         raise FirebaseConfigurationError(
             "FIREBASE_SERVICE_ACCOUNT_JSON contains invalid JSON"
+        ) from error
+
+    except FirebaseConfigurationError:
+        raise
+
+    except Exception as error:
+        logger.exception(
+            "Firebase Admin initialization failed"
+        )
+
+        raise FirebaseConfigurationError(
+            "Firebase Admin initialization failed"
         ) from error
 
 
@@ -112,7 +132,18 @@ def verify_firebase_token(
             "firebase": decoded_token,
         }
 
+    except FirebaseConfigurationError:
+        logger.exception(
+            "Firebase configuration error"
+        )
+
+        raise
+
     except Exception as error:
+        logger.exception(
+            "Firebase token verification failed"
+        )
+
         raise ValueError(
             "Invalid Firebase authentication token"
         ) from error
