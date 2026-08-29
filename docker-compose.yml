@@ -82,6 +82,10 @@ services:
     env_file:
       - .env
 
+    # Firebase service-account file mounted at runtime
+    volumes:
+      - ./backend/firebase-service-account.json:/app/firebase-service-account.json:ro
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -109,5 +113,6 @@ services:
     restart: unless-stopped
 
 
+# Top-level named Docker volumes
 volumes:
   postgres_data:
