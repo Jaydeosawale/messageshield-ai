@@ -88,6 +88,41 @@ class _RegisterScreenState
     }
   }
 
+  String _friendlyRegisterError(
+  String error,
+) {
+  final cleanedError = error
+      .replaceFirst('Exception: ', '')
+      .trim();
+
+  final message = cleanedError.toLowerCase();
+
+  if (message.contains('already registered') ||
+      message.contains('already exists') ||
+      message.contains('already in use') ||
+      message.contains('email already') ||
+      message.contains('email exists') ||
+      message.contains('duplicate')) {
+    return 'An account with this email already exists. '
+        'Please sign in instead.';
+  }
+
+  if (message.contains('network') ||
+      message.contains('socket') ||
+      message.contains('connection')) {
+    return 'Unable to connect to the server. '
+        'Please check your internet connection.';
+  }
+
+  if (message.contains('timeout')) {
+    return 'The request timed out. Please try again.';
+  }
+
+  return cleanedError.isNotEmpty
+      ? cleanedError
+      : 'Unable to create your account. Please try again.';
+}
+
   // ==========================================
   // Google Registration / Login
   // ==========================================
@@ -220,7 +255,7 @@ Future<void> _continueWithGoogle() async {
   // Check this FIRST because the backend message
   // can also contain "already exists".
 
-  
+
   // ------------------------------------------
 
   if (message.contains('different sign-in method') ||
