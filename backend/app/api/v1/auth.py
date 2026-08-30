@@ -355,6 +355,7 @@ def firebase_register(
             email=email,
             firebase_uid=firebase_uid,
             email_verified=email_verified,
+            create_if_missing=True,
         )
 
     except AccountProviderConflictError:
@@ -380,4 +381,3 @@ def firebase_register(
         "access_token": access_token,
         "token_type": "bearer",
     }
-    

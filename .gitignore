@@ -33,3 +33,4 @@ mlruns/
 .DS_Store
 .idea/
 .ANTIGRAVITY/
+backend/firebase-service-account.json
