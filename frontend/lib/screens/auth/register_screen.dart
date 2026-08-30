@@ -216,9 +216,11 @@ Future<void> _continueWithGoogle() async {
   final message =
       cleanedError.toLowerCase();
 
-  
+
   // Check this FIRST because the backend message
   // can also contain "already exists".
+
+  
   // ------------------------------------------
 
   if (message.contains('different sign-in method') ||
