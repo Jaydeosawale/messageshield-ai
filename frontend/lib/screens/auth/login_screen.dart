@@ -188,40 +188,44 @@ class _LoginScreenState
   // USER-FRIENDLY BACKEND ERRORS
   // ============================================================
 
-  String _friendlyError(String error) {
-    final value = error.toLowerCase();
+   String _friendlyError(String error) {
+  final value = error.toLowerCase();
 
-    if (value.contains('invalid credentials') ||
-        value.contains('incorrect email') ||
-        value.contains('incorrect password') ||
-        value.contains(
-          'invalid email or password',
-        ) ||
-        value.contains('unauthorized')) {
-      return 'Invalid email or password.';
-    }
-
-    if (value.contains('network') ||
-        value.contains('connection') ||
-        value.contains('socket')) {
-      return
-          'Unable to connect to the server. Please try again.';
-    }
-
-    if (value.contains('timeout')) {
-      return
-          'The request timed out. Please try again.';
-    }
-
-    if (value.contains('inactive')) {
-      return
-          'Your account is currently inactive.';
-    }
-
-    return error.isNotEmpty
-        ? error
-        : 'Unable to sign in. Please try again.';
+  // Google account is valid but not registered
+  // in MessageShield yet.
+  if (value.contains('account not found') ||
+      value.contains('create an account first') ||
+      value.contains('not registered')) {
+    return 'No MessageShield account found for this Google account. '
+        'Please create an account first.';
   }
+
+  if (value.contains('invalid credentials') ||
+      value.contains('incorrect email') ||
+      value.contains('incorrect password') ||
+      value.contains('invalid email or password') ||
+      value.contains('unauthorized')) {
+    return 'Invalid email or password.';
+  }
+
+  if (value.contains('network') ||
+      value.contains('connection') ||
+      value.contains('socket')) {
+    return 'Unable to connect to the server. Please try again.';
+  }
+
+  if (value.contains('timeout')) {
+    return 'The request timed out. Please try again.';
+  }
+
+  if (value.contains('inactive')) {
+    return 'Your account is currently inactive.';
+  }
+
+  return error.isNotEmpty
+      ? error
+      : 'Unable to sign in. Please try again.';
+}
 
   @override
   Widget build(BuildContext context) {
