@@ -206,70 +206,19 @@ Future<void> _continueWithGoogle() async {
   // Friendly Email Registration Errors
   // ==========================================
 
-  String _friendlyRegisterError(
-    String error,
-  ) {
-    final message = error.toLowerCase();
-
-    if (message.contains('already registered') ||
-        message.contains('already exists') ||
-        message.contains('already in use') ||
-        message.contains('duplicate')) {
-      return 'An account with this email already exists.';
-    }
-
-    if (message.contains('network') ||
-        message.contains('socket') ||
-        message.contains('connection')) {
-      return 'Unable to connect to the server. '
-          'Please check your internet connection.';
-    }
-
-    if (message.contains('timeout')) {
-      return 'The request timed out. '
-          'Please try again.';
-    }
-
-    return 'Unable to create your account. '
-        'Please try again.';
-  }
-
-  // ==========================================
-  // Friendly Google Errors
-  // ==========================================
-
-  // ==========================================
-// Friendly Google Errors
-// ==========================================
-
-String _friendlyGoogleError(
+  String _friendlyGoogleError(
   String error,
 ) {
-  // Remove common Dart exception prefix.
-  final cleanedError =
-      error.replaceFirst(
-    'Exception: ',
-    '',
-  );
+  final cleanedError = error
+      .replaceFirst('Exception: ', '')
+      .trim();
 
   final message =
       cleanedError.toLowerCase();
 
-  // ------------------------------------------
-  // Account already exists
-  // ------------------------------------------
-
-  if (message.contains('account already exists') ||
-      message.contains('already exists') ||
-      message.contains('already registered') ||
-      message.contains('please sign in instead')) {
-    return 'A MessageShield account already exists '
-        'for this Google account. '
-        'Please sign in instead.';
-  }
-
-  // ------------------------------------------
-  // Account provider conflict
+  
+  // Check this FIRST because the backend message
+  // can also contain "already exists".
   // ------------------------------------------
 
   if (message.contains('different sign-in method') ||
@@ -279,7 +228,22 @@ String _friendlyGoogleError(
   }
 
   // ------------------------------------------
-  // Google sign-in cancelled
+  // Google / MessageShield account already exists.
+  // ------------------------------------------
+
+  if (message.contains('account already exists') ||
+      message.contains('already exists') ||
+      message.contains('already registered') ||
+      message.contains('already in use') ||
+      message.contains('email already') ||
+      message.contains('email exists') ||
+      message.contains('please sign in instead')) {
+    return 'An account with this email already exists. '
+        'Please sign in instead.';
+  }
+
+  // ------------------------------------------
+  // Google sign-in cancelled.
   // ------------------------------------------
 
   if (message.contains('cancelled') ||
@@ -289,7 +253,7 @@ String _friendlyGoogleError(
   }
 
   // ------------------------------------------
-  // Popup blocked
+  // Popup blocked.
   // ------------------------------------------
 
   if (message.contains('popup-blocked')) {
@@ -298,7 +262,7 @@ String _friendlyGoogleError(
   }
 
   // ------------------------------------------
-  // Network
+  // Network.
   // ------------------------------------------
 
   if (message.contains('network') ||
@@ -310,7 +274,7 @@ String _friendlyGoogleError(
   }
 
   // ------------------------------------------
-  // Firebase authentication
+  // Firebase authentication.
   // ------------------------------------------
 
   if (message.contains('invalid firebase') ||
@@ -320,7 +284,7 @@ String _friendlyGoogleError(
   }
 
   // ------------------------------------------
-  // Platform
+  // Platform.
   // ------------------------------------------
 
   if (message.contains('not supported')) {
@@ -329,7 +293,7 @@ String _friendlyGoogleError(
   }
 
   // ------------------------------------------
-  // Default
+  // Default.
   // ------------------------------------------
 
   return cleanedError.isNotEmpty
