@@ -99,131 +99,217 @@ class _LoginScreenState
   // GOOGLE LOGIN
   // ============================================================
 
-  Future<void> _continueWithGoogle() async {
-    FocusScope.of(context).unfocus();
+  // ============================================================
+// GOOGLE LOGIN
+// ============================================================
 
-    try {
-      // Step 1:
-      // Authenticate with Google through Firebase.
-      final firebase_auth.User firebaseUser =
-          await GoogleAuthService.signIn();
+Future<void> _continueWithGoogle() async {
+  FocusScope.of(context).unfocus();
 
-      if (!mounted) return;
+  try {
+    // Clear any old error before starting.
+    context.read<AuthProvider>().clearError();
 
-      // Step 2:
-      // Send Firebase authentication to
-      // MessageShield backend.
-      await context
-          .read<AuthProvider>()
-          .loginWithFirebaseUser(
-            firebaseUser,
-          );
+    // Step 1:
+    // Authenticate with Google through Firebase.
+    final firebase_auth.User firebaseUser =
+        await GoogleAuthService.signIn();
 
-      if (!mounted) return;
-    } catch (error, stackTrace) {
-      debugPrint(
-        '========================================',
-      );
-      debugPrint(
-        'GOOGLE SIGN-IN ERROR:',
-      );
-      debugPrint(
-        error.toString(),
-      );
-      debugPrint(
-        'GOOGLE SIGN-IN STACK TRACE:',
-      );
-      debugPrint(
-        stackTrace.toString(),
-      );
-      debugPrint(
-        '========================================',
-      );
+    if (!mounted) return;
 
-      if (!mounted) return;
+    // Step 2:
+    // Send Firebase authentication to
+    // MessageShield backend.
+    await context
+        .read<AuthProvider>()
+        .loginWithFirebaseUser(
+          firebaseUser,
+        );
 
-      final providerError =
-          context.read<AuthProvider>().error;
+    if (!mounted) return;
+  } catch (error, stackTrace) {
+    debugPrint(
+      '========================================',
+    );
+    debugPrint(
+      'GOOGLE SIGN-IN ERROR:',
+    );
+    debugPrint(
+      error.toString(),
+    );
+    debugPrint(
+      'GOOGLE SIGN-IN STACK TRACE:',
+    );
+    debugPrint(
+      stackTrace.toString(),
+    );
+    debugPrint(
+      '========================================',
+    );
 
-      final String message;
+    if (!mounted) return;
 
-      if (providerError != null &&
-          providerError.isNotEmpty) {
-        message =
-            _friendlyError(providerError);
-      } else {
-        message =
-            'Google sign-in failed. Please try again.';
-      }
+    final providerError =
+        context.read<AuthProvider>().error;
 
-      ScaffoldMessenger.of(context)
-          .hideCurrentSnackBar();
+    // IMPORTANT:
+    // If backend/AuthProvider has an error,
+    // use it.
+    //
+    // Otherwise use the actual caught error
+    // from Google/Firebase.
+    final actualError =
+        providerError != null &&
+                providerError.isNotEmpty
+            ? providerError
+            : error.toString();
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(
-                Icons.error_outline_rounded,
-                color: Colors.white,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(message),
-              ),
-            ],
-          ),
-          backgroundColor: AppColors.danger,
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
-          duration:
-              const Duration(seconds: 4),
+    final message =
+        _friendlyError(actualError);
+
+    ScaffoldMessenger.of(context)
+        .hideCurrentSnackBar();
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(
+              Icons.error_outline_rounded,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(message),
+            ),
+          ],
         ),
-      );
-    }
+        backgroundColor: AppColors.danger,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        duration:
+            const Duration(seconds: 4),
+      ),
+    );
   }
+}
 
   // ============================================================
   // USER-FRIENDLY BACKEND ERRORS
   // ============================================================
 
-   String _friendlyError(String error) {
-  final value = error.toLowerCase();
+   // ============================================================
+// USER-FRIENDLY ERRORS
+// ============================================================
 
-  // Google account is valid but not registered
-  // in MessageShield yet.
+String _friendlyError(String error) {
+  // Remove the common Dart Exception prefix.
+  final cleanedError =
+      error.replaceFirst(
+    'Exception: ',
+    '',
+  );
+
+  final value =
+      cleanedError.toLowerCase();
+
+  // ----------------------------------------------------------
+  // Google account does not have a MessageShield account
+  // ----------------------------------------------------------
+
   if (value.contains('account not found') ||
-      value.contains('create an account first') ||
-      value.contains('not registered')) {
-    return 'No MessageShield account found for this Google account. '
+      value.contains('create an account first')) {
+    return 'No MessageShield account was found '
+        'for this Google account. '
         'Please create an account first.';
   }
+
+  // ----------------------------------------------------------
+  // Google sign-in cancelled
+  // ----------------------------------------------------------
+
+  if (value.contains('popup-closed-by-user') ||
+      value.contains('sign-in was cancelled') ||
+      value.contains('sign in was cancelled') ||
+      value.contains('cancelled') ||
+      value.contains('canceled')) {
+    return 'Google sign-in was cancelled.';
+  }
+
+  // ----------------------------------------------------------
+  // Popup blocked
+  // ----------------------------------------------------------
+
+  if (value.contains('popup-blocked')) {
+    return 'Google sign-in popup was blocked. '
+        'Please allow popups and try again.';
+  }
+
+  // ----------------------------------------------------------
+  // Google / Firebase configuration
+  // ----------------------------------------------------------
+
+  if (value.contains('operation-not-allowed')) {
+    return 'Google sign-in is not enabled.';
+  }
+
+  if (value.contains('configuration') ||
+      value.contains('client id') ||
+      value.contains('developer_error')) {
+    return 'Google sign-in is not configured correctly.';
+  }
+
+  // ----------------------------------------------------------
+  // Email/password errors
+  // ----------------------------------------------------------
 
   if (value.contains('invalid credentials') ||
       value.contains('incorrect email') ||
       value.contains('incorrect password') ||
-      value.contains('invalid email or password') ||
+      value.contains(
+        'invalid email or password',
+      ) ||
       value.contains('unauthorized')) {
     return 'Invalid email or password.';
   }
 
+  // ----------------------------------------------------------
+  // Network
+  // ----------------------------------------------------------
+
   if (value.contains('network') ||
       value.contains('connection') ||
-      value.contains('socket')) {
-    return 'Unable to connect to the server. Please try again.';
+      value.contains('socket') ||
+      value.contains('network-request-failed')) {
+    return 'Unable to connect to the server. '
+        'Please check your internet connection '
+        'and try again.';
   }
 
+  // ----------------------------------------------------------
+  // Timeout
+  // ----------------------------------------------------------
+
   if (value.contains('timeout')) {
-    return 'The request timed out. Please try again.';
+    return 'The request timed out. '
+        'Please try again.';
   }
+
+  // ----------------------------------------------------------
+  // Account inactive
+  // ----------------------------------------------------------
 
   if (value.contains('inactive')) {
     return 'Your account is currently inactive.';
   }
 
-  return error.isNotEmpty
-      ? error
+  // ----------------------------------------------------------
+  // Default
+  // ----------------------------------------------------------
+
+  return cleanedError.isNotEmpty
+      ? cleanedError
       : 'Unable to sign in. Please try again.';
 }
 

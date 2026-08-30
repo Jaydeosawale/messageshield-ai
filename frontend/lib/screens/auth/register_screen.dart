@@ -92,81 +92,115 @@ class _RegisterScreenState
   // Google Registration / Login
   // ==========================================
 
-  Future<void> _continueWithGoogle() async {
-    final authProvider =
-        context.read<AuthProvider>();
+  // ==========================================
+// Google Registration
+// ==========================================
 
-    try {
-      // ------------------------------------------
-      // Google Sign-In
-      // ------------------------------------------
-      //
-      // Handles platform-specific Google login.
-      //
-      // Android / iOS / supported platforms:
-      // google_sign_in v7
-      //
-      // Web:
-      // Firebase Google popup
-      // ------------------------------------------
+Future<void> _continueWithGoogle() async {
+  FocusScope.of(context).unfocus();
 
-      final firebaseUser =
-          await GoogleAuthService.signIn();
+  final authProvider =
+      context.read<AuthProvider>();
 
-      // ------------------------------------------
-      // Firebase user
-      //        ↓
-      // Firebase ID Token
-      //        ↓
-      // MessageShield backend
-      //        ↓
-      // MessageShield JWT
-      // ------------------------------------------
+  try {
+    // Clear any previous error.
+    authProvider.clearError();
 
-      await authProvider.registerWithFirebaseUser(
-  firebaseUser,
-);
+    // Step 1:
+    // Authenticate with Google / Firebase.
+    final firebaseUser =
+        await GoogleAuthService.signIn();
 
-      if (!mounted) return;
+    if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Account created successfully with Google.',
-          ),
-          backgroundColor: AppColors.success,
-          behavior: SnackBarBehavior.floating,
+    // Step 2:
+    // Register a NEW MessageShield account.
+    //
+    // Backend endpoint:
+    // POST /api/v1/auth/firebase/register
+    await authProvider.registerWithFirebaseUser(
+      firebaseUser,
+    );
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context)
+        .hideCurrentSnackBar();
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Account created successfully with Google.',
         ),
-      );
-
-      // User is now authenticated.
-      //
-      // Go back to previous screen.
-      Navigator.of(context).pop();
-    } 
-  catch (error, stackTrace) {
-  debugPrint('========================================');
-  debugPrint('GOOGLE SIGN-IN ERROR:');
-  debugPrint(error.toString());
-  debugPrint('GOOGLE SIGN-IN STACK TRACE:');
-  debugPrint(stackTrace.toString());
-  debugPrint('========================================');
-
-  if (!mounted) return;
-
-  final message =
-      _friendlyGoogleError(error.toString());
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        'Google error: ${error.toString()}',
+        backgroundColor: AppColors.success,
+        behavior: SnackBarBehavior.floating,
       ),
-      backgroundColor: AppColors.danger,
-      behavior: SnackBarBehavior.floating,
-    ),
-  );
-}
+    );
+
+    // User is authenticated.
+    Navigator.of(context).pop();
+  } catch (error, stackTrace) {
+    debugPrint(
+      '========================================',
+    );
+    debugPrint(
+      'GOOGLE REGISTRATION ERROR:',
+    );
+    debugPrint(error.toString());
+    debugPrint(
+      'GOOGLE REGISTRATION STACK TRACE:',
+    );
+    debugPrint(stackTrace.toString());
+    debugPrint(
+      '========================================',
+    );
+
+    if (!mounted) return;
+
+    // Backend/AuthProvider error has priority.
+    final providerError =
+        authProvider.error;
+
+    // If the backend registration failed,
+    // use its real error message.
+    //
+    // Otherwise use the Google/Firebase error.
+    final actualError =
+        providerError != null &&
+                providerError.isNotEmpty
+            ? providerError
+            : error.toString();
+
+    final message =
+        _friendlyGoogleError(actualError);
+
+    ScaffoldMessenger.of(context)
+        .hideCurrentSnackBar();
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(
+              Icons.error_outline_rounded,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(message),
+            ),
+          ],
+        ),
+        backgroundColor: AppColors.danger,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        duration:
+            const Duration(seconds: 4),
+      ),
+    );
+  }
 }
   // ==========================================
   // Friendly Email Registration Errors
@@ -204,37 +238,105 @@ class _RegisterScreenState
   // Friendly Google Errors
   // ==========================================
 
-  String _friendlyGoogleError(
-    String error,
-  ) {
-    final message = error.toLowerCase();
+  // ==========================================
+// Friendly Google Errors
+// ==========================================
 
-    if (message.contains('cancelled') ||
-        message.contains('canceled')) {
-      return 'Google sign-in was cancelled.';
-    }
+String _friendlyGoogleError(
+  String error,
+) {
+  // Remove common Dart exception prefix.
+  final cleanedError =
+      error.replaceFirst(
+    'Exception: ',
+    '',
+  );
 
-    if (message.contains('network') ||
-        message.contains('socket') ||
-        message.contains('connection')) {
-      return 'Unable to connect. '
-          'Please check your internet connection.';
-    }
+  final message =
+      cleanedError.toLowerCase();
 
-    if (message.contains('invalid firebase') ||
-        message.contains('authentication token') ||
-        message.contains('firebase authentication')) {
-      return 'Google authentication could not be verified.';
-    }
+  // ------------------------------------------
+  // Account already exists
+  // ------------------------------------------
 
-    if (message.contains('not supported')) {
-      return 'Google sign-in is not supported '
-          'on this platform.';
-    }
-
-    return 'Unable to continue with Google. '
-        'Please try again.';
+  if (message.contains('account already exists') ||
+      message.contains('already exists') ||
+      message.contains('already registered') ||
+      message.contains('please sign in instead')) {
+    return 'A MessageShield account already exists '
+        'for this Google account. '
+        'Please sign in instead.';
   }
+
+  // ------------------------------------------
+  // Account provider conflict
+  // ------------------------------------------
+
+  if (message.contains('different sign-in method') ||
+      message.contains('provider conflict')) {
+    return 'An account with this email already exists '
+        'using a different sign-in method.';
+  }
+
+  // ------------------------------------------
+  // Google sign-in cancelled
+  // ------------------------------------------
+
+  if (message.contains('cancelled') ||
+      message.contains('canceled') ||
+      message.contains('popup-closed-by-user')) {
+    return 'Google sign-in was cancelled.';
+  }
+
+  // ------------------------------------------
+  // Popup blocked
+  // ------------------------------------------
+
+  if (message.contains('popup-blocked')) {
+    return 'Google sign-in popup was blocked. '
+        'Please allow popups and try again.';
+  }
+
+  // ------------------------------------------
+  // Network
+  // ------------------------------------------
+
+  if (message.contains('network') ||
+      message.contains('socket') ||
+      message.contains('connection') ||
+      message.contains('network-request-failed')) {
+    return 'Unable to connect. '
+        'Please check your internet connection.';
+  }
+
+  // ------------------------------------------
+  // Firebase authentication
+  // ------------------------------------------
+
+  if (message.contains('invalid firebase') ||
+      message.contains('authentication token') ||
+      message.contains('firebase authentication')) {
+    return 'Google authentication could not be verified.';
+  }
+
+  // ------------------------------------------
+  // Platform
+  // ------------------------------------------
+
+  if (message.contains('not supported')) {
+    return 'Google sign-in is not supported '
+        'on this platform.';
+  }
+
+  // ------------------------------------------
+  // Default
+  // ------------------------------------------
+
+  return cleanedError.isNotEmpty
+      ? cleanedError
+      : 'Unable to continue with Google. '
+          'Please try again.';
+}
 
   @override
   Widget build(BuildContext context) {
