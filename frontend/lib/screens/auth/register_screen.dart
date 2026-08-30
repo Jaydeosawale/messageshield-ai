@@ -254,15 +254,14 @@ Future<void> _continueWithGoogle() async {
 
   // Check this FIRST because the backend message
   // can also contain "already exists".
-
-
-  // ------------------------------------------
-
-  if (message.contains('different sign-in method') ||
-      message.contains('provider conflict')) {
-    return 'An account with this email already exists '
-        'using a different sign-in method.';
-  }
+if (message.contains('different sign-in method') ||
+    message.contains('provider conflict') ||
+    message.contains('using email and password') ||
+    message.contains('email and password sign-in')) {
+  return 'An account with this email already exists '
+      'using email and password. '
+      'Please sign in using your email and password.';
+}
 
   // ------------------------------------------
   // Google / MessageShield account already exists.
