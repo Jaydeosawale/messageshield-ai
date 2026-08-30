@@ -29,9 +29,7 @@ class AuthService {
     );
 
     if (response.statusCode != 201) {
-      throw Exception(
-        ApiService.getErrorMessage(response),
-      );
+      throw _getAuthException(response);
     }
 
     final data =
@@ -58,9 +56,7 @@ class AuthService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception(
-        ApiService.getErrorMessage(response),
-      );
+      throw _getAuthException(response);
     }
 
     final data =
@@ -117,9 +113,7 @@ class AuthService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception(
-        ApiService.getErrorMessage(response),
-      );
+      throw _getAuthException(response);
     }
 
     await _saveAccessToken(response);
@@ -165,12 +159,161 @@ class AuthService {
 
     if (response.statusCode != 200 &&
         response.statusCode != 201) {
-      throw Exception(
-        ApiService.getErrorMessage(response),
-      );
+      throw _getAuthException(response);
     }
 
     await _saveAccessToken(response);
+  }
+
+  // ==========================================
+  // Friendly authentication errors
+  // ==========================================
+
+  static Exception _getAuthException(
+    dynamic response,
+  ) {
+    final backendMessage =
+        ApiService.getErrorMessage(response);
+
+    final originalMessage = backendMessage
+        .toString()
+        .replaceFirst(
+          'Exception: ',
+          '',
+        )
+        .trim();
+
+    final message =
+        originalMessage.toLowerCase();
+
+    // ------------------------------------------
+    // Account already exists / Conflict
+    // ------------------------------------------
+
+    if (response.statusCode == 409 ||
+        message.contains('already exists') ||
+        message.contains('already registered') ||
+        message.contains('email already') ||
+        message.contains('email exists') ||
+        message.contains('duplicate')) {
+      return Exception(
+        'An account with this email already exists. '
+        'Please sign in instead.',
+      );
+    }
+
+    // ------------------------------------------
+    // Existing password account
+    // ------------------------------------------
+
+    if (message.contains('email and password')) {
+      return Exception(
+        'An account with this email already exists. '
+        'Please sign in using email and password.',
+      );
+    }
+
+    // ------------------------------------------
+    // Google account identity conflict
+    // ------------------------------------------
+
+    if (message.contains('google account identity')) {
+      return Exception(
+        'This Google account is already registered. '
+        'Please sign in instead.',
+      );
+    }
+
+    // ------------------------------------------
+    // Google/Firebase user not registered
+    // ------------------------------------------
+
+    if (response.statusCode == 404 ||
+        message.contains('not registered') ||
+        message.contains('no messageshield account') ||
+        message.contains('no message shield account')) {
+      return Exception(
+        'No account was found for this Google account. '
+        'Please create an account first.',
+      );
+    }
+
+    // ------------------------------------------
+    // Invalid credentials
+    // ------------------------------------------
+
+    if (response.statusCode == 401 ||
+        message.contains('invalid credentials') ||
+        message.contains('incorrect password')) {
+      return Exception(
+        'Invalid email or password.',
+      );
+    }
+
+    // ------------------------------------------
+    // Email verification required
+    // ------------------------------------------
+
+    if (message.contains('email not verified') ||
+        message.contains('verify your email') ||
+        message.contains('email verification')) {
+      return Exception(
+        'Please verify your email before signing in.',
+      );
+    }
+
+    // ------------------------------------------
+    // Inactive account
+    // ------------------------------------------
+
+    if (message.contains('inactive')) {
+      return Exception(
+        'Your account is currently inactive. '
+        'Please contact support.',
+      );
+    }
+
+    // ------------------------------------------
+    // Password login unavailable
+    // ------------------------------------------
+
+    if (message.contains('password login') ||
+        message.contains('password sign-in')) {
+      return Exception(
+        'This account uses Google sign-in. '
+        'Please continue with Google.',
+      );
+    }
+
+    // ------------------------------------------
+    // Network / server errors
+    // ------------------------------------------
+
+    if (response.statusCode >= 500) {
+      return Exception(
+        'Something went wrong on the server. '
+        'Please try again later.',
+      );
+    }
+
+    if (message.contains('network') ||
+        message.contains('socket') ||
+        message.contains('connection')) {
+      return Exception(
+        'Unable to connect to the server. '
+        'Please check your internet connection.',
+      );
+    }
+
+    // ------------------------------------------
+    // Default backend error
+    // ------------------------------------------
+
+    return Exception(
+      originalMessage.isNotEmpty
+          ? originalMessage
+          : 'Authentication failed. Please try again.',
+    );
   }
 
   // ==========================================
@@ -206,9 +349,7 @@ class AuthService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception(
-        ApiService.getErrorMessage(response),
-      );
+      throw _getAuthException(response);
     }
 
     final data =

@@ -252,6 +252,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final message = cleanedError.toLowerCase();
 
+    if (message.contains('409') ||
+    message.contains('conflict')) {
+  return 'An account with this email already exists. '
+      'Please sign in instead.';
+}
+
     // Check this FIRST because the backend message
     // can also contain "already exists".
     if (message.contains('different sign-in method') ||

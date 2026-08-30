@@ -99,10 +99,6 @@ class _LoginScreenState
   // GOOGLE LOGIN
   // ============================================================
 
-  // ============================================================
-// GOOGLE LOGIN
-// ============================================================
-
 Future<void> _continueWithGoogle() async {
   FocusScope.of(context).unfocus();
 
