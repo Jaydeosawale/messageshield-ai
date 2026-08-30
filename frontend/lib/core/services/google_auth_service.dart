@@ -1,13 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart'
-    as firebase_auth;
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleAuthService {
   GoogleAuthService._();
 
-  static final GoogleSignIn _googleSignIn =
-      GoogleSignIn.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
   static bool _initialized = false;
 
@@ -17,8 +15,6 @@ class GoogleAuthService {
 
   static Future<void> initialize() async {
     // Web uses Firebase signInWithPopup().
-    // GoogleSignIn.initialize() is not required
-    // for the web flow.
     if (kIsWeb) {
       return;
     }
@@ -37,100 +33,103 @@ class GoogleAuthService {
   // ==========================================
 
   static Future<firebase_auth.User> signIn() async {
-    // ------------------------------------------
-    // WEB
-    // ------------------------------------------
-
     if (kIsWeb) {
-      try {
-        final firebaseAuth =
-            firebase_auth.FirebaseAuth.instance;
-
-        // Clear any previous Firebase session.
-        //
-        // This prevents Firebase from silently
-        // reusing the previously authenticated user.
-        await firebaseAuth.signOut();
-
-        final provider =
-            firebase_auth.GoogleAuthProvider();
-
-        provider.addScope('email');
-        provider.addScope('profile');
-
-        // IMPORTANT:
-        // Force Google to show account selection.
-        provider.setCustomParameters({
-          'prompt': 'select_account',
-        });
-
-        final userCredential =
-            await firebaseAuth.signInWithPopup(
-          provider,
-        );
-
-        final user = userCredential.user;
-
-        if (user == null) {
-          throw Exception(
-            'Google sign-in did not return a user',
-          );
-        }
-
-        return user;
-      } on firebase_auth.FirebaseAuthException catch (
-        error,
-      ) {
-        throw Exception(
-          _getFirebaseErrorMessage(error),
-        );
-      }
+      return _signInOnWeb();
     }
 
-    // ------------------------------------------
-    // MOBILE / SUPPORTED PLATFORMS
-    // ------------------------------------------
+    return _signInOnMobile();
+  }
 
-    await initialize();
+  // ==========================================
+  // Web Google Sign-In
+  // ==========================================
 
+  static Future<firebase_auth.User> _signInOnWeb() async {
     try {
-      if (_googleSignIn.supportsAuthenticate()) {
-        final GoogleSignInAccount googleAccount =
-            await _googleSignIn.authenticate();
+      final firebaseAuth = firebase_auth.FirebaseAuth.instance;
 
-        final GoogleSignInAuthentication authentication =
-            googleAccount.authentication;
+      // Clear previous Firebase session so the
+      // Google account chooser can appear.
+      await firebaseAuth.signOut();
 
-        final credential =
-            firebase_auth.GoogleAuthProvider.credential(
-          idToken: authentication.idToken,
+      final provider = firebase_auth.GoogleAuthProvider();
+
+      provider.addScope('email');
+      provider.addScope('profile');
+
+      provider.setCustomParameters({
+        'prompt': 'select_account',
+      });
+
+      final userCredential = await firebaseAuth.signInWithPopup(
+        provider,
+      );
+
+      final user = userCredential.user;
+
+      if (user == null) {
+        throw Exception(
+          'Google sign-in did not return a user.',
         );
-
-        final userCredential =
-            await firebase_auth.FirebaseAuth.instance
-                .signInWithCredential(
-          credential,
-        );
-
-        final user = userCredential.user;
-
-        if (user == null) {
-          throw Exception(
-            'Google sign-in did not return a user',
-          );
-        }
-
-        return user;
       }
 
-      throw UnsupportedError(
-        'Google sign-in is not supported on this platform',
-      );
-    } on firebase_auth.FirebaseAuthException catch (
-      error,
-    ) {
+      return user;
+    } on firebase_auth.FirebaseAuthException catch (error) {
       throw Exception(
         _getFirebaseErrorMessage(error),
+      );
+    } catch (error) {
+      throw Exception(
+        _getGeneralErrorMessage(error),
+      );
+    }
+  }
+
+  // ==========================================
+  // Mobile Google Sign-In
+  // ==========================================
+
+  static Future<firebase_auth.User> _signInOnMobile() async {
+    try {
+      await initialize();
+
+      if (!_googleSignIn.supportsAuthenticate()) {
+        throw UnsupportedError(
+          'Google sign-in is not supported on this platform.',
+        );
+      }
+
+      final GoogleSignInAccount googleAccount =
+          await _googleSignIn.authenticate();
+
+      final GoogleSignInAuthentication authentication =
+          googleAccount.authentication;
+
+      final credential = firebase_auth.GoogleAuthProvider.credential(
+        idToken: authentication.idToken,
+      );
+
+      final userCredential =
+          await firebase_auth.FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
+
+      final user = userCredential.user;
+
+      if (user == null) {
+        throw Exception(
+          'Google sign-in did not return a user.',
+        );
+      }
+
+      return user;
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      throw Exception(
+        _getFirebaseErrorMessage(error),
+      );
+    } catch (error) {
+      throw Exception(
+        _getGeneralErrorMessage(error),
       );
     }
   }
@@ -140,8 +139,7 @@ class GoogleAuthService {
   // ==========================================
 
   static Future<void> signOut() async {
-    await firebase_auth.FirebaseAuth.instance
-        .signOut();
+    await firebase_auth.FirebaseAuth.instance.signOut();
   }
 
   // ==========================================
@@ -165,14 +163,41 @@ class GoogleAuthService {
 
       case 'network-request-failed':
         return 'Network error. Please check your '
-            'internet connection.';
+            'internet connection and try again.';
 
       case 'operation-not-allowed':
         return 'Google sign-in is not enabled.';
 
+      case 'invalid-credential':
+        return 'The Google sign-in credential is invalid '
+            'or has expired. Please try again.';
+
+      case 'user-disabled':
+        return 'This Google account has been disabled.';
+
       default:
-        return error.message ??
-            'Google sign-in failed. Please try again.';
+        return error.message ?? 'Google sign-in failed. Please try again.';
     }
+  }
+
+  // ==========================================
+  // General Error Messages
+  // ==========================================
+
+  static String _getGeneralErrorMessage(
+    Object error,
+  ) {
+    var message = error.toString().trim();
+
+    message = message.replaceFirst(
+      'Exception: ',
+      '',
+    );
+
+    if (message.isEmpty) {
+      return 'Google sign-in failed. Please try again.';
+    }
+
+    return message;
   }
 }
