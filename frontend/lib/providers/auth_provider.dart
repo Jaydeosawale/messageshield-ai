@@ -1,5 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart'
-    as firebase_auth;
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 
 import '../core/services/auth_service.dart';
@@ -31,6 +30,13 @@ class AuthProvider extends ChangeNotifier {
   // ==========================================
   // Initialize app session
   // ==========================================
+  //
+  // MessageShield JWT is the local application
+  // session.
+  //
+  // Firebase is NOT used here to authorize
+  // MessageShield API access.
+  // ==========================================
 
   Future<void> initialize() async {
     if (_isInitialized) return;
@@ -49,10 +55,10 @@ class AuthProvider extends ChangeNotifier {
         return;
       }
 
-      // Verify token with backend.
+      // Verify MessageShield JWT with backend.
       _user = await AuthService.getCurrentUser();
     } catch (_) {
-      // Invalid or expired JWT.
+      // Invalid or expired MessageShield JWT.
       await TokenStorage.deleteToken();
 
       _user = null;
@@ -65,7 +71,20 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // ==========================================
-  // Email / Password Register
+  // Email / Password REGISTER
+  // ==========================================
+  //
+  // Step 1:
+  // Firebase creates the user.
+  //
+  // Step 2:
+  // Firebase sends verification email.
+  //
+  // IMPORTANT:
+  // MessageShield PostgreSQL user is NOT created
+  // yet.
+  //
+  // The user must verify the email first.
   // ==========================================
 
   Future<void> register({
@@ -81,6 +100,11 @@ class AuthProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
+
+      // No MessageShield JWT yet.
+      _user = null;
+
+      notifyListeners();
     } catch (error) {
       _error = _cleanError(error);
 
@@ -93,7 +117,109 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // ==========================================
-  // Email / Password Login
+  // Verify email + complete registration
+  // ==========================================
+  //
+  // Called after the user clicks the Firebase
+  // verification link.
+  //
+  // Flow:
+  //
+  // Firebase email verified
+  //        ↓
+  // Reload Firebase user
+  //        ↓
+  // Firebase ID token
+  //        ↓
+  // POST /auth/firebase/register
+  //        ↓
+  // PostgreSQL MessageShield user
+  //        ↓
+  // MessageShield JWT
+  //        ↓
+  // /auth/me
+  // ==========================================
+
+  Future<bool> verifyEmailAndCompleteRegistration() async {
+    _setLoading(true);
+
+    try {
+      _error = null;
+
+      // ----------------------------------------
+      // 1. Refresh Firebase user.
+      // ----------------------------------------
+
+      final verified = await AuthService.reloadFirebaseUser();
+
+      // ----------------------------------------
+      // 2. User has not verified email yet.
+      // ----------------------------------------
+
+      if (!verified) {
+        _error = 'Please verify your email address first.';
+
+        notifyListeners();
+
+        return false;
+      }
+
+      // ----------------------------------------
+      // 3. Email is verified.
+      //
+      // Create MessageShield account and receive
+      // MessageShield JWT.
+      // ----------------------------------------
+
+      await AuthService.completeFirebaseRegistration();
+
+      // ----------------------------------------
+      // 4. Load MessageShield user.
+      // ----------------------------------------
+
+      _user = await AuthService.getCurrentUser();
+
+      _error = null;
+
+      notifyListeners();
+
+      return true;
+    } catch (error) {
+      // Do not leave a partially authenticated
+      // MessageShield session behind.
+      await TokenStorage.deleteToken();
+
+      _user = null;
+
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // ==========================================
+  // Email / Password LOGIN
+  // ==========================================
+  //
+  // Firebase:
+  //
+  // email + password
+  //        ↓
+  // emailVerified
+  //        ↓
+  // Firebase ID token
+  //
+  // Backend:
+  //
+  // Firebase ID token
+  //        ↓
+  // MessageShield account lookup
+  //        ↓
+  // MessageShield JWT
   // ==========================================
 
   Future<void> login({
@@ -110,11 +236,12 @@ class AuthProvider extends ChangeNotifier {
         password: password,
       );
 
-      // Load current MessageShield user.
+      // MessageShield JWT now exists.
       _user = await AuthService.getCurrentUser();
 
       notifyListeners();
     } catch (error) {
+      // Never keep an invalid/partial JWT.
       await TokenStorage.deleteToken();
 
       _user = null;
@@ -132,6 +259,19 @@ class AuthProvider extends ChangeNotifier {
   // ==========================================
   // Firebase / Google LOGIN
   // ==========================================
+  //
+  // Existing MessageShield user only.
+  //
+  // Google
+  //   ↓
+  // Firebase
+  //   ↓
+  // Firebase ID token
+  //   ↓
+  // /auth/firebase/login
+  //   ↓
+  // MessageShield JWT
+  // ==========================================
 
   Future<void> loginWithFirebaseUser(
     firebase_auth.User firebaseUser,
@@ -141,15 +281,11 @@ class AuthProvider extends ChangeNotifier {
     try {
       _error = null;
 
-      // Existing MessageShield user only.
-      //
-      // Backend endpoint:
-      // POST /api/v1/auth/firebase/login
       await AuthService.loginWithFirebaseUser(
         firebaseUser,
       );
 
-      // Load local MessageShield user.
+      // Load MessageShield user.
       _user = await AuthService.getCurrentUser();
 
       notifyListeners();
@@ -171,6 +307,19 @@ class AuthProvider extends ChangeNotifier {
   // ==========================================
   // Firebase / Google REGISTER
   // ==========================================
+  //
+  // Google
+  //   ↓
+  // Firebase
+  //   ↓
+  // Firebase ID token
+  //   ↓
+  // /auth/firebase/register
+  //   ↓
+  // MessageShield user
+  //   ↓
+  // MessageShield JWT
+  // ==========================================
 
   Future<void> registerWithFirebaseUser(
     firebase_auth.User firebaseUser,
@@ -180,21 +329,15 @@ class AuthProvider extends ChangeNotifier {
     try {
       _error = null;
 
-      // Create a new MessageShield user.
-      //
-      // Backend endpoint:
-      // POST /api/v1/auth/firebase/register
       await AuthService.registerWithFirebaseUser(
         firebaseUser,
       );
 
-      // Backend returns/stores MessageShield JWT.
-      // Load the new local user.
+      // Backend returned MessageShield JWT.
       _user = await AuthService.getCurrentUser();
 
       notifyListeners();
     } catch (error) {
-      // Registration failed.
       await TokenStorage.deleteToken();
 
       _user = null;
@@ -210,7 +353,71 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // ==========================================
-  // Refresh current user
+  // Send Firebase email verification
+  // ==========================================
+
+  Future<void> sendFirebaseVerificationEmail() async {
+    _setLoading(true);
+
+    try {
+      _error = null;
+
+      await AuthService.sendEmailVerification();
+
+      notifyListeners();
+    } catch (error) {
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      rethrow;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // ==========================================
+  // Check Firebase email verification
+  // ==========================================
+  //
+  // Returns:
+  //
+  // true  -> verified
+  // false -> not verified
+  // ==========================================
+
+  Future<bool> checkFirebaseEmailVerification() async {
+    _setLoading(true);
+
+    try {
+      _error = null;
+
+      final verified = await AuthService.reloadFirebaseUser();
+
+      notifyListeners();
+
+      return verified;
+    } catch (error) {
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // ==========================================
+  // Firebase user
+  // ==========================================
+
+  firebase_auth.User? get firebaseUser {
+    return AuthService.firebaseUser;
+  }
+
+  // ==========================================
+  // Refresh current MessageShield user
   // ==========================================
 
   Future<void> refreshUser() async {
@@ -226,53 +433,31 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+   // ==========================================
+// Clear authentication session
+// ==========================================
+//
+// Used after successful registration when
+// the user should continue to LoginScreen.
+//
 
-  // ==========================================
-  // Firebase email verification
-  // ==========================================
+Future<void> clearAuthenticationSession() async {
+  try {
+    await AuthService.logout();
 
-  Future<void> sendFirebaseVerificationEmail() async {
-    _setLoading(true);
-
-    try {
-      _error = null;
-
-      await AuthService.sendEmailVerification();
-    } catch (error) {
-      _error = _cleanError(error);
-
-      notifyListeners();
-
-      rethrow;
-    } finally {
-      _setLoading(false);
-    }
+    _user = null;
+    _error = null;
+  } finally {
+    notifyListeners();
   }
-
-  // ==========================================
-  // Check Firebase email verification
-  // ==========================================
-
-  Future<bool> checkFirebaseEmailVerification() async {
-    _setLoading(true);
-
-    try {
-      _error = null;
-
-      return await AuthService.reloadFirebaseUser();
-    } catch (error) {
-      _error = _cleanError(error);
-
-      notifyListeners();
-
-      return false;
-    } finally {
-      _setLoading(false);
-    }
-  }
-
+}
   // ==========================================
   // Logout
+  // ==========================================
+  //
+  // Removes:
+  // 1. MessageShield JWT
+  // 2. Firebase session
   // ==========================================
 
   Future<void> logout() async {
@@ -322,6 +507,7 @@ class AuthProvider extends ChangeNotifier {
         .replaceFirst(
           'Exception: ',
           '',
-        );
+        )
+        .trim();
   }
 }

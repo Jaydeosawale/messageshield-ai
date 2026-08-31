@@ -46,22 +46,30 @@ class GoogleAuthService {
 
   static Future<firebase_auth.User> _signInOnWeb() async {
     try {
-      final firebaseAuth = firebase_auth.FirebaseAuth.instance;
+      final firebaseAuth =
+          firebase_auth.FirebaseAuth.instance;
 
-      // Clear previous Firebase session so the
-      // Google account chooser can appear.
-      await firebaseAuth.signOut();
+      // IMPORTANT:
+      // Do NOT sign out Firebase immediately before
+      // signInWithPopup().
+      //
+      // signInWithPopup() should remain directly connected
+      // to the user's button interaction so browsers such
+      // as Safari are less likely to block the popup.
 
-      final provider = firebase_auth.GoogleAuthProvider();
+      final provider =
+          firebase_auth.GoogleAuthProvider();
 
       provider.addScope('email');
       provider.addScope('profile');
 
+      // Always show the Google account chooser.
       provider.setCustomParameters({
         'prompt': 'select_account',
       });
 
-      final userCredential = await firebaseAuth.signInWithPopup(
+      final userCredential =
+          await firebaseAuth.signInWithPopup(
         provider,
       );
 
@@ -75,10 +83,24 @@ class GoogleAuthService {
 
       return user;
     } on firebase_auth.FirebaseAuthException catch (error) {
+      debugPrint(
+        'Google Web Firebase error code: ${error.code}',
+      );
+      debugPrint(
+        'Google Web Firebase error message: ${error.message}',
+      );
+
       throw Exception(
         _getFirebaseErrorMessage(error),
       );
-    } catch (error) {
+    } catch (error, stackTrace) {
+      debugPrint(
+        'Google Web error: $error',
+      );
+      debugPrint(
+        'Google Web stack trace: $stackTrace',
+      );
+
       throw Exception(
         _getGeneralErrorMessage(error),
       );
@@ -105,12 +127,14 @@ class GoogleAuthService {
       final GoogleSignInAuthentication authentication =
           googleAccount.authentication;
 
-      final credential = firebase_auth.GoogleAuthProvider.credential(
+      final credential =
+          firebase_auth.GoogleAuthProvider.credential(
         idToken: authentication.idToken,
       );
 
       final userCredential =
-          await firebase_auth.FirebaseAuth.instance.signInWithCredential(
+          await firebase_auth.FirebaseAuth.instance
+              .signInWithCredential(
         credential,
       );
 
@@ -124,10 +148,24 @@ class GoogleAuthService {
 
       return user;
     } on firebase_auth.FirebaseAuthException catch (error) {
+      debugPrint(
+        'Google Mobile Firebase error code: ${error.code}',
+      );
+      debugPrint(
+        'Google Mobile Firebase error message: ${error.message}',
+      );
+
       throw Exception(
         _getFirebaseErrorMessage(error),
       );
-    } catch (error) {
+    } catch (error, stackTrace) {
+      debugPrint(
+        'Google Mobile error: $error',
+      );
+      debugPrint(
+        'Google Mobile stack trace: $stackTrace',
+      );
+
       throw Exception(
         _getGeneralErrorMessage(error),
       );
@@ -141,7 +179,31 @@ class GoogleAuthService {
   static Future<void> signOut() async {
     await firebase_auth.FirebaseAuth.instance.signOut();
   }
+   // ==========================================
+// Clear Google / Firebase session
+// ==========================================
+//
+// Used when Google authentication succeeds
+// but MessageShield authentication fails.
+// ==========================================
 
+static Future<void> clearSession() async {
+  try {
+    await firebase_auth.FirebaseAuth.instance.signOut();
+  } catch (error) {
+    debugPrint(
+      'Firebase sign-out during cleanup failed: $error',
+    );
+  }
+
+  try {
+    await _googleSignIn.signOut();
+  } catch (error) {
+    debugPrint(
+      'Google sign-out during cleanup failed: $error',
+    );
+  }
+}
   // ==========================================
   // Firebase Error Messages
   // ==========================================
@@ -176,7 +238,8 @@ class GoogleAuthService {
         return 'This Google account has been disabled.';
 
       default:
-        return error.message ?? 'Google sign-in failed. Please try again.';
+        return error.message ??
+            'Google sign-in failed. Please try again.';
     }
   }
 

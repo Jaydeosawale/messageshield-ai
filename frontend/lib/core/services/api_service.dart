@@ -74,6 +74,9 @@ class ApiService {
       'POST $url -> ${response.statusCode}',
     );
 
+    debugPrint('POST $url -> ${response.statusCode}');
+debugPrint('POST RESPONSE: ${response.body}');
+
     return response;
   }
 

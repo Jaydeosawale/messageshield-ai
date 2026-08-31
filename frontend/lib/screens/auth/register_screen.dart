@@ -6,6 +6,7 @@ import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/app_background.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -47,42 +48,291 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     FocusScope.of(context).unfocus();
 
+    final authProvider = context.read<AuthProvider>();
+
     try {
-      await context.read<AuthProvider>().register(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          );
+      authProvider.clearError();
+
+      // ==========================================
+      // Step 1
+      // ==========================================
+      //
+      // Create Firebase email/password account.
+      //
+      // Firebase also sends the verification email.
+      //
+
+      await authProvider.register(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Account created successfully. Please log in.',
-          ),
-          backgroundColor: AppColors.success,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      // ==========================================
+      // Step 2
+      // ==========================================
+      //
+      // Do NOT create MessageShield account yet.
+      //
+      // User must verify email first.
+      //
 
-      Navigator.pop(context);
+      await _showEmailVerificationDialog();
     } catch (_) {
       if (!mounted) return;
 
-      final rawError =
-          context.read<AuthProvider>().error ?? 'Registration failed';
+      final rawError = authProvider.error ?? 'Registration failed';
+
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            _friendlyRegisterError(rawError),
+          content: Row(
+            children: [
+              const Icon(
+                Icons.error_outline_rounded,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  _friendlyRegisterError(rawError),
+                ),
+              ),
+            ],
           ),
           backgroundColor: AppColors.danger,
           behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
   }
+
+  Future<void> _showEmailVerificationDialog() async {
+  if (!mounted) return;
+
+  await showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) {
+      return StatefulBuilder(
+        builder: (
+          dialogBuildContext,
+          setDialogState,
+        ) {
+          final authProvider =
+              dialogBuildContext.watch<AuthProvider>();
+
+          return AlertDialog(
+            backgroundColor: AppColors.backgroundSoft,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: const Row(
+              children: [
+                Icon(
+                  Icons.mark_email_read_outlined,
+                  color: AppColors.teal,
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Verify your email',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            content: Text(
+              'We sent a verification link to '
+              '${_emailController.text.trim()}.\n\n'
+              'Open the email from MessageShield and click '
+              'the verification link. Then return here and tap '
+              '"I\'ve verified my email".',
+              style: const TextStyle(
+                color: AppColors.textSecondary,
+                height: 1.5,
+              ),
+            ),
+            actions: [
+              // ==========================================
+              // RESEND
+              // ==========================================
+
+              TextButton(
+                onPressed: authProvider.isLoading
+                    ? null
+                    : () async {
+                        try {
+                          await dialogBuildContext
+                              .read<AuthProvider>()
+                              .sendFirebaseVerificationEmail();
+
+                          if (!dialogContext.mounted) {
+                            return;
+                          }
+
+                          ScaffoldMessenger.of(
+                            dialogContext,
+                          ).hideCurrentSnackBar();
+
+                          ScaffoldMessenger.of(
+                            dialogContext,
+                          ).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Verification email sent again. '
+                                'Please check your inbox or spam folder.',
+                              ),
+                              behavior:
+                                  SnackBarBehavior.floating,
+                            ),
+                          );
+                        } catch (_) {
+                          if (!dialogContext.mounted) {
+                            return;
+                          }
+
+                          final error =
+                              dialogBuildContext
+                                      .read<AuthProvider>()
+                                      .error ??
+                                  'Unable to resend verification email.';
+
+                          ScaffoldMessenger.of(
+                            dialogContext,
+                          ).showSnackBar(
+                            SnackBar(
+                              content: Text(error),
+                              backgroundColor:
+                                  AppColors.danger,
+                              behavior:
+                                  SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      },
+                child: const Text(
+                  'Resend email',
+                ),
+              ),
+
+              // ==========================================
+              // I'VE VERIFIED
+              // ==========================================
+
+              FilledButton(
+                onPressed: authProvider.isLoading
+                    ? null
+                    : () async {
+                        final success =
+                            await dialogBuildContext
+                                .read<AuthProvider>()
+                                .verifyEmailAndCompleteRegistration();
+
+                        if (!dialogContext.mounted) {
+                          return;
+                        }
+
+                        if (success) {
+                          Navigator.of(
+                            dialogContext,
+                          ).pop();
+                          return;
+                        }
+
+                        setDialogState(() {});
+
+                        final error =
+                            dialogBuildContext
+                                    .read<AuthProvider>()
+                                    .error ??
+                                'Please verify your email first.';
+
+                        ScaffoldMessenger.of(
+                          dialogContext,
+                        ).hideCurrentSnackBar();
+
+                        ScaffoldMessenger.of(
+                          dialogContext,
+                        ).showSnackBar(
+                          SnackBar(
+                            content: Text(error),
+                            backgroundColor:
+                                AppColors.danger,
+                            behavior:
+                                SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                child: authProvider.isLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        "I've verified my email",
+                      ),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+
+    // ==========================================
+  // Registration completed
+  // ==========================================
+
+  if (!mounted) return;
+
+  final authProvider = context.read<AuthProvider>();
+
+  if (authProvider.isAuthenticated) {
+    // The MessageShield account has now been created.
+    //
+    // We intentionally clear the temporary authenticated
+    // session because the user should continue through
+    // the normal Login screen.
+
+    await authProvider.clearAuthenticationSession();
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Email verified successfully. Please sign in to continue.',
+        ),
+        backgroundColor: AppColors.success,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    // Replace RegisterScreen with LoginScreen.
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const LoginScreen(),
+      ),
+    );
+  }
+  
+  await authProvider.clearAuthenticationSession();
+
+}
 
   String _friendlyRegisterError(
     Object error,
@@ -202,20 +452,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
         '========================================',
       );
 
+      // Google authentication may have succeeded,
+      // but MessageShield registration may have failed.
+      //
+      // Do not leave the Firebase/Google session
+      // active in that case.
+      await GoogleAuthService.clearSession();
+
       if (!mounted) return;
 
-      // Backend/AuthProvider error has priority.
       final providerError = authProvider.error;
 
-      // If the backend registration failed,
-      // use its real error message.
-      //
-      // Otherwise use the Google/Firebase error.
-      final actualError = providerError != null && providerError.isNotEmpty
-          ? providerError
-          : error.toString();
+      final actualError =
+          providerError != null && providerError.isNotEmpty
+              ? providerError
+              : error.toString();
 
-      final message = _friendlyGoogleError(actualError);
+      final message = _friendlyGoogleError(
+        actualError,
+      );
 
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
@@ -240,7 +495,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
     }
-  }
+  } 
   // ==========================================
   // Friendly Email Registration Errors
   // ==========================================
@@ -252,11 +507,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final message = cleanedError.toLowerCase();
 
-    if (message.contains('409') ||
-    message.contains('conflict')) {
-  return 'An account with this email already exists. '
-      'Please sign in instead.';
-}
+    if (message.contains('409') || message.contains('conflict')) {
+      return 'An account with this email already exists. '
+          'Please sign in instead.';
+    }
 
     // Check this FIRST because the backend message
     // can also contain "already exists".

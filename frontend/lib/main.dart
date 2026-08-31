@@ -11,6 +11,8 @@ import 'screens/history/history_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'widgets/app_background.dart';
+import 'core/services/ocr_service.dart';
+
 
 // ============================================================
 // APP START
@@ -193,165 +195,222 @@ class _AppShellState extends State<AppShell> {
   // ==========================================================
 
   Future<void> _openScan() async {
-    final controller = TextEditingController();
-
-    final result =
-        await showModalBottomSheet<String>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              bottom:
-                  MediaQuery.of(sheetContext)
-                          .viewInsets
-                          .bottom +
-                      16,
+  final source = await showModalBottomSheet<String>(
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (sheetContext) {
+      return SafeArea(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(
+            20,
+            20,
+            20,
+            24,
+          ),
+          decoration: const BoxDecoration(
+            color: Color(0xFF0D2028),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(24),
             ),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0D2028),
-                borderRadius:
-                    BorderRadius.circular(20),
-                border: Border.all(
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
                   color: AppColors.teal.withValues(
-                    alpha: 0.25,
+                    alpha: 0.12,
                   ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(
+                  Icons.document_scanner_outlined,
+                  color: AppColors.tealSoft,
+                  size: 28,
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color:
-                          AppColors.teal.withValues(
-                        alpha: 0.12,
-                      ),
-                      borderRadius:
-                          BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.document_scanner_outlined,
-                      color: AppColors.tealSoft,
-                    ),
+              const SizedBox(height: 14),
+              const Text(
+                'Scan message',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Capture a message with your camera '
+                'or select a screenshot/image.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Camera
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(
+                      sheetContext,
+                      'camera',
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.camera_alt_outlined,
                   ),
-
-                  const SizedBox(height: 14),
-
-                  const Text(
-                    'Scan message',
+                  label: const Text(
+                    'SCAN WITH CAMERA',
                     style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-
-                  const SizedBox(height: 8),
-
-                  const Text(
-                    'OCR camera and screenshot scanning will be connected here.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 14,
-                      height: 1.4,
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  TextField(
-                    controller: controller,
-                    minLines: 3,
-                    maxLines: 6,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 14,
-                    ),
-                    decoration: InputDecoration(
-                      hintText:
-                          'For now, paste scanned text here to test the flow...',
-                      hintStyle: const TextStyle(
-                        color:
-                            AppColors.textSecondary,
-                        fontSize: 14,
-                      ),
-                      filled: true,
-                      fillColor:
-                          const Color(0xFF102B34),
-                      contentPadding:
-                          const EdgeInsets.all(14),
-                      border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(8),
-                        borderSide:
-                            const BorderSide(
-                          color:
-                              Color(0xFF1D4A56),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        final text =
-                            controller.text.trim();
-
-                        if (text.isNotEmpty) {
-                          Navigator.pop(
-                            sheetContext,
-                            text,
-                          );
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.check_rounded,
-                      ),
-                      label: const Text(
-                        'USE THIS TEXT',
-                        style: TextStyle(
-                          fontWeight:
-                              FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+
+              const SizedBox(height: 12),
+
+              // Gallery / Screenshot
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(
+                      sheetContext,
+                      'gallery',
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.photo_library_outlined,
+                  ),
+                  label: const Text(
+                    'CHOOSE IMAGE',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
+        ),
+      );
+    },
+  );
+
+  if (!mounted || source == null) {
+    return;
+  }
+
+  String? extractedText;
+
+  try {
+    // ==========================================
+    // Show OCR progress
+    // ==========================================
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return const Center(
+          child: CircularProgressIndicator(),
         );
       },
     );
 
-    controller.dispose();
+    // ==========================================
+    // OCR
+    // ==========================================
 
-    if (!mounted ||
-        result == null ||
-        result.isEmpty) {
+    if (source == 'camera') {
+      extractedText =
+          await OcrService.scanFromCamera();
+    } else if (source == 'gallery') {
+      extractedText =
+          await OcrService.scanFromGallery();
+    }
+  } catch (error, stackTrace) {
+    debugPrint(
+      '========================================',
+    );
+    debugPrint('OCR SCAN ERROR:');
+    debugPrint(error.toString());
+    debugPrint('OCR STACK TRACE:');
+    debugPrint(stackTrace.toString());
+    debugPrint(
+      '========================================',
+    );
+
+    extractedText = null;
+
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
+
+    if (!mounted) {
       return;
     }
 
-    setState(() {
-      _scannedText = result;
-      _selected = AppSection.home;
-    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Unable to scan the message. '
+          '${error.toString().replaceFirst('Exception: ', '')}',
+        ),
+        backgroundColor: AppColors.danger,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    return;
   }
+
+  // Close OCR progress dialog.
+  if (mounted) {
+    Navigator.of(context).pop();
+  }
+
+  if (!mounted) {
+    return;
+  }
+
+  // ==========================================
+  // No text detected
+  // ==========================================
+
+  if (extractedText == null ||
+      extractedText!.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'No readable text was found in the image.',
+        ),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    return;
+  }
+
+  // ==========================================
+  // Send extracted text to HomeScreen
+  // ==========================================
+
+  setState(() {
+    _scannedText = extractedText!.trim();
+    _selected = AppSection.home;
+  });
+}
 
   // ==========================================================
   // CURRENT PAGE

@@ -1,5 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart'
-    as firebase_auth;
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 import '../../models/user.dart';
 import '../constants/api_constants.dart';
@@ -13,10 +12,134 @@ class AuthService {
       firebase_auth.FirebaseAuth.instance;
 
   // ==========================================
-  // Register with email/password
+  // Firebase / Email-password REGISTER
+  // ==========================================
+  //
+  // Step 1:
+  // Create Firebase account.
+  //
+  // Step 2:
+  // Send Firebase verification email.
+  //
+  // IMPORTANT:
+  // We DO NOT create the MessageShield account here.
+  //
+  // The user must first verify the email.
+  //
+  // After verification:
+  // completeFirebaseRegistration()
+  // creates the MessageShield account.
   // ==========================================
 
-  static Future<User> register({
+  static Future<firebase_auth.User> register({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final credential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+
+      final firebaseUser = credential.user;
+
+      if (firebaseUser == null) {
+        throw Exception(
+          'Unable to create Firebase account.',
+        );
+      }
+
+      // Send Firebase verification email.
+      if (!firebaseUser.emailVerified) {
+        await firebaseUser.sendEmailVerification();
+      }
+
+      return firebaseUser;
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      throw _firebaseAuthException(error);
+    }
+  }
+
+  // ==========================================
+  // Complete Firebase email registration
+  // ==========================================
+  //
+  // Called AFTER the user verifies their email.
+  //
+  // Flow:
+  //
+  // Firebase verified user
+  //        ↓
+  // fresh Firebase ID token
+  //        ↓
+  // POST /auth/firebase/register
+  //        ↓
+  // MessageShield PostgreSQL user
+  //        ↓
+  // MessageShield JWT
+  // ==========================================
+
+  static Future<void> completeFirebaseRegistration() async {
+    final user = _firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw Exception(
+        'No Firebase user is signed in.',
+      );
+    }
+
+    // Always reload before checking verification status.
+    await user.reload();
+
+    final refreshedUser = _firebaseAuth.currentUser;
+
+    if (refreshedUser == null) {
+      throw Exception(
+        'Unable to refresh Firebase user.',
+      );
+    }
+
+    if (!refreshedUser.emailVerified) {
+      throw Exception(
+        'Please verify your email address before continuing.',
+      );
+    }
+
+    //final idToken = await refreshedUser.getIdToken();
+    final idToken = await refreshedUser.getIdToken(true);
+
+    if (idToken == null || idToken.isEmpty) {
+      throw Exception(
+        'Unable to get authentication token.',
+      );
+    }
+
+    final response = await ApiService.post(
+      ApiConstants.firebaseRegister,
+      body: {
+        'id_token': idToken,
+      },
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw _getAuthException(response);
+    }
+
+    await _saveAccessToken(response);
+  }
+
+  // ==========================================
+  // Legacy password REGISTER
+  // ==========================================
+  //
+  // Kept temporarily for compatibility with
+  // existing backend users.
+  //
+  // New email/password registration should use
+  // Firebase through register().
+  // ==========================================
+
+  static Future<User> registerLegacyPasswordUser({
     required String email,
     required String password,
   }) async {
@@ -32,18 +155,99 @@ class AuthService {
       throw _getAuthException(response);
     }
 
-    final data =
-        ApiService.decodeResponse(response)
-            as Map<String, dynamic>;
+    final data = ApiService.decodeResponse(response) as Map<String, dynamic>;
 
     return User.fromJson(data);
   }
 
   // ==========================================
-  // Email/password login
+  // Firebase / Email-password LOGIN
+  // ==========================================
+  //
+  // Firebase verifies:
+  // - email
+  // - password
+  //
+  // Then Firebase email verification is checked.
+  //
+  // Finally the Firebase ID token is exchanged
+  // for a MessageShield JWT.
   // ==========================================
 
   static Future<void> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final credential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+
+      final firebaseUser = credential.user;
+
+      if (firebaseUser == null) {
+        throw Exception(
+          'Unable to sign in.',
+        );
+      }
+
+      // Firebase user data may be stale.
+      await firebaseUser.reload();
+
+      final refreshedUser = _firebaseAuth.currentUser;
+
+      if (refreshedUser == null) {
+        throw Exception(
+          'Unable to refresh Firebase user.',
+        );
+      }
+
+      // Email verification is mandatory.
+      if (!refreshedUser.emailVerified) {
+        throw Exception(
+          'Please verify your email address before signing in.',
+        );
+      }
+
+      final idToken = await refreshedUser.getIdToken();
+
+      if (idToken == null || idToken.isEmpty) {
+        throw Exception(
+          'Unable to get authentication token.',
+        );
+      }
+
+      // Exchange Firebase authentication
+      // for MessageShield JWT.
+      final response = await ApiService.post(
+        ApiConstants.firebaseLogin,
+        body: {
+          'id_token': idToken,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw _getAuthException(response);
+      }
+
+      await _saveAccessToken(response);
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      throw _firebaseAuthException(error);
+    }
+  }
+
+  // ==========================================
+  // Legacy password LOGIN
+  // ==========================================
+  //
+  // Kept temporarily for migration/testing of
+  // old PostgreSQL password accounts.
+  //
+  // New login() uses Firebase.
+  // ==========================================
+
+  static Future<void> loginLegacyPasswordUser({
     required String email,
     required String password,
   }) async {
@@ -59,19 +263,7 @@ class AuthService {
       throw _getAuthException(response);
     }
 
-    final data =
-        ApiService.decodeResponse(response)
-            as Map<String, dynamic>;
-
-    final token = data['access_token'];
-
-    if (token == null || token is! String) {
-      throw Exception(
-        'Invalid authentication response',
-      );
-    }
-
-    await TokenStorage.saveToken(token);
+    await _saveAccessToken(response);
   }
 
   // ==========================================
@@ -80,15 +272,11 @@ class AuthService {
   //
   // Existing MessageShield user only.
   //
-  // Flow:
-  //
   // Google/Firebase
   //        ↓
   // Firebase ID Token
   //        ↓
   // POST /auth/firebase/login
-  //        ↓
-  // Backend verifies user exists
   //        ↓
   // MessageShield JWT
   // ==========================================
@@ -96,27 +284,30 @@ class AuthService {
   static Future<void> loginWithFirebaseUser(
     firebase_auth.User firebaseUser,
   ) async {
-    final idToken =
-        await firebaseUser.getIdToken();
+    try {
+      final idToken = await firebaseUser.getIdToken();
 
-    if (idToken == null || idToken.isEmpty) {
-      throw Exception(
-        'Unable to get authentication token',
+      if (idToken == null || idToken.isEmpty) {
+        throw Exception(
+          'Unable to get authentication token.',
+        );
+      }
+
+      final response = await ApiService.post(
+        ApiConstants.firebaseLogin,
+        body: {
+          'id_token': idToken,
+        },
       );
+
+      if (response.statusCode != 200) {
+        throw _getAuthException(response);
+      }
+
+      await _saveAccessToken(response);
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      throw _firebaseAuthException(error);
     }
-
-    final response = await ApiService.post(
-      ApiConstants.firebaseLogin,
-      body: {
-        'id_token': idToken,
-      },
-    );
-
-    if (response.statusCode != 200) {
-      throw _getAuthException(response);
-    }
-
-    await _saveAccessToken(response);
   }
 
   // ==========================================
@@ -125,15 +316,11 @@ class AuthService {
   //
   // New MessageShield user.
   //
-  // Flow:
-  //
   // Google/Firebase
   //        ↓
   // Firebase ID Token
   //        ↓
   // POST /auth/firebase/register
-  //        ↓
-  // Backend creates MessageShield user
   //        ↓
   // MessageShield JWT
   // ==========================================
@@ -141,39 +328,103 @@ class AuthService {
   static Future<void> registerWithFirebaseUser(
     firebase_auth.User firebaseUser,
   ) async {
-    final idToken =
-        await firebaseUser.getIdToken();
+    try {
+      final idToken = await firebaseUser.getIdToken();
 
-    if (idToken == null || idToken.isEmpty) {
-      throw Exception(
-        'Unable to get authentication token',
+      if (idToken == null || idToken.isEmpty) {
+        throw Exception(
+          'Unable to get authentication token.',
+        );
+      }
+
+      final response = await ApiService.post(
+        ApiConstants.firebaseRegister,
+        body: {
+          'id_token': idToken,
+        },
       );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw _getAuthException(response);
+      }
+
+      await _saveAccessToken(response);
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      throw _firebaseAuthException(error);
     }
-
-    final response = await ApiService.post(
-      ApiConstants.firebaseRegister,
-      body: {
-        'id_token': idToken,
-      },
-    );
-
-    if (response.statusCode != 200 &&
-        response.statusCode != 201) {
-      throw _getAuthException(response);
-    }
-
-    await _saveAccessToken(response);
   }
 
   // ==========================================
-  // Friendly authentication errors
+  // Firebase Auth errors
+  // ==========================================
+
+  static Exception _firebaseAuthException(
+    firebase_auth.FirebaseAuthException error,
+  ) {
+    switch (error.code) {
+      case 'email-already-in-use':
+        return Exception(
+          'An account with this email already exists. '
+          'Please sign in instead.',
+        );
+
+      case 'invalid-email':
+        return Exception(
+          'Please enter a valid email address.',
+        );
+
+      case 'weak-password':
+        return Exception(
+          'Your password is too weak. '
+          'Please choose a stronger password.',
+        );
+
+      case 'user-not-found':
+        return Exception(
+          'No account was found with this email address.',
+        );
+
+      case 'wrong-password':
+      case 'invalid-credential':
+        return Exception(
+          'Invalid email or password.',
+        );
+
+      case 'user-disabled':
+        return Exception(
+          'This account has been disabled. '
+          'Please contact support.',
+        );
+
+      case 'too-many-requests':
+        return Exception(
+          'Too many authentication attempts. '
+          'Please try again later.',
+        );
+
+      case 'network-request-failed':
+        return Exception(
+          'Unable to connect to Firebase. '
+          'Please check your internet connection.',
+        );
+
+      default:
+        return Exception(
+          error.message ??
+              'Firebase authentication failed. '
+                  'Please try again.',
+        );
+    }
+  }
+
+  // ==========================================
+  // Friendly backend authentication errors
   // ==========================================
 
   static Exception _getAuthException(
     dynamic response,
   ) {
-    final backendMessage =
-        ApiService.getErrorMessage(response);
+    final backendMessage = ApiService.getErrorMessage(response);
 
     final originalMessage = backendMessage
         .toString()
@@ -183,11 +434,10 @@ class AuthService {
         )
         .trim();
 
-    final message =
-        originalMessage.toLowerCase();
+    final message = originalMessage.toLowerCase();
 
     // ------------------------------------------
-    // Account already exists / Conflict
+    // Account already exists
     // ------------------------------------------
 
     if (response.statusCode == 409 ||
@@ -217,23 +467,25 @@ class AuthService {
     // Google account identity conflict
     // ------------------------------------------
 
-    if (message.contains('google account identity')) {
+    if (message.contains('google account identity') ||
+        message.contains('firebase account identity')) {
       return Exception(
-        'This Google account is already registered. '
+        'This account is already registered. '
         'Please sign in instead.',
       );
     }
 
     // ------------------------------------------
-    // Google/Firebase user not registered
+    // Firebase user not registered
     // ------------------------------------------
 
     if (response.statusCode == 404 ||
         message.contains('not registered') ||
+        message.contains('account not found') ||
         message.contains('no messageshield account') ||
         message.contains('no message shield account')) {
       return Exception(
-        'No account was found for this Google account. '
+        'No MessageShield account was found. '
         'Please create an account first.',
       );
     }
@@ -244,7 +496,8 @@ class AuthService {
 
     if (response.statusCode == 401 ||
         message.contains('invalid credentials') ||
-        message.contains('incorrect password')) {
+        message.contains('incorrect password') ||
+        message.contains('invalid email or password')) {
       return Exception(
         'Invalid email or password.',
       );
@@ -256,9 +509,11 @@ class AuthService {
 
     if (message.contains('email not verified') ||
         message.contains('verify your email') ||
-        message.contains('email verification')) {
+        message.contains('email verification') ||
+        message.contains('before continuing') ||
+        message.contains('before signing in')) {
       return Exception(
-        'Please verify your email before signing in.',
+        'Please verify your email address before continuing.',
       );
     }
 
@@ -323,15 +578,13 @@ class AuthService {
   static Future<void> _saveAccessToken(
     dynamic response,
   ) async {
-    final data =
-        ApiService.decodeResponse(response)
-            as Map<String, dynamic>;
+    final data = ApiService.decodeResponse(response) as Map<String, dynamic>;
 
     final token = data['access_token'];
 
     if (token == null || token is! String) {
       throw Exception(
-        'Invalid authentication response',
+        'Invalid authentication response.',
       );
     }
 
@@ -352,9 +605,7 @@ class AuthService {
       throw _getAuthException(response);
     }
 
-    final data =
-        ApiService.decodeResponse(response)
-            as Map<String, dynamic>;
+    final data = ApiService.decodeResponse(response) as Map<String, dynamic>;
 
     return User.fromJson(data);
   }
@@ -376,15 +627,25 @@ class AuthService {
 
     if (user == null) {
       throw Exception(
-        'No Firebase user is signed in',
+        'No Firebase user is signed in.',
       );
     }
 
-    if (user.emailVerified) {
+    await user.reload();
+
+    final refreshedUser = _firebaseAuth.currentUser;
+
+    if (refreshedUser == null) {
+      throw Exception(
+        'Unable to refresh Firebase user.',
+      );
+    }
+
+    if (refreshedUser.emailVerified) {
       return;
     }
 
-    await user.sendEmailVerification();
+    await refreshedUser.sendEmailVerification();
   }
 
   // ==========================================
@@ -400,8 +661,7 @@ class AuthService {
 
     await user.reload();
 
-    final refreshedUser =
-        _firebaseAuth.currentUser;
+    final refreshedUser = _firebaseAuth.currentUser;
 
     return refreshedUser?.emailVerified ?? false;
   }

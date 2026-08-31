@@ -23,10 +23,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -64,5 +61,14 @@ class DefaultFirebaseOptions {
     messagingSenderId: '361867576556',
     projectId: 'messageshield-ai',
     storageBucket: 'messageshield-ai.firebasestorage.app',
+  );
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCrVKAOymnUZ43Kgz4a6OZaJAIIU0BnXBY',
+    appId: '1:361867576556:ios:db6628cfaf447786d8d1c9',
+    messagingSenderId: '361867576556',
+    projectId: 'messageshield-ai',
+    storageBucket: 'messageshield-ai.firebasestorage.app',
+    iosClientId: '361867576556-fgl8dsn5utjou7t20vn4b5tlosv05bd6.apps.googleusercontent.com',
+    iosBundleId: 'com.example.messageshield',
   );
 }
