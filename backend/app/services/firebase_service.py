@@ -130,8 +130,8 @@ def verify_firebase_token(
     """
     Verify Firebase ID token.
 
-    Never trust email, UID, or verification
-    status sent directly from Flutter.
+    Never trust email, UID, provider, or
+    verification status sent directly from Flutter.
 
     All identity information comes from
     the verified Firebase token.
@@ -164,11 +164,23 @@ def verify_firebase_token(
         uid = decoded_token.get("uid")
         email = decoded_token.get("email")
 
+        # Firebase authentication provider information
+        # is contained inside the verified Firebase claims.
+        firebase_claims = decoded_token.get(
+            "firebase",
+            {},
+        )
+
+        sign_in_provider = firebase_claims.get(
+            "sign_in_provider"
+        )
+
         logger.info(
             "Firebase token verified successfully "
-            "for uid=%s email=%s",
+            "for uid=%s email=%s provider=%s",
             uid,
             email,
+            sign_in_provider,
         )
 
         return {
@@ -178,6 +190,7 @@ def verify_firebase_token(
                 "email_verified",
                 False,
             ),
+            "sign_in_provider": sign_in_provider,
             "firebase": decoded_token,
         }
 

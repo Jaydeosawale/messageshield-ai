@@ -73,13 +73,20 @@ def build_user_response(
 
 def get_verified_firebase_identity(
     id_token: str,
-) -> tuple[str, str, bool]:
+) -> tuple[str, str, bool, str]:
     """
     Verify the Firebase ID token and return
     trusted identity information.
 
-    Never trust UID, email, or verification
-    status sent directly from Flutter.
+    Never trust UID, email, provider, or
+    verification status sent directly from Flutter.
+
+    Returns:
+
+        firebase_uid
+        email
+        email_verified
+        sign_in_provider
     """
 
     try:
@@ -103,6 +110,14 @@ def get_verified_firebase_identity(
         )
     )
 
+    sign_in_provider = firebase_user.get(
+        "sign_in_provider"
+    )
+
+    # ==========================================
+    # Validate Firebase identity
+    # ==========================================
+
     if not firebase_uid:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -121,6 +136,23 @@ def get_verified_firebase_identity(
             ),
         )
 
+    # ==========================================
+    # Only allow supported providers
+    # ==========================================
+
+    if sign_in_provider not in {
+        "google.com",
+        "password",
+    }:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unsupported authentication provider",
+        )
+
+    # ==========================================
+    # Email must be verified
+    # ==========================================
+
     if not email_verified:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -134,11 +166,18 @@ def get_verified_firebase_identity(
         firebase_uid,
         email,
         email_verified,
+        sign_in_provider,
     )
 
 
 # ==========================================
-# Register
+# Legacy password Register
+# ==========================================
+#
+# Kept temporarily for existing password
+# accounts during Firebase migration.
+#
+# New registration will use Firebase.
 # ==========================================
 
 @router.post(
@@ -186,7 +225,13 @@ def get_me(
 
 
 # ==========================================
-# Password login
+# Legacy password LOGIN
+# ==========================================
+#
+# Kept temporarily for existing password
+# accounts during Firebase migration.
+#
+# New login will use Firebase.
 # ==========================================
 
 @router.post(
@@ -250,7 +295,16 @@ def login(
 
 
 # ==========================================
-# Firebase / Google LOGIN
+# Firebase LOGIN
+# ==========================================
+#
+# Supports:
+#
+#   Google
+#   Firebase email/password
+#
+# Both authenticate through Firebase first.
+# MessageShield then issues its own JWT.
 # ==========================================
 
 @router.post(
@@ -263,21 +317,33 @@ def firebase_login(
     data: FirebaseLoginRequest,
     db: Session = Depends(get_db),
 ):
-    # Verify Firebase identity.
-    firebase_uid, email, _ = (
-        get_verified_firebase_identity(
-            data.id_token
-        )
+    # ==========================================
+    # 1. Verify Firebase identity
+    # ==========================================
+
+    (
+        firebase_uid,
+        email,
+        _,
+        sign_in_provider,
+    ) = get_verified_firebase_identity(
+        data.id_token
     )
 
-    # Find existing MessageShield Google user.
+    # ==========================================
+    # 2. Find MessageShield user
+    # ==========================================
+
     user = find_firebase_user(
         db=db,
         firebase_uid=firebase_uid,
     )
 
-    # User has authenticated with Google,
-    # but has not created a MessageShield account.
+    # ==========================================
+    # 3. Firebase account exists but
+    #    MessageShield account does not
+    # ==========================================
+
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -287,18 +353,50 @@ def firebase_login(
             ),
         )
 
+    # ==========================================
+    # 4. Verify account is active
+    # ==========================================
+
     if not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User account is inactive",
         )
 
-    # Extra safety check.
+    # ==========================================
+    # 5. Verify provider matches
+    # ==========================================
+
+    expected_provider = (
+        "google"
+        if sign_in_provider == "google.com"
+        else "password"
+    )
+
+    if user.auth_provider != expected_provider:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=(
+                "Firebase account authentication method "
+                "does not match the MessageShield account."
+            ),
+        )
+
+    # ==========================================
+    # 6. Verify email identity
+    # ==========================================
+
     if user.email.lower() != email.lower():
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Google account identity does not match",
+            detail=(
+                "Firebase account identity does not match"
+            ),
         )
+
+    # ==========================================
+    # 7. Create MessageShield JWT
+    # ==========================================
 
     access_token = create_access_token(
         subject=str(user.id),
@@ -311,7 +409,17 @@ def firebase_login(
 
 
 # ==========================================
-# Firebase / Google REGISTER
+# Firebase REGISTER
+# ==========================================
+#
+# Supports:
+#
+#   Google
+#   Firebase email/password
+#
+# Firebase must already have verified
+# the user's email before this endpoint
+# is called.
 # ==========================================
 
 @router.post(
@@ -325,15 +433,23 @@ def firebase_register(
     data: FirebaseLoginRequest,
     db: Session = Depends(get_db),
 ):
-    # Verify Firebase identity.
-    firebase_uid, email, email_verified = (
-        get_verified_firebase_identity(
-            data.id_token
-        )
+    # ==========================================
+    # 1. Verify Firebase identity
+    # ==========================================
+
+    (
+        firebase_uid,
+        email,
+        email_verified,
+        sign_in_provider,
+    ) = get_verified_firebase_identity(
+        data.id_token
     )
 
-    # First check whether this Google user
-    # already has a MessageShield account.
+    # ==========================================
+    # 2. Check existing Firebase UID
+    # ==========================================
+
     existing_user = find_firebase_user(
         db=db,
         firebase_uid=firebase_uid,
@@ -348,30 +464,39 @@ def firebase_register(
             ),
         )
 
-    # Create new MessageShield Google user.
+    # ==========================================
+    # 3. Create MessageShield user
+    # ==========================================
+
     try:
         user = get_or_create_firebase_user(
             db=db,
             email=email,
             firebase_uid=firebase_uid,
             email_verified=email_verified,
+            sign_in_provider=sign_in_provider,
             create_if_missing=True,
         )
 
-    except AccountProviderConflictError:
+    except AccountProviderConflictError as error:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=(
-                "An account with this email already exists "
-                "using a different sign-in method."
-            ),
+            detail=str(error),
         )
+
+    # ==========================================
+    # 4. Verify account is active
+    # ==========================================
 
     if not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User account is inactive",
         )
+
+    # ==========================================
+    # 5. Create MessageShield JWT
+    # ==========================================
 
     access_token = create_access_token(
         subject=str(user.id),
@@ -381,3 +506,4 @@ def firebase_register(
         "access_token": access_token,
         "token_type": "bearer",
     }
+    
