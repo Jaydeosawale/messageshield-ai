@@ -112,65 +112,98 @@ class GoogleAuthService {
   // ==========================================
 
   static Future<firebase_auth.User> _signInOnMobile() async {
-    try {
-      await initialize();
+  try {
+    debugPrint('========== MOBILE GOOGLE SIGN-IN START ==========');
 
-      if (!_googleSignIn.supportsAuthenticate()) {
-        throw UnsupportedError(
-          'Google sign-in is not supported on this platform.',
-        );
-      }
+    debugPrint('1. Initializing Google Sign-In...');
+    await initialize();
+    debugPrint('2. Google Sign-In initialized');
 
-      final GoogleSignInAccount googleAccount =
-          await _googleSignIn.authenticate();
+    if (!_googleSignIn.supportsAuthenticate()) {
+      debugPrint('ERROR: supportsAuthenticate() = false');
 
-      final GoogleSignInAuthentication authentication =
-          googleAccount.authentication;
-
-      final credential =
-          firebase_auth.GoogleAuthProvider.credential(
-        idToken: authentication.idToken,
-      );
-
-      final userCredential =
-          await firebase_auth.FirebaseAuth.instance
-              .signInWithCredential(
-        credential,
-      );
-
-      final user = userCredential.user;
-
-      if (user == null) {
-        throw Exception(
-          'Google sign-in did not return a user.',
-        );
-      }
-
-      return user;
-    } on firebase_auth.FirebaseAuthException catch (error) {
-      debugPrint(
-        'Google Mobile Firebase error code: ${error.code}',
-      );
-      debugPrint(
-        'Google Mobile Firebase error message: ${error.message}',
-      );
-
-      throw Exception(
-        _getFirebaseErrorMessage(error),
-      );
-    } catch (error, stackTrace) {
-      debugPrint(
-        'Google Mobile error: $error',
-      );
-      debugPrint(
-        'Google Mobile stack trace: $stackTrace',
-      );
-
-      throw Exception(
-        _getGeneralErrorMessage(error),
+      throw UnsupportedError(
+        'Google sign-in is not supported on this platform.',
       );
     }
+
+    debugPrint('3. supportsAuthenticate() = true');
+    debugPrint('4. Opening Google account chooser...');
+
+    final GoogleSignInAccount googleAccount =
+        await _googleSignIn.authenticate();
+
+    debugPrint('5. Google authentication SUCCESS');
+    debugPrint('   Google email: ${googleAccount.email}');
+
+    final GoogleSignInAuthentication authentication =
+        googleAccount.authentication;
+
+    debugPrint('6. Got Google authentication object');
+    debugPrint(
+      '   ID token exists: ${authentication.idToken != null}',
+    );
+
+    if (authentication.idToken == null) {
+      debugPrint('ERROR: Google returned NULL ID TOKEN');
+
+      throw Exception(
+        'Google authentication did not return an ID token.',
+      );
+    }
+
+    final credential =
+        firebase_auth.GoogleAuthProvider.credential(
+      idToken: authentication.idToken,
+    );
+
+    debugPrint('7. Firebase credential created');
+    debugPrint('8. Signing into Firebase...');
+
+    final userCredential =
+        await firebase_auth.FirebaseAuth.instance
+            .signInWithCredential(
+      credential,
+    );
+
+    debugPrint('9. Firebase sign-in SUCCESS');
+
+    final user = userCredential.user;
+
+    if (user == null) {
+      debugPrint('ERROR: Firebase returned NULL user');
+
+      throw Exception(
+        'Google sign-in did not return a user.',
+      );
+    }
+
+    debugPrint('10. Firebase user exists');
+    debugPrint('    Firebase UID: ${user.uid}');
+    debugPrint('    Firebase email: ${user.email}');
+    debugPrint('========== MOBILE GOOGLE SIGN-IN COMPLETE ==========');
+
+    return user;
+  } on firebase_auth.FirebaseAuthException catch (error) {
+    debugPrint('========== MOBILE FIREBASE ERROR ==========');
+    debugPrint('Firebase error code: ${error.code}');
+    debugPrint('Firebase error message: ${error.message}');
+    debugPrint('============================================');
+
+    throw Exception(
+      _getFirebaseErrorMessage(error),
+    );
+  } catch (error, stackTrace) {
+    debugPrint('========== MOBILE GOOGLE ERROR ==========');
+    debugPrint('Error: $error');
+    debugPrint('Stack trace: $stackTrace');
+    debugPrint('=========================================');
+
+    throw Exception(
+      _getGeneralErrorMessage(error),
+    );
   }
+}
 
   // ==========================================
   // Sign out
