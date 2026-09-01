@@ -29,8 +29,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _messageController =
-      TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -43,15 +42,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void didUpdateWidget(covariant HomeScreen oldWidget) {
+  void didUpdateWidget(
+    covariant HomeScreen oldWidget,
+  ) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.scannedText != null &&
-        widget.scannedText != oldWidget.scannedText) {
-      _messageController.text = widget.scannedText!;
+    final scannedText = widget.scannedText;
+
+    if (scannedText == null || scannedText == oldWidget.scannedText) {
+      return;
+    }
+
+    // Do not update the parent while Flutter is
+    // currently building/updating this widget.
+    //
+    // The callback changes AppShell state, so it
+    // must run after the current frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      // Make sure this is still the current scanned
+      // text when the callback executes.
+      if (widget.scannedText != scannedText) {
+        return;
+      }
+
+      _messageController.text = scannedText;
 
       widget.onScannedTextConsumed?.call();
-    }
+    });
   }
 
   void _refresh() {
@@ -102,8 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       setState(() {
-        _errorMessage =
-            error.toString().replaceFirst('Exception: ', '');
+        _errorMessage = error.toString().replaceFirst('Exception: ', '');
       });
     } finally {
       if (mounted) {
@@ -271,9 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
             size: 26,
           ),
         ),
-
         const SizedBox(width: 12),
-
         Expanded(
           child: Text.rich(
             TextSpan(
@@ -310,7 +328,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-
         IconButton(
           onPressed: () {},
           icon: const Icon(
@@ -374,8 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 1.4,
               ),
               decoration: const InputDecoration(
-                hintText:
-                    'Paste the message you received here...',
+                hintText: 'Paste the message you received here...',
                 hintStyle: TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 14,
@@ -390,7 +406,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
           if (_errorMessage != null) ...[
             const SizedBox(height: 10),
-
             Text(
               _errorMessage!,
               style: const TextStyle(
@@ -405,9 +420,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: isPhone ? 58 : 58,
             child: ElevatedButton.icon(
-              onPressed: _isLoading
-                  ? null
-                  : _analyzeMessage,
+              onPressed: _isLoading ? null : _analyzeMessage,
               icon: _isLoading
                   ? const SizedBox(
                       width: 18,
@@ -422,9 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 20,
                     ),
               label: Text(
-                _isLoading
-                    ? 'ANALYZING...'
-                    : 'ANALYZE MESSAGE',
+                _isLoading ? 'ANALYZING...' : 'ANALYZE MESSAGE',
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
@@ -437,9 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (_messageController.text.isNotEmpty)
             Center(
               child: TextButton(
-                onPressed: _isLoading
-                    ? null
-                    : _clearMessage,
+                onPressed: _isLoading ? null : _clearMessage,
                 child: const Text(
                   'Clear message',
                   style: TextStyle(
@@ -593,9 +602,7 @@ class _SafetyContent extends StatelessWidget {
                         color: AppColors.textPrimary,
                       ),
                     ),
-
                   const SizedBox(width: 8),
-
                   const Text(
                     'Safety guidelines',
                     style: TextStyle(
@@ -606,14 +613,11 @@ class _SafetyContent extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
-
               Expanded(
                 child: ListView.separated(
                   itemCount: items.length,
-                  separatorBuilder: (_, __) =>
-                      const SizedBox(height: 12),
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final item = items[index];
 
@@ -626,20 +630,16 @@ class _SafetyContent extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(
                             item.$1,
                             color: AppColors.tealSoft,
                           ),
-
                           const SizedBox(width: 14),
-
                           Expanded(
                             child: Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   item.$2,
@@ -649,14 +649,11 @@ class _SafetyContent extends StatelessWidget {
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-
                                 const SizedBox(height: 5),
-
                                 Text(
                                   item.$3,
                                   style: const TextStyle(
-                                    color:
-                                        AppColors.textSecondary,
+                                    color: AppColors.textSecondary,
                                     fontSize: 14,
                                     height: 1.4,
                                   ),
