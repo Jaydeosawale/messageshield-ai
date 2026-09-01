@@ -140,6 +140,25 @@ class AuthProvider extends ChangeNotifier {
   // /auth/me
   // ==========================================
 
+  // ==========================================
+// Verify email and complete registration
+// ==========================================
+//
+// Flow:
+//
+// Firebase email verified
+//        ↓
+// Reload Firebase user
+//        ↓
+// POST /auth/firebase/register
+//        ↓
+// MessageShield account created/synchronized
+//        ↓
+// NO MessageShield login
+//        ↓
+// Caller navigates to LoginScreen
+// ==========================================
+
   Future<bool> verifyEmailAndCompleteRegistration() async {
     _setLoading(true);
 
@@ -165,28 +184,36 @@ class AuthProvider extends ChangeNotifier {
       }
 
       // ----------------------------------------
-      // 3. Email is verified.
+      // 3. Complete MessageShield registration.
+      // ----------------------------------------
       //
-      // Create MessageShield account and receive
-      // MessageShield JWT.
+      // This creates/synchronizes the DB account.
+      //
+      // IMPORTANT:
+      // This does NOT create a MessageShield
+      // authenticated session.
       // ----------------------------------------
 
       await AuthService.completeFirebaseRegistration();
 
       // ----------------------------------------
-      // 4. Load MessageShield user.
+      // 4. Registration succeeded.
+      //
+      // Do not load /auth/me.
+      // Do not populate _user.
+      // Do not keep a JWT.
       // ----------------------------------------
 
-      _user = await AuthService.getCurrentUser();
+      await TokenStorage.deleteToken();
 
+      _user = null;
       _error = null;
 
       notifyListeners();
 
       return true;
     } catch (error) {
-      // Do not leave a partially authenticated
-      // MessageShield session behind.
+      // Never leave a partial MessageShield session.
       await TokenStorage.deleteToken();
 
       _user = null;
@@ -433,7 +460,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-   // ==========================================
+  // ==========================================
 // Clear authentication session
 // ==========================================
 //
@@ -441,16 +468,16 @@ class AuthProvider extends ChangeNotifier {
 // the user should continue to LoginScreen.
 //
 
-Future<void> clearAuthenticationSession() async {
-  try {
-    await AuthService.logout();
+  Future<void> clearAuthenticationSession() async {
+    try {
+      await AuthService.logout();
 
-    _user = null;
-    _error = null;
-  } finally {
-    notifyListeners();
+      _user = null;
+      _error = null;
+    } finally {
+      notifyListeners();
+    }
   }
-}
   // ==========================================
   // Logout
   // ==========================================

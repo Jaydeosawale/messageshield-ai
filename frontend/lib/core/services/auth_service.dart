@@ -31,13 +31,80 @@ class AuthService {
   // creates the MessageShield account.
   // ==========================================
 
+  // ==========================================
+// Firebase / Email-password REGISTER
+// ==========================================
+//
+// Step 1:
+// Check whether the email already exists
+// in MessageShield.
+//
+// Step 2:
+// Firebase creates the user.
+//
+// Step 3:
+// Firebase sends verification email.
+//
+// IMPORTANT:
+// We DO NOT create the MessageShield account here.
+//
+// The user must first verify the email.
+//
+// After verification:
+// completeFirebaseRegistration()
+// creates the MessageShield account.
+// ==========================================
+// ==========================================
+// Check whether email already exists
+// ==========================================
+
+  static Future<bool> checkEmailExists(
+    String email,
+  ) async {
+    final response = await ApiService.post(
+      ApiConstants.checkEmail,
+      body: {
+        'email': email.trim(),
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw _getAuthException(response);
+    }
+
+    final data = ApiService.decodeResponse(response) as Map<String, dynamic>;
+
+    return data['exists'] == true;
+  }
+
   static Future<firebase_auth.User> register({
     required String email,
     required String password,
   }) async {
     try {
+      final normalizedEmail = email.trim();
+
+      // ==========================================
+      // 1. Check MessageShield database first
+      // ==========================================
+
+      final emailExists = await checkEmailExists(
+        normalizedEmail,
+      );
+
+      if (emailExists) {
+        throw Exception(
+          'An account with this email already exists. '
+          'Please sign in instead.',
+        );
+      }
+
+      // ==========================================
+      // 2. Create Firebase account
+      // ==========================================
+
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email.trim(),
+        email: normalizedEmail,
         password: password,
       );
 
@@ -49,7 +116,10 @@ class AuthService {
         );
       }
 
-      // Send Firebase verification email.
+      // ==========================================
+      // 3. Send Firebase verification email
+      // ==========================================
+
       if (!firebaseUser.emailVerified) {
         await firebaseUser.sendEmailVerification();
       }
@@ -79,6 +149,31 @@ class AuthService {
   // MessageShield JWT
   // ==========================================
 
+  // ==========================================
+// Complete Firebase email registration
+// ==========================================
+//
+// Called AFTER the user verifies their email.
+//
+// Flow:
+//
+// Firebase verified user
+//        ↓
+// fresh Firebase ID token
+//        ↓
+// POST /auth/firebase/register
+//        ↓
+// MessageShield PostgreSQL user
+//        ↓
+// Registration complete
+//
+// IMPORTANT:
+// We intentionally DO NOT save the
+// MessageShield JWT here.
+//
+// Registration must finish at the Login screen.
+// ==========================================
+
   static Future<void> completeFirebaseRegistration() async {
     final user = _firebaseAuth.currentUser;
 
@@ -88,7 +183,7 @@ class AuthService {
       );
     }
 
-    // Always reload before checking verification status.
+    // Always reload before checking verification.
     await user.reload();
 
     final refreshedUser = _firebaseAuth.currentUser;
@@ -105,7 +200,8 @@ class AuthService {
       );
     }
 
-    //final idToken = await refreshedUser.getIdToken();
+    // Force Firebase to issue a fresh token so the backend
+    // receives the latest email_verified=true state.
     final idToken = await refreshedUser.getIdToken(true);
 
     if (idToken == null || idToken.isEmpty) {
@@ -125,7 +221,14 @@ class AuthService {
       throw _getAuthException(response);
     }
 
-    await _saveAccessToken(response);
+    // IMPORTANT:
+    //
+    // Do NOT call:
+    //
+    //   _saveAccessToken(response);
+    //
+    // Registration is complete, but the user is NOT
+    // logged into MessageShield yet.
   }
 
   // ==========================================

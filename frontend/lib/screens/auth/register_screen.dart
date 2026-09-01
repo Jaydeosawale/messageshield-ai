@@ -112,71 +112,170 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _showEmailVerificationDialog() async {
-  if (!mounted) return;
+    if (!mounted) return;
 
-  await showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (dialogContext) {
-      return StatefulBuilder(
-        builder: (
-          dialogBuildContext,
-          setDialogState,
-        ) {
-          final authProvider =
-              dialogBuildContext.watch<AuthProvider>();
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (
+            dialogBuildContext,
+            setDialogState,
+          ) {
+            final authProvider = dialogBuildContext.watch<AuthProvider>();
 
-          return AlertDialog(
-            backgroundColor: AppColors.backgroundSoft,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: const Row(
-              children: [
-                Icon(
-                  Icons.mark_email_read_outlined,
-                  color: AppColors.teal,
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'Verify your email',
-                    style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w800,
+            return AlertDialog(
+              backgroundColor: AppColors.backgroundSoft,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: const Row(
+                children: [
+                  Icon(
+                    Icons.mark_email_read_outlined,
+                    color: AppColors.teal,
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Verify your email',
+                      style: TextStyle(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            content: Text(
-              'We sent a verification link to '
-              '${_emailController.text.trim()}.\n\n'
-              'Open the email from MessageShield and click '
-              'the verification link. Then return here and tap '
-              '"I\'ve verified my email".',
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-                height: 1.5,
+                ],
               ),
-            ),
-            actions: [
-              // ==========================================
-              // RESEND
-              // ==========================================
+              content: Text(
+                'We sent a verification link to '
+                '${_emailController.text.trim()}.\n\n'
+                'Open the email from MessageShield and click '
+                'the verification link. Then return here and tap '
+                '"I\'ve verified my email".',
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  height: 1.5,
+                ),
+              ),
+              actions: [
+                // ==========================================
+                // RESEND
+                // ==========================================
 
-              TextButton(
-                onPressed: authProvider.isLoading
-                    ? null
-                    : () async {
-                        try {
-                          await dialogBuildContext
+                TextButton(
+                  onPressed: authProvider.isLoading
+                      ? null
+                      : () async {
+                          try {
+                            await dialogBuildContext
+                                .read<AuthProvider>()
+                                .sendFirebaseVerificationEmail();
+
+                            if (!dialogContext.mounted) {
+                              return;
+                            }
+
+                            ScaffoldMessenger.of(
+                              dialogContext,
+                            ).hideCurrentSnackBar();
+
+                            ScaffoldMessenger.of(
+                              dialogContext,
+                            ).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Verification email sent again. '
+                                  'Please check your inbox or spam folder.',
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          } catch (_) {
+                            if (!dialogContext.mounted) {
+                              return;
+                            }
+
+                            final error =
+                                dialogBuildContext.read<AuthProvider>().error ??
+                                    'Unable to resend verification email.';
+
+                            ScaffoldMessenger.of(
+                              dialogContext,
+                            ).showSnackBar(
+                              SnackBar(
+                                content: Text(error),
+                                backgroundColor: AppColors.danger,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        },
+                  child: const Text(
+                    'Resend email',
+                  ),
+                ),
+
+                // ==========================================
+                // I'VE VERIFIED
+                // ==========================================
+
+                FilledButton(
+                  onPressed: authProvider.isLoading
+                      ? null
+                      : () async {
+                          final success = await dialogBuildContext
                               .read<AuthProvider>()
-                              .sendFirebaseVerificationEmail();
+                              .verifyEmailAndCompleteRegistration();
 
                           if (!dialogContext.mounted) {
                             return;
                           }
+
+                          if (success) {
+                            Navigator.of(
+                              dialogContext,
+                            ).pop();
+
+                            if (!mounted) {
+                              return;
+                            }
+
+                            final authProvider = context.read<AuthProvider>();
+
+                            await authProvider.clearAuthenticationSession();
+
+                            if (!mounted) {
+                              return;
+                            }
+
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Email verified successfully. Please sign in to continue.',
+                                ),
+                                backgroundColor: AppColors.success,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => const LoginScreen(),
+                              ),
+                            );
+
+                            return;
+                          }
+
+                          setDialogState(() {});
+
+                          final error =
+                              dialogBuildContext.read<AuthProvider>().error ??
+                                  'Please verify your email first.';
 
                           ScaffoldMessenger.of(
                             dialogContext,
@@ -185,126 +284,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ScaffoldMessenger.of(
                             dialogContext,
                           ).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Verification email sent again. '
-                                'Please check your inbox or spam folder.',
-                              ),
-                              behavior:
-                                  SnackBarBehavior.floating,
-                            ),
-                          );
-                        } catch (_) {
-                          if (!dialogContext.mounted) {
-                            return;
-                          }
-
-                          final error =
-                              dialogBuildContext
-                                      .read<AuthProvider>()
-                                      .error ??
-                                  'Unable to resend verification email.';
-
-                          ScaffoldMessenger.of(
-                            dialogContext,
-                          ).showSnackBar(
                             SnackBar(
                               content: Text(error),
-                              backgroundColor:
-                                  AppColors.danger,
-                              behavior:
-                                  SnackBarBehavior.floating,
+                              backgroundColor: AppColors.danger,
+                              behavior: SnackBarBehavior.floating,
                             ),
                           );
-                        }
-                      },
-                child: const Text(
-                  'Resend email',
-                ),
-              ),
-
-              // ==========================================
-              // I'VE VERIFIED
-              // ==========================================
-
-              FilledButton(
-                onPressed: authProvider.isLoading
-                    ? null
-                    : () async {
-                        final success =
-                            await dialogBuildContext
-                                .read<AuthProvider>()
-                                .verifyEmailAndCompleteRegistration();
-
-                        if (!dialogContext.mounted) {
-                          return;
-                        }
-
-                        if (success) {
-                          Navigator.of(
-                            dialogContext,
-                          ).pop();
-                          return;
-                        }
-
-                        setDialogState(() {});
-
-                        final error =
-                            dialogBuildContext
-                                    .read<AuthProvider>()
-                                    .error ??
-                                'Please verify your email first.';
-
-                        ScaffoldMessenger.of(
-                          dialogContext,
-                        ).hideCurrentSnackBar();
-
-                        ScaffoldMessenger.of(
-                          dialogContext,
-                        ).showSnackBar(
-                          SnackBar(
-                            content: Text(error),
-                            backgroundColor:
-                                AppColors.danger,
-                            behavior:
-                                SnackBarBehavior.floating,
+                        },
+                  child: authProvider.isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
                           ),
-                        );
-                      },
-                child: authProvider.isLoading
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
+                        )
+                      : const Text(
+                          "I've verified my email",
                         ),
-                      )
-                    : const Text(
-                        "I've verified my email",
-                      ),
-              ),
-            ],
-          );
-        },
-      );
-    },
-  );
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
 
     // ==========================================
-  // Registration completed
-  // ==========================================
+// Registration completed
+// ==========================================
 
-  if (!mounted) return;
+    if (!mounted) return;
 
-  final authProvider = context.read<AuthProvider>();
-
-  if (authProvider.isAuthenticated) {
-    // The MessageShield account has now been created.
-    //
-    // We intentionally clear the temporary authenticated
-    // session because the user should continue through
-    // the normal Login screen.
+    final authProvider = context.read<AuthProvider>();
 
     await authProvider.clearAuthenticationSession();
 
@@ -322,17 +335,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
 
-    // Replace RegisterScreen with LoginScreen.
+// Replace RegisterScreen with LoginScreen.
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => const LoginScreen(),
       ),
     );
   }
-  
-  await authProvider.clearAuthenticationSession();
-
-}
 
   String _friendlyRegisterError(
     Object error,
@@ -463,10 +472,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       final providerError = authProvider.error;
 
-      final actualError =
-          providerError != null && providerError.isNotEmpty
-              ? providerError
-              : error.toString();
+      final actualError = providerError != null && providerError.isNotEmpty
+          ? providerError
+          : error.toString();
 
       final message = _friendlyGoogleError(
         actualError,
@@ -495,7 +503,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
     }
-  } 
+  }
   // ==========================================
   // Friendly Email Registration Errors
   // ==========================================
