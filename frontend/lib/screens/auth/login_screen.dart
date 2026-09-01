@@ -9,6 +9,7 @@ import '../../providers/auth_provider.dart';
 
 import '../../widgets/app_background.dart';
 import 'register_screen.dart';
+import '../home/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -54,9 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
+      debugPrint(
+    'LOGIN SUCCESS: isAuthenticated=${authProvider.isAuthenticated}',
+);
 
       if (!mounted) return;
-
+     
       // AuthProvider now has the MessageShield JWT
       // and current user.
 
