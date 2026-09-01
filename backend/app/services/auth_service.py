@@ -1,3 +1,4 @@
+from __future__ import annotations
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -7,6 +8,7 @@ from app.core.security import (
 )
 from app.models.role import Role
 from app.models.user import User
+
 
 
 DEFAULT_USER_ROLE = "USER"
@@ -75,11 +77,11 @@ def get_default_user_role(
 #
 # LEGACY / EXISTING FLOW
 #
-# This remains temporarily for existing
-# MessageShield password users.
+# Kept temporarily for existing MessageShield
+# password users.
 #
-# New password registration will eventually
-# use Firebase Auth.
+# New email/password registration should use
+# Firebase Auth through register().
 # ==========================================
 
 def register_user(
@@ -127,8 +129,8 @@ def register_user(
 #
 # LEGACY / EXISTING FLOW
 #
-# Kept temporarily for existing password
-# accounts during migration to Firebase.
+# Kept temporarily for existing MessageShield
+# password accounts during migration to Firebase.
 # ==========================================
 
 def authenticate_user(
@@ -147,7 +149,7 @@ def authenticate_user(
     if user is None:
         raise InvalidCredentialsError()
 
-    # Google-only account.
+    # Google-only account cannot use password login.
     if user.auth_provider != "password":
         raise PasswordLoginNotAvailableError()
 
@@ -188,6 +190,30 @@ def find_firebase_user(
 # ==========================================
 # Find or create Firebase user
 # ==========================================
+#
+# Firebase identity is the source of truth for
+# authentication.
+#
+# Supported Firebase providers:
+#
+#   google.com
+#       -> MessageShield auth_provider="google"
+#
+#   password
+#       -> MessageShield auth_provider="password"
+#
+# Firebase UID is stored in:
+#
+#   provider_uid
+#
+# create_if_missing=False:
+#   Used by Firebase LOGIN.
+#   Never creates a MessageShield user.
+#
+# create_if_missing=True:
+#   Used by Firebase REGISTER.
+#   Creates a MessageShield user if appropriate.
+# ==========================================
 
 def get_or_create_firebase_user(
     db: Session,
@@ -198,30 +224,6 @@ def get_or_create_firebase_user(
     sign_in_provider: str,
     create_if_missing: bool,
 ) -> User:
-    """
-    Find or create a MessageShield user
-    associated with a verified Firebase identity.
-
-    Supported Firebase providers:
-
-        google.com
-            -> MessageShield auth_provider="google"
-
-        password
-            -> MessageShield auth_provider="password"
-
-    The Firebase UID is always stored in:
-
-        provider_uid
-
-    create_if_missing=False:
-        Used for Firebase LOGIN.
-        The MessageShield account must already exist.
-
-    create_if_missing=True:
-        Used for Firebase REGISTER.
-        A new MessageShield account may be created.
-    """
 
     normalized_email = email.strip().lower()
 
@@ -238,12 +240,11 @@ def get_or_create_firebase_user(
         )
 
     # ==========================================
-    # Convert Firebase provider to our provider
+    # Convert Firebase provider to MessageShield
     # ==========================================
 
     if sign_in_provider == "google.com":
         message_shield_provider = "google"
-
     else:
         message_shield_provider = "password"
 
@@ -260,7 +261,7 @@ def get_or_create_firebase_user(
     if user is not None:
 
         # --------------------------------------
-        # Existing Firebase identity
+        # Verify provider consistency
         # --------------------------------------
 
         if user.auth_provider != message_shield_provider:
@@ -270,18 +271,38 @@ def get_or_create_firebase_user(
             )
 
         # --------------------------------------
-        # Keep email verification synchronized
+        # Verify email consistency
+        # --------------------------------------
+
+        if user.email.lower() != normalized_email:
+            raise AccountProviderConflictError(
+                "Firebase account email does not match "
+                "the MessageShield account."
+            )
+
+        # --------------------------------------
+        # Verify active account
+        # --------------------------------------
+
+        if not user.is_active:
+            raise InactiveUserError(
+                "User account is inactive."
+            )
+
+        # --------------------------------------
+        # Synchronize email verification
         # --------------------------------------
 
         if email_verified and not user.email_verified:
             user.email_verified = True
+
             db.commit()
             db.refresh(user)
 
         return user
 
     # ==========================================
-    # 2. Check existing email
+    # 2. Find existing account by email
     # ==========================================
 
     existing_email_user = db.scalar(
@@ -293,35 +314,122 @@ def get_or_create_firebase_user(
     if existing_email_user is not None:
 
         # --------------------------------------
-        # Existing Google account
+        # Existing account must be active
         # --------------------------------------
+
+        if not existing_email_user.is_active:
+            raise InactiveUserError(
+                "User account is inactive."
+            )
+
+        # ======================================
+        # Existing Google account
+        # ======================================
 
         if existing_email_user.auth_provider == "google":
 
+            # Same provider but different Firebase UID.
+            #
+            # Do NOT automatically replace the UID.
             if message_shield_provider == "google":
-                raise AccountProviderConflictError(
-                    "Google account identity does not match."
-                )
 
+                if (
+                    existing_email_user.provider_uid is not None
+                    and existing_email_user.provider_uid != firebase_uid
+                ):
+                    raise AccountProviderConflictError(
+                        "An account with this email is already "
+                        "associated with another Google identity."
+                    )
+
+                # Defensive fallback for an old Google row
+                # without a provider UID.
+                if existing_email_user.provider_uid is None:
+                    existing_email_user.provider_uid = firebase_uid
+                    existing_email_user.email_verified = email_verified
+
+                    db.commit()
+                    db.refresh(existing_email_user)
+
+                return existing_email_user
+
+            # Google account + password authentication.
             raise AccountProviderConflictError(
                 "An account with this email already exists "
-                "using Google sign-in."
+                "using Google sign-in. "
+                "Please continue with Google."
             )
 
-        # --------------------------------------
+        # ======================================
         # Existing password account
-        # --------------------------------------
+        # ======================================
 
         if existing_email_user.auth_provider == "password":
 
+            # ----------------------------------
+            # Password Firebase account
+            # ----------------------------------
+
+            if message_shield_provider == "password":
+
+                # --------------------------------
+                # Existing Firebase identity
+                # --------------------------------
+                #
+                # If a provider UID already exists
+                # and is different, never merge them.
+                # --------------------------------
+
+                if (
+                    existing_email_user.provider_uid is not None
+                    and existing_email_user.provider_uid != firebase_uid
+                ):
+                    raise AccountProviderConflictError(
+                        "An account with this email is already "
+                        "associated with another authentication "
+                        "identity."
+                    )
+
+                # --------------------------------
+                # Legacy password account
+                # --------------------------------
+                #
+                # provider_uid=None means this is an
+                # old MessageShield password account
+                # that has not yet been associated with
+                # Firebase.
+                #
+                # It is safe to attach the authenticated
+                # Firebase password identity here because:
+                #
+                #   - Firebase authenticated the user
+                #   - email matches
+                #   - provider matches
+                # --------------------------------
+
+                if existing_email_user.provider_uid is None:
+                    existing_email_user.provider_uid = firebase_uid
+                    existing_email_user.email_verified = email_verified
+
+                    db.commit()
+                    db.refresh(existing_email_user)
+
+                return existing_email_user
+
+            # ----------------------------------
+            # Google attempting to use an
+            # email/password MessageShield account.
+            # ----------------------------------
+
             raise AccountProviderConflictError(
                 "An account with this email already exists "
-                "using email and password sign-in."
+                "using email and password sign-in. "
+                "Please sign in with your email and password."
             )
 
-        # --------------------------------------
+        # ======================================
         # Unknown provider
-        # --------------------------------------
+        # ======================================
 
         raise AccountProviderConflictError(
             "An account with this email already exists."
@@ -350,7 +458,7 @@ def get_or_create_firebase_user(
         # MessageShield does not store it.
         password_hash=None,
 
-        # Correct provider:
+        # Provider mapping:
         #
         # google.com -> google
         # password   -> password
@@ -359,7 +467,7 @@ def get_or_create_firebase_user(
         # Firebase UID.
         provider_uid=firebase_uid,
 
-        # Comes from the verified Firebase ID token.
+        # Trusted Firebase verification state.
         email_verified=email_verified,
 
         is_active=True,

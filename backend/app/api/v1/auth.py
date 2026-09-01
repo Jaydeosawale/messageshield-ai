@@ -27,6 +27,7 @@ from app.services.auth_service import (
     AccountProviderConflictError,
     EmailAlreadyRegisteredError,
     EmailNotVerifiedError,
+    FirebaseUserNotRegisteredError,
     InactiveUserError,
     InvalidCredentialsError,
     PasswordLoginNotAvailableError,
@@ -171,7 +172,7 @@ def get_verified_firebase_identity(
 
 
 # ==========================================
-# Legacy password Register
+# Legacy password REGISTER
 # ==========================================
 #
 # Kept temporarily for existing password
@@ -395,7 +396,16 @@ def firebase_login(
         )
 
     # ==========================================
-    # 7. Create MessageShield JWT
+    # 7. Synchronize verification
+    # ==========================================
+
+    if user.email_verified is False:
+        user.email_verified = True
+        db.commit()
+        db.refresh(user)
+
+    # ==========================================
+    # 8. Create MessageShield JWT
     # ==========================================
 
     access_token = create_access_token(
@@ -420,6 +430,9 @@ def firebase_login(
 # Firebase must already have verified
 # the user's email before this endpoint
 # is called.
+#
+# The service owns all existing-account
+# and provider-conflict decisions.
 # ==========================================
 
 @router.post(
@@ -447,25 +460,19 @@ def firebase_register(
     )
 
     # ==========================================
-    # 2. Check existing Firebase UID
+    # 2. Find or create MessageShield user
     # ==========================================
-
-    existing_user = find_firebase_user(
-        db=db,
-        firebase_uid=firebase_uid,
-    )
-
-    if existing_user is not None:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=(
-                "Account already exists. "
-                "Please sign in instead."
-            ),
-        )
-
-    # ==========================================
-    # 3. Create MessageShield user
+    #
+    # Do NOT perform a separate Firebase UID
+    # rejection here.
+    #
+    # get_or_create_firebase_user() handles:
+    #
+    #   - existing Firebase identity
+    #   - existing email
+    #   - provider conflicts
+    #   - legacy password accounts
+    #   - new Firebase accounts
     # ==========================================
 
     try:
@@ -484,8 +491,20 @@ def firebase_register(
             detail=str(error),
         )
 
+    except InactiveUserError as error:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=str(error),
+        )
+
+    except FirebaseUserNotRegisteredError as error:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(error),
+        )
+
     # ==========================================
-    # 4. Verify account is active
+    # 3. Verify account is active
     # ==========================================
 
     if not user.is_active:
@@ -495,7 +514,7 @@ def firebase_register(
         )
 
     # ==========================================
-    # 5. Create MessageShield JWT
+    # 4. Create MessageShield JWT
     # ==========================================
 
     access_token = create_access_token(
