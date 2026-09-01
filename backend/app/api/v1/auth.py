@@ -1,4 +1,5 @@
 from typing import Annotated
+from sqlalchemy import select
 
 from fastapi import (
     APIRouter,
@@ -15,7 +16,10 @@ from app.core.security import create_access_token
 from app.db.session import get_db
 from app.models.user import User
 
+
 from app.schemas.auth import (
+    EmailCheckRequest,
+    EmailCheckResponse,
     FirebaseLoginRequest,
     LoginRequest,
     RegisterRequest,
@@ -415,6 +419,33 @@ def firebase_login(
     return {
         "access_token": access_token,
         "token_type": "bearer",
+    }
+
+
+    # ==========================================
+# Check email before Firebase registration
+# ==========================================
+
+@router.post(
+    "/check-email",
+    response_model=EmailCheckResponse,
+)
+@limiter.limit("10/minute")
+def check_email(
+    request: Request,
+    data: EmailCheckRequest,
+    db: Session = Depends(get_db),
+):
+    normalized_email = str(data.email).strip().lower()
+
+    existing_user = db.scalar(
+        select(User).where(
+            User.email == normalized_email
+        )
+    )
+
+    return {
+        "exists": existing_user is not None,
     }
 
 

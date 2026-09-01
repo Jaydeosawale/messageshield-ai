@@ -28,6 +28,18 @@ class LoginRequest(BaseModel):
 
 
 # ==========================================
+# Email availability check
+# ==========================================
+
+class EmailCheckRequest(BaseModel):
+    email: EmailStr
+
+
+class EmailCheckResponse(BaseModel):
+    exists: bool
+
+
+# ==========================================
 # Firebase / Google login
 # ==========================================
 

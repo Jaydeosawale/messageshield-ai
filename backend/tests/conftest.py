@@ -115,25 +115,27 @@ def seed_users(db: Session):
     db.flush()
 
     admin_user = User(
-        email="jaydeo@example.com",
-        password_hash=hash_password(
-            "StrongPassword123!"
-        ),
-        roles=[
-            user_role,
-            admin_role,
-        ],
-    )
+    email="jaydeo@example.com",
+    password_hash=hash_password(
+        "StrongPassword123!"
+    ),
+    email_verified=True,
+    roles=[
+        user_role,
+        admin_role,
+    ],
+)
 
     regular_user = User(
-        email="user@example.com",
-        password_hash=hash_password(
-            "TestUserPassword123!"
-        ),
-        roles=[
-            user_role,
-        ],
-    )
+    email="user@example.com",
+    password_hash=hash_password(
+        "TestUserPassword123!"
+    ),
+    email_verified=True,
+    roles=[
+        user_role,
+    ],
+)
 
     db.add_all([
         admin_user,
