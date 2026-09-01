@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/message_analysis.dart';
 import '../../providers/auth_provider.dart';
 import '../home/home_screen.dart';
-import 'login_screen.dart';
+import 'register_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -33,7 +33,7 @@ class AuthGate extends StatelessWidget {
     }
 
 
-    return const LoginScreen();
+    return const RegisterScreen();
   }
 }
 

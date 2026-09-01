@@ -261,13 +261,36 @@ def get_or_create_firebase_user(
     if user is not None:
 
         # --------------------------------------
-        # Verify provider consistency
+        # Verify Firebase-backed account
+        # --------------------------------------
+        #
+        # Firebase UID is the identity anchor.
+        #
+        # A single Firebase account can have both:
+        #   - google.com
+        #   - password
+        #
+        # Therefore the current sign-in provider does
+        # not need to match the original MessageShield
+        # auth_provider.
+        #
+        # Example:
+        #
+        # PostgreSQL:
+        #   auth_provider = "google"
+        #   provider_uid  = "ABC123"
+        #
+        # Firebase:
+        #   UID = ABC123
+        #   providers = Google + Password
+        #
+        # Both methods belong to the same account.
         # --------------------------------------
 
-        if user.auth_provider != message_shield_provider:
+        if user.auth_provider not in {"google", "password"}:
             raise AccountProviderConflictError(
                 "This Firebase account is associated "
-                "with a different sign-in method."
+                "with an unsupported sign-in method."
             )
 
         # --------------------------------------

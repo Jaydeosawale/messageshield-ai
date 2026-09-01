@@ -6,7 +6,6 @@ import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/app_background.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -242,10 +241,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return;
                             }
 
-                            final authProvider = context.read<AuthProvider>();
-
-                            await authProvider.clearAuthenticationSession();
-
                             if (!mounted) {
                               return;
                             }
@@ -255,19 +250,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
-                                  'Email verified successfully. Please sign in to continue.',
+                                  'Email verified successfully.',
                                 ),
                                 backgroundColor: AppColors.success,
                                 behavior: SnackBarBehavior.floating,
                               ),
                             );
 
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (_) => const LoginScreen(),
-                              ),
-                            );
-
+                            // Keep the authenticated Firebase/MessageShield
+                            // session. AuthGate will show HomeScreen.
                             return;
                           }
 
@@ -317,30 +308,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (!mounted) return;
 
-    final authProvider = context.read<AuthProvider>();
-
-    await authProvider.clearAuthenticationSession();
-
-    if (!mounted) return;
-
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
-          'Email verified successfully. Please sign in to continue.',
+          'Email verified successfully.',
         ),
         backgroundColor: AppColors.success,
         behavior: SnackBarBehavior.floating,
       ),
     );
 
-// Replace RegisterScreen with LoginScreen.
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
-      ),
-    );
+    // Keep the authenticated Firebase/MessageShield
+    // session. AuthGate will show HomeScreen.
+    return;
   }
 
   String _friendlyRegisterError(

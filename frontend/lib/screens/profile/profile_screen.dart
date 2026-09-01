@@ -4,8 +4,68 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  bool _hasPasswordProvider(AuthProvider auth) {
+    final firebaseUser = auth.firebaseUser;
+
+    if (firebaseUser == null) {
+      return false;
+    }
+
+    return firebaseUser.providerData.any(
+      (provider) => provider.providerId == 'password',
+    );
+  }
+
+  Future<void> _openPasswordDialog(BuildContext context) async {
+    final auth = context.read<AuthProvider>();
+    final hasPassword = _hasPasswordProvider(auth);
+
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return _PasswordDialog(
+          hasPassword: hasPassword,
+          onSetPassword: (password) async {
+            await auth.setPassword(
+              password: password,
+            );
+          },
+          onChangePassword: (
+            currentPassword,
+            newPassword,
+          ) async {
+            await auth.changePassword(
+              currentPassword: currentPassword,
+              newPassword: newPassword,
+            );
+          },
+        );
+      },
+    );
+
+    if (result == true && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            hasPassword
+                ? 'Password changed successfully.'
+                : 'Password set successfully. You can now sign in with Google or email and password.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
 
   Future<void> _logout(BuildContext context) async {
     final shouldLogout = await showDialog<bool>(
@@ -351,13 +411,21 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.security_outlined,
               child: Column(
                 children: [
-                  _ActionRow(
-                    icon: Icons.lock_outline,
-                    title: 'Password',
-                    subtitle:
-                        'Password changes will be available in a future update.',
-                    enabled: false,
-                    onTap: null,
+                  Builder(
+                    builder: (context) {
+                      final hasPassword =
+                          _hasPasswordProvider(auth);
+
+                      return _ActionRow(
+                        icon: Icons.lock_outline,
+                        title: 'Password',
+                        subtitle: hasPassword
+                            ? 'Change your account password.'
+                            : 'Set a password for email and password sign-in.',
+                        enabled: true,
+                        onTap: () => _openPasswordDialog(context),
+                      );
+                    },
                   ),
 
                   const Divider(
@@ -521,6 +589,289 @@ class ProfileScreen extends StatelessWidget {
             ],
           )
         : content;
+  }
+}
+
+
+// ============================================================================
+// PASSWORD DIALOG
+// ============================================================================
+
+class _PasswordDialog extends StatefulWidget {
+  final bool hasPassword;
+  final Future<void> Function(String password) onSetPassword;
+  final Future<void> Function(
+    String currentPassword,
+    String newPassword,
+  ) onChangePassword;
+
+  const _PasswordDialog({
+    required this.hasPassword,
+    required this.onSetPassword,
+    required this.onChangePassword,
+  });
+
+  @override
+  State<_PasswordDialog> createState() => _PasswordDialogState();
+}
+
+class _PasswordDialogState extends State<_PasswordDialog> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _currentPasswordController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  bool _obscureCurrent = true;
+  bool _obscurePassword = true;
+  bool _obscureConfirm = true;
+  bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _currentPasswordController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_isSubmitting) {
+      return;
+    }
+
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      if (widget.hasPassword) {
+        await widget.onChangePassword(
+          _currentPasswordController.text,
+          _passwordController.text,
+        );
+      } else {
+        await widget.onSetPassword(
+          _passwordController.text,
+        );
+      }
+
+      if (!mounted) {
+        return;
+      }
+
+      Navigator.of(context).pop(true);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            error.toString().replaceFirst(
+              'Exception: ',
+              '',
+            ),
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+
+      setState(() {
+        _isSubmitting = false;
+      });
+    }
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password is required.';
+    }
+
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters.';
+    }
+
+    return null;
+  }
+
+  String? _validateConfirmation(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password.';
+    }
+
+    if (value != _passwordController.text) {
+      return 'Passwords do not match.';
+    }
+
+    return null;
+  }
+
+  InputDecoration _decoration({
+    required String label,
+    required IconData icon,
+    required bool obscure,
+    required VoidCallback onToggle,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon),
+      suffixIcon: IconButton(
+        onPressed: _isSubmitting ? null : onToggle,
+        icon: Icon(
+          obscure
+              ? Icons.visibility_outlined
+              : Icons.visibility_off_outlined,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final title = widget.hasPassword
+        ? 'Change Password'
+        : 'Set Password';
+
+    return AlertDialog(
+      backgroundColor: AppColors.backgroundSoft,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: const BorderSide(
+          color: AppColors.darkBorder,
+        ),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      content: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!widget.hasPassword) ...[
+                const Text(
+                  'Add a password to your existing account. '
+                  'You will still be able to sign in with Google.',
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 18),
+              ],
+
+              if (widget.hasPassword) ...[
+                TextFormField(
+                  controller: _currentPasswordController,
+                  obscureText: _obscureCurrent,
+                  enabled: !_isSubmitting,
+                  decoration: _decoration(
+                    label: 'Current password',
+                    icon: Icons.lock_outline,
+                    obscure: _obscureCurrent,
+                    onToggle: () {
+                      setState(() {
+                        _obscureCurrent = !_obscureCurrent;
+                      });
+                    },
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Current password is required.';
+                    }
+
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 14),
+              ],
+
+              TextFormField(
+                controller: _passwordController,
+                obscureText: _obscurePassword,
+                enabled: !_isSubmitting,
+                decoration: _decoration(
+                  label: 'New password',
+                  icon: Icons.lock_reset_outlined,
+                  obscure: _obscurePassword,
+                  onToggle: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+                validator: _validatePassword,
+              ),
+
+              const SizedBox(height: 14),
+
+              TextFormField(
+                controller: _confirmPasswordController,
+                obscureText: _obscureConfirm,
+                enabled: !_isSubmitting,
+                decoration: _decoration(
+                  label: 'Confirm password',
+                  icon: Icons.verified_user_outlined,
+                  obscure: _obscureConfirm,
+                  onToggle: () {
+                    setState(() {
+                      _obscureConfirm = !_obscureConfirm;
+                    });
+                  },
+                ),
+                validator: _validateConfirmation,
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _isSubmitting
+              ? null
+              : () => Navigator.of(context).pop(false),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: _isSubmitting ? null : _submit,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.teal,
+            foregroundColor: Colors.white,
+            elevation: 0,
+          ),
+          child: _isSubmitting
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+              : Text(
+                  widget.hasPassword
+                      ? 'Change Password'
+                      : 'Set Password',
+                ),
+        ),
+      ],
+    );
   }
 }
 

@@ -458,6 +458,101 @@ class AuthService {
   }
 
   // ==========================================
+  // Set password for a Firebase account
+  // ==========================================
+  //
+  // Used primarily for Google users who want to
+  // add email/password authentication to their
+  // existing Firebase account.
+  //
+  // IMPORTANT:
+  // linkWithCredential() keeps the SAME Firebase UID.
+  // It does NOT create another Firebase account.
+  // ==========================================
+
+  static Future<void> setPassword({
+    required String password,
+  }) async {
+    final user = _firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw Exception(
+        'No authenticated Firebase user found.',
+      );
+    }
+
+    if (password.trim().isEmpty) {
+      throw Exception(
+        'Password cannot be empty.',
+      );
+    }
+
+    try {
+      final credential =
+          firebase_auth.EmailAuthProvider.credential(
+        email: user.email ?? '',
+        password: password,
+      );
+
+      await user.linkWithCredential(credential);
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      throw _firebaseAuthException(error);
+    }
+  }
+
+  // ==========================================
+  // Change password for an existing password
+  // Firebase account
+  // ==========================================
+
+  static Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = _firebaseAuth.currentUser;
+
+    if (user == null) {
+      throw Exception(
+        'No authenticated Firebase user found.',
+      );
+    }
+
+    if (user.email == null || user.email!.isEmpty) {
+      throw Exception(
+        'This Firebase account does not have an email address.',
+      );
+    }
+
+    if (currentPassword.isEmpty) {
+      throw Exception(
+        'Current password cannot be empty.',
+      );
+    }
+
+    if (newPassword.trim().isEmpty) {
+      throw Exception(
+        'New password cannot be empty.',
+      );
+    }
+
+    try {
+      final credential =
+          firebase_auth.EmailAuthProvider.credential(
+        email: user.email!,
+        password: currentPassword,
+      );
+
+      await user.reauthenticateWithCredential(
+        credential,
+      );
+
+      await user.updatePassword(newPassword);
+    } on firebase_auth.FirebaseAuthException catch (error) {
+      throw _firebaseAuthException(error);
+    }
+  }
+
+  // ==========================================
   // Firebase Auth errors
   // ==========================================
 

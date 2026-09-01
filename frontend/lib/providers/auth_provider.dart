@@ -380,6 +380,56 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // ==========================================
+  // Set password for Google-authenticated user
+  // ==========================================
+
+  Future<void> setPassword({
+    required String password,
+  }) async {
+    try {
+      _error = null;
+
+      await AuthService.setPassword(
+        password: password,
+      );
+
+      notifyListeners();
+    } catch (error) {
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      rethrow;
+    }
+  }
+
+  // ==========================================
+  // Change password for password-authenticated user
+  // ==========================================
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      _error = null;
+
+      await AuthService.changePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      );
+
+      notifyListeners();
+    } catch (error) {
+      _error = _cleanError(error);
+
+      notifyListeners();
+
+      rethrow;
+    }
+  }
+
+  // ==========================================
   // Send Firebase email verification
   // ==========================================
 
