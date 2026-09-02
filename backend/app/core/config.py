@@ -55,13 +55,14 @@ class Settings(BaseSettings):
         allowed_environments = {
             "development",
             "testing",
+            "staging",
             "production",
         }
 
         if value not in allowed_environments:
             raise ValueError(
                 "ENVIRONMENT must be development, "
-                "testing, or production"
+                "testing, staging, or production"
             )
 
         return value
