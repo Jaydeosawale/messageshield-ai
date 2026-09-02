@@ -275,76 +275,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               12,
                               8,
                             ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                RadioListTile<String>(
-                                  value: 'en',
-                                  groupValue: currentLanguage,
-                                  activeColor: AppColors.teal,
-                                  tileColor: Colors.transparent,
-                                  title: Text(
-                                    l10n.english,
-                                    style: const TextStyle(
-                                      color: AppColors.textPrimary,
-                                      fontWeight: FontWeight.w500,
+                            content: RadioGroup<String>(
+                              groupValue: currentLanguage,
+                              onChanged: (value) async {
+                                if (value != null) {
+                                  await languageProvider.setLanguage(value);
+
+                                  if (dialogContext.mounted) {
+                                    Navigator.of(dialogContext).pop();
+                                  }
+                                }
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  RadioListTile<String>(
+                                    value: 'en',
+                                    activeColor: AppColors.teal,
+                                    tileColor: Colors.transparent,
+                                    title: Text(
+                                      l10n.english,
+                                      style: const TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
-                                  onChanged: (value) async {
-                                    if (value != null) {
-                                      await languageProvider.setLanguage(value);
-
-                                      if (dialogContext.mounted) {
-                                        Navigator.of(dialogContext).pop();
-                                      }
-                                    }
-                                  },
-                                ),
-                                RadioListTile<String>(
-                                  value: 'hi',
-                                  groupValue: currentLanguage,
-                                  activeColor: AppColors.teal,
-                                  tileColor: Colors.transparent,
-                                  title: Text(
-                                    l10n.hindi,
-                                    style: const TextStyle(
-                                      color: AppColors.textPrimary,
-                                      fontWeight: FontWeight.w500,
+                                  RadioListTile<String>(
+                                    value: 'hi',
+                                    activeColor: AppColors.teal,
+                                    tileColor: Colors.transparent,
+                                    title: Text(
+                                      l10n.hindi,
+                                      style: const TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
-                                  onChanged: (value) async {
-                                    if (value != null) {
-                                      await languageProvider.setLanguage(value);
-
-                                      if (dialogContext.mounted) {
-                                        Navigator.of(dialogContext).pop();
-                                      }
-                                    }
-                                  },
-                                ),
-                                RadioListTile<String>(
-                                  value: 'mr',
-                                  groupValue: currentLanguage,
-                                  activeColor: AppColors.teal,
-                                  tileColor: Colors.transparent,
-                                  title: Text(
-                                    l10n.marathi,
-                                    style: const TextStyle(
-                                      color: AppColors.textPrimary,
-                                      fontWeight: FontWeight.w500,
+                                  RadioListTile<String>(
+                                    value: 'mr',
+                                    activeColor: AppColors.teal,
+                                    tileColor: Colors.transparent,
+                                    title: Text(
+                                      l10n.marathi,
+                                      style: const TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
-                                  onChanged: (value) async {
-                                    if (value != null) {
-                                      await languageProvider.setLanguage(value);
-
-                                      if (dialogContext.mounted) {
-                                        Navigator.of(dialogContext).pop();
-                                      }
-                                    }
-                                  },
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                             actions: [
                               TextButton(
