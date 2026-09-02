@@ -7,7 +7,8 @@ from collections.abc import Generator
 # ==========================================
 os.environ["ENVIRONMENT"] = "testing"
 
-os.environ["DATABASE_URL"] = (
+os.environ.setdefault(
+    "DATABASE_URL",
     "postgresql+psycopg://"
     "messageshield:change_me@"
     "localhost:5433/messageshield_test"
