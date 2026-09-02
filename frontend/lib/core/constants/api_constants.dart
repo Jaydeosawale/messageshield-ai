@@ -1,9 +1,12 @@
+import '../../app_environment.dart';
+
 class ApiConstants {
-  static const String environment =
-      String.fromEnvironment(
-    'ENV',
-    defaultValue: 'prod',
-  );
+  static String get baseEnvironment {
+    if (AppEnvironmentConfig.isStaging) {
+      return 'staging';
+    }
+    return 'prod';
+  }
 
   static final String baseUrl = _getBaseUrl();
 
@@ -28,20 +31,14 @@ class ApiConstants {
   static final String analyses =
       '$baseUrl/analyses';
 
-  static const String _devBaseUrl =
-      'http://127.0.0.1:8000/api/v1';
-
   static const String _stagingBaseUrl =
-      'https://messageshield-staging.onrender.com/api/v1';
+      'https://messageshield-ai-staging.onrender.com/api/v1';
 
   static const String _prodBaseUrl =
       'https://messageshield-ai.onrender.com/api/v1';
 
   static String _getBaseUrl() {
-    switch (environment) {
-      case 'dev':
-        return _devBaseUrl;
-
+    switch (baseEnvironment) {
       case 'staging':
         return _stagingBaseUrl;
 
