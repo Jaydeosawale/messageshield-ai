@@ -1,37 +1,53 @@
 class ApiConstants {
-  ApiConstants._();
+  static const String environment =
+      String.fromEnvironment(
+    'ENV',
+    defaultValue: 'prod',
+  );
 
-  // ==========================================
-  // Production API
-  // ==========================================
+  static final String baseUrl = _getBaseUrl();
 
-  static const String baseUrl = 'https://messageshield-ai.onrender.com/api/v1';
+  static final String register = '$baseUrl/auth/register';
 
-  // ==========================================
-  // Authentication
-  // ==========================================
+  static final String login = '$baseUrl/auth/login';
 
-  static const String register = '$baseUrl/auth/register';
+  static final String firebaseLogin =
+      '$baseUrl/auth/firebase/login';
 
-  static const String login = '$baseUrl/auth/login';
+  static final String firebaseRegister =
+      '$baseUrl/auth/firebase/register';
 
-  // Google / Firebase LOGIN
-  static const String firebaseLogin = '$baseUrl/auth/firebase/login';
+  static final String checkEmail =
+      '$baseUrl/auth/check-email';
 
-  // Google / Firebase REGISTER
-  static const String firebaseRegister = '$baseUrl/auth/firebase/register';
+  static final String me = '$baseUrl/auth/me';
 
-  // Check whether an email already exists
-  // in the MessageShield database.
-  static const String checkEmail = '$baseUrl/auth/check-email';
+  static final String analyze =
+      '$baseUrl/analyze';
 
-  static const String me = '$baseUrl/auth/me';
+  static final String analyses =
+      '$baseUrl/analyses';
 
-  // ==========================================
-  // Message analysis
-  // ==========================================
+  static const String _devBaseUrl =
+      'http://127.0.0.1:8000/api/v1';
 
-  static const String analyze = '$baseUrl/analyze';
+  static const String _stagingBaseUrl =
+      'https://messageshield-staging.onrender.com/api/v1';
 
-  static const String analyses = '$baseUrl/analyses';
+  static const String _prodBaseUrl =
+      'https://messageshield-ai.onrender.com/api/v1';
+
+  static String _getBaseUrl() {
+    switch (environment) {
+      case 'dev':
+        return _devBaseUrl;
+
+      case 'staging':
+        return _stagingBaseUrl;
+
+      case 'prod':
+      default:
+        return _prodBaseUrl;
+    }
+  }
 }

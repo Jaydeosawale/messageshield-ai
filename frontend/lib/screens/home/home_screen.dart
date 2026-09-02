@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:messageshield/l10n/app_localizations.dart';
 
 import '../../core/services/analysis_service.dart';
 import '../../core/theme/app_theme.dart';
@@ -89,11 +90,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _analyzeMessage() async {
+    final l10n = AppLocalizations.of(context)!;
     final message = _messageController.text.trim();
 
     if (message.isEmpty) {
       setState(() {
-        _errorMessage = 'Paste or scan a message first.';
+        _errorMessage = l10n.pasteOrScanMessageFirst;
       });
       return;
     }
@@ -160,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final l10n = AppLocalizations.of(context)!;
         final width = constraints.maxWidth;
 
         final isPhone = width < 700;
@@ -203,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   Text(
-                    'Stay Protected.',
+                    l10n.stayProtected,
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: isNarrowPhone
@@ -219,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 6),
 
                   Text(
-                    'Check suspicious messages safely before you act.',
+                    l10n.checkSuspiciousMessages,
                     style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: isPhone ? 14 : 17,
@@ -237,6 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _buildMessageCard(
                     isPhone: isPhone,
                     isNarrowPhone: isNarrowPhone,
+                    l10n: l10n,
                   ),
 
                   if (_analysis != null) ...[
@@ -255,6 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   _buildSafetyCard(
                     isPhone: isPhone,
+                    l10n: l10n,
                   ),
 
                   const SizedBox(height: 12),
@@ -342,6 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildMessageCard({
     required bool isPhone,
     required bool isNarrowPhone,
+    required AppLocalizations l10n,
   }) {
     return Container(
       width: double.infinity,
@@ -390,8 +396,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontSize: 14,
                 height: 1.4,
               ),
-              decoration: const InputDecoration(
-                hintText: 'Paste the message you received here...',
+              decoration: InputDecoration(
+                hintText: l10n.pasteMessage,
                 hintStyle: TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 14,
@@ -435,7 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 20,
                     ),
               label: Text(
-                _isLoading ? 'ANALYZING...' : 'ANALYZE MESSAGE',
+                _isLoading ? l10n.analyzing : l10n.analyzeMessage,
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
@@ -449,8 +455,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(
               child: TextButton(
                 onPressed: _isLoading ? null : _clearMessage,
-                child: const Text(
-                  'Clear message',
+                child: Text(
+                  l10n.clearMessage,
                   style: TextStyle(
                     fontSize: 13,
                   ),
@@ -464,6 +470,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSafetyCard({
     required bool isPhone,
+    required AppLocalizations l10n,
   }) {
     return Material(
       color: Colors.transparent,
@@ -485,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          child: const Row(
+          child: Row(
             children: [
               Icon(
                 Icons.shield_outlined,
@@ -495,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'Safety guidelines',
+                  l10n.safetyGuidelines,
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 16,
@@ -558,26 +565,20 @@ class _SafetyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = const [
+    final l10n = AppLocalizations.of(context)!;
+
+    final items = [
       (
         Icons.password_rounded,
-        'OTP and passwords',
-        'Never share OTPs, passwords, PINs or CVV values.'
+        l10n.otpAndPasswords,
+        l10n.neverShareSensitiveCodes
       ),
-      (
-        Icons.link_rounded,
-        'Suspicious links',
-        'Avoid unknown links and verify organisations through official channels.'
-      ),
-      (
-        Icons.payments_outlined,
-        'Payment scams',
-        'Verify payment requests before sending money.'
-      ),
+      (Icons.link_rounded, l10n.suspiciousLinks, l10n.avoidUnknownLinks),
+      (Icons.payments_outlined, l10n.paymentScams, l10n.verifyPaymentRequests),
       (
         Icons.person_search_outlined,
-        'Verify the sender',
-        'A familiar name does not guarantee that a message is genuine.'
+        l10n.verifyTheSender,
+        l10n.familiarNameNotGuarantee
       ),
     ];
 
@@ -603,8 +604,8 @@ class _SafetyContent extends StatelessWidget {
                       ),
                     ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'Safety guidelines',
+                  Text(
+                    l10n.safetyGuidelines,
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 22,

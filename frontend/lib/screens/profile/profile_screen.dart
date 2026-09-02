@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../providers/language_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
@@ -12,7 +14,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   bool _hasPasswordProvider(AuthProvider auth) {
     final firebaseUser = auth.firebaseUser;
 
@@ -26,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _openPasswordDialog(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final auth = context.read<AuthProvider>();
     final hasPassword = _hasPasswordProvider(auth);
 
@@ -58,8 +60,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SnackBar(
           content: Text(
             hasPassword
-                ? 'Password changed successfully.'
-                : 'Password set successfully. You can now sign in with Google or email and password.',
+                ? l10n.passwordChangedSuccessfully
+                : l10n.passwordSetSuccessfully,
           ),
           behavior: SnackBarBehavior.floating,
         ),
@@ -68,6 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
@@ -79,15 +82,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: AppColors.darkBorder,
             ),
           ),
-          title: const Text(
-            'Logout?',
+          title: Text(
+            l10n.logoutQuestion,
             style: TextStyle(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,
             ),
           ),
-          content: const Text(
-            'Are you sure you want to logout from MessageShield?',
+          content: Text(
+            l10n.logoutConfirmation,
             style: TextStyle(
               color: AppColors.textSecondary,
               height: 1.4,
@@ -98,8 +101,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: () {
                 Navigator.pop(dialogContext, false);
               },
-              child: const Text(
-                'Cancel',
+              child: Text(
+                l10n.cancel,
                 style: TextStyle(
                   color: AppColors.textSecondary,
                 ),
@@ -114,8 +117,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 foregroundColor: Colors.white,
                 elevation: 0,
               ),
-              child: const Text(
-                'Logout',
+              child: Text(
+                l10n.logout,
               ),
             ),
           ],
@@ -172,6 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
     final user = auth.user;
+    final l10n = AppLocalizations.of(context)!;
 
     if (user == null) {
       return const SizedBox.shrink();
@@ -194,8 +198,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             40,
           ),
           children: [
-            const Text(
-              'Profile',
+            Text(
+              l10n.profile,
               style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 30,
@@ -213,6 +217,156 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fontSize: 14,
                 height: 1.5,
               ),
+            ),
+
+            const SizedBox(height: 24),
+
+            Consumer<LanguageProvider>(
+              builder: (context, languageProvider, _) {
+                final l10n = AppLocalizations.of(context)!;
+                final currentLanguage = languageProvider.locale.languageCode;
+
+                String languageName() {
+                  switch (currentLanguage) {
+                    case 'hi':
+                      return l10n.hindi;
+                    case 'mr':
+                      return l10n.marathi;
+                    case 'en':
+                    default:
+                      return l10n.english;
+                  }
+                }
+
+                return Card(
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.language_rounded,
+                    ),
+                    title: Text(l10n.language),
+                    subtitle: Text(languageName()),
+                    trailing: const Icon(
+                      Icons.chevron_right_rounded,
+                    ),
+                    onTap: () {
+                      showDialog<void>(
+                        context: context,
+                        builder: (dialogContext) {
+                          return AlertDialog(
+                            backgroundColor: AppColors.backgroundSoft,
+                            surfaceTintColor: Colors.transparent,
+                            elevation: 12,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: const BorderSide(
+                                color: AppColors.darkBorder,
+                              ),
+                            ),
+                            title: Text(
+                              l10n.changeLanguage,
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.fromLTRB(
+                              12,
+                              8,
+                              12,
+                              8,
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                RadioListTile<String>(
+                                  value: 'en',
+                                  groupValue: currentLanguage,
+                                  activeColor: AppColors.teal,
+                                  tileColor: Colors.transparent,
+                                  title: Text(
+                                    l10n.english,
+                                    style: const TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  onChanged: (value) async {
+                                    if (value != null) {
+                                      await languageProvider.setLanguage(value);
+
+                                      if (dialogContext.mounted) {
+                                        Navigator.of(dialogContext).pop();
+                                      }
+                                    }
+                                  },
+                                ),
+                                RadioListTile<String>(
+                                  value: 'hi',
+                                  groupValue: currentLanguage,
+                                  activeColor: AppColors.teal,
+                                  tileColor: Colors.transparent,
+                                  title: Text(
+                                    l10n.hindi,
+                                    style: const TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  onChanged: (value) async {
+                                    if (value != null) {
+                                      await languageProvider.setLanguage(value);
+
+                                      if (dialogContext.mounted) {
+                                        Navigator.of(dialogContext).pop();
+                                      }
+                                    }
+                                  },
+                                ),
+                                RadioListTile<String>(
+                                  value: 'mr',
+                                  groupValue: currentLanguage,
+                                  activeColor: AppColors.teal,
+                                  tileColor: Colors.transparent,
+                                  title: Text(
+                                    l10n.marathi,
+                                    style: const TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  onChanged: (value) async {
+                                    if (value != null) {
+                                      await languageProvider.setLanguage(value);
+
+                                      if (dialogContext.mounted) {
+                                        Navigator.of(dialogContext).pop();
+                                      }
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(dialogContext).pop();
+                                },
+                                child: Text(
+                                  l10n.cancel,
+                                  style: const TextStyle(
+                                    color: AppColors.teal,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 28),
@@ -278,9 +432,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-
                       const SizedBox(height: 5),
-
                       Text(
                         user.email,
                         overflow: TextOverflow.ellipsis,
@@ -289,17 +441,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontSize: 14,
                         ),
                       ),
-
                       const SizedBox(height: 14),
-
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: [
                           _StatusBadge(
                             label: user.isActive
-                                ? 'Active Account'
-                                : 'Inactive Account',
+                                ? l10n.activeAccount
+                                : l10n.inactiveAccount,
                             icon: user.isActive
                                 ? Icons.verified_user_outlined
                                 : Icons.block_outlined,
@@ -307,10 +457,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ? AppColors.success
                                 : AppColors.danger,
                           ),
-
                           if (user.isAdmin)
-                            const _StatusBadge(
-                              label: 'Administrator',
+                            _StatusBadge(
+                              label: l10n.administrator,
                               icon: Icons.admin_panel_settings_outlined,
                               color: AppColors.warning,
                             ),
@@ -348,51 +497,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // ==========================================================
 
             _SectionCard(
-              title: 'Account Information',
+              title: l10n.accountInformation,
               icon: Icons.person_outline,
               child: Column(
                 children: [
                   _ProfileInfoRow(
                     icon: Icons.email_outlined,
-                    label: 'Email Address',
+                    label: l10n.emailAddress,
                     value: user.email,
                   ),
-
                   const Divider(
                     height: 28,
                     color: AppColors.darkBorder,
                   ),
-
                   _ProfileInfoRow(
                     icon: Icons.badge_outlined,
-                    label: 'User ID',
+                    label: l10n.userId,
                     value: '#${user.id}',
                   ),
-
                   const Divider(
                     height: 28,
                     color: AppColors.darkBorder,
                   ),
-
                   _ProfileInfoRow(
                     icon: Icons.shield_outlined,
-                    label: 'Account Status',
-                    value: user.isActive ? 'Active' : 'Inactive',
-                    valueColor: user.isActive
-                        ? AppColors.success
-                        : AppColors.danger,
+                    label: l10n.accountStatus,
+                    value: user.isActive ? l10n.active : l10n.inactive,
+                    valueColor:
+                        user.isActive ? AppColors.success : AppColors.danger,
                   ),
-
                   if (user.isAdmin) ...[
                     const Divider(
                       height: 28,
                       color: AppColors.darkBorder,
                     ),
-
-                    const _ProfileInfoRow(
+                    _ProfileInfoRow(
                       icon: Icons.admin_panel_settings_outlined,
-                      label: 'Account Role',
-                      value: 'Administrator',
+                      label: l10n.accountRole,
+                      value: l10n.administrator,
                       valueColor: AppColors.warning,
                     ),
                   ],
@@ -407,37 +549,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // ==========================================================
 
             _SectionCard(
-              title: 'Security',
+              title: l10n.security,
               icon: Icons.security_outlined,
               child: Column(
                 children: [
                   Builder(
                     builder: (context) {
-                      final hasPassword =
-                          _hasPasswordProvider(auth);
+                      final hasPassword = _hasPasswordProvider(auth);
 
                       return _ActionRow(
                         icon: Icons.lock_outline,
-                        title: 'Password',
+                        title: l10n.password,
                         subtitle: hasPassword
-                            ? 'Change your account password.'
-                            : 'Set a password for email and password sign-in.',
+                            ? l10n.changeAccountPassword
+                            : l10n.setPasswordForEmailSignIn,
                         enabled: true,
                         onTap: () => _openPasswordDialog(context),
                       );
                     },
                   ),
-
                   const Divider(
                     height: 28,
                     color: AppColors.darkBorder,
                   ),
-
                   _ActionRow(
                     icon: Icons.privacy_tip_outlined,
-                    title: 'Privacy',
-                    subtitle:
-                        'MessageShield keeps your analysis data protected.',
+                    title: l10n.privacy,
+                    subtitle: l10n.messageShieldKeepsDataProtected,
                     enabled: false,
                     onTap: null,
                   ),
@@ -454,34 +592,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             if (user.isAdmin) ...[
               _SectionCard(
-                title: 'Administrator',
+                title: l10n.administrator,
                 icon: Icons.admin_panel_settings_outlined,
                 iconColor: AppColors.warning,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'You have administrator access.',
+                    Text(
+                      l10n.youHaveAdministratorAccess,
                       style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-
                     const SizedBox(height: 6),
-
-                    const Text(
-                      'Administrative tools and system statistics should only be visible to authorized users.',
+                    Text(
+                      l10n.adminToolsAuthorizedOnly,
                       style: TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 13,
                         height: 1.45,
                       ),
                     ),
-
                     const SizedBox(height: 18),
-
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
@@ -491,7 +625,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: AppColors.warning.withValues(alpha: 0.25),
                         ),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Icon(
                             Icons.info_outline,
@@ -500,7 +634,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              'Admin controls are restricted to administrator accounts.',
+                              l10n.adminControlsRestricted,
                               style: TextStyle(
                                 color: AppColors.textPrimary,
                                 fontSize: 13,
@@ -513,7 +647,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
             ],
 
@@ -524,14 +657,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: 52,
               child: OutlinedButton.icon(
-                onPressed: auth.isLoading
-                    ? null
-                    : () => _logout(context),
+                onPressed: auth.isLoading ? null : () => _logout(context),
                 icon: const Icon(
                   Icons.logout,
                 ),
-                label: const Text(
-                  'Logout',
+                label: Text(
+                  l10n.logout,
                 ),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.danger,
@@ -560,9 +691,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 4),
 
-            const Center(
+            Center(
               child: Text(
-                'Smart. Private. Protected.',
+                l10n.smartPrivateProtected,
                 style: TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 12,
@@ -591,7 +722,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : content;
   }
 }
-
 
 // ============================================================================
 // PASSWORD DIALOG
@@ -674,9 +804,9 @@ class _PasswordDialogState extends State<_PasswordDialog> {
         SnackBar(
           content: Text(
             error.toString().replaceFirst(
-              'Exception: ',
-              '',
-            ),
+                  'Exception: ',
+                  '',
+                ),
           ),
           behavior: SnackBarBehavior.floating,
         ),
@@ -724,9 +854,7 @@ class _PasswordDialogState extends State<_PasswordDialog> {
       suffixIcon: IconButton(
         onPressed: _isSubmitting ? null : onToggle,
         icon: Icon(
-          obscure
-              ? Icons.visibility_outlined
-              : Icons.visibility_off_outlined,
+          obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
         ),
       ),
     );
@@ -734,9 +862,7 @@ class _PasswordDialogState extends State<_PasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.hasPassword
-        ? 'Change Password'
-        : 'Set Password';
+    final title = widget.hasPassword ? 'Change Password' : 'Set Password';
 
     return AlertDialog(
       backgroundColor: AppColors.backgroundSoft,
@@ -770,7 +896,6 @@ class _PasswordDialogState extends State<_PasswordDialog> {
                 ),
                 const SizedBox(height: 18),
               ],
-
               if (widget.hasPassword) ...[
                 TextFormField(
                   controller: _currentPasswordController,
@@ -796,7 +921,6 @@ class _PasswordDialogState extends State<_PasswordDialog> {
                 ),
                 const SizedBox(height: 14),
               ],
-
               TextFormField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
@@ -813,9 +937,7 @@ class _PasswordDialogState extends State<_PasswordDialog> {
                 ),
                 validator: _validatePassword,
               ),
-
               const SizedBox(height: 14),
-
               TextFormField(
                 controller: _confirmPasswordController,
                 obscureText: _obscureConfirm,
@@ -838,9 +960,8 @@ class _PasswordDialogState extends State<_PasswordDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: _isSubmitting
-              ? null
-              : () => Navigator.of(context).pop(false),
+          onPressed:
+              _isSubmitting ? null : () => Navigator.of(context).pop(false),
           child: const Text(
             'Cancel',
             style: TextStyle(
@@ -865,16 +986,13 @@ class _PasswordDialogState extends State<_PasswordDialog> {
                   ),
                 )
               : Text(
-                  widget.hasPassword
-                      ? 'Change Password'
-                      : 'Set Password',
+                  widget.hasPassword ? 'Change Password' : 'Set Password',
                 ),
         ),
       ],
     );
   }
 }
-
 
 // ============================================================================
 // SECTION CARD
@@ -924,9 +1042,7 @@ class _SectionCard extends StatelessWidget {
                   size: 21,
                 ),
               ),
-
               const SizedBox(width: 12),
-
               Expanded(
                 child: Text(
                   title,
@@ -939,16 +1055,13 @@ class _SectionCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 20),
-
           child,
         ],
       ),
     );
   }
 }
-
 
 // ============================================================================
 // PROFILE INFORMATION ROW
@@ -976,9 +1089,7 @@ class _ProfileInfoRow extends StatelessWidget {
           color: AppColors.textSecondary,
           size: 20,
         ),
-
         const SizedBox(width: 14),
-
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -990,9 +1101,7 @@ class _ProfileInfoRow extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-
               const SizedBox(height: 4),
-
               Text(
                 value,
                 overflow: TextOverflow.ellipsis,
@@ -1009,7 +1118,6 @@ class _ProfileInfoRow extends StatelessWidget {
     );
   }
 }
-
 
 // ============================================================================
 // ACTION ROW
@@ -1048,15 +1156,11 @@ class _ActionRow extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              color: enabled
-                  ? AppColors.teal
-                  : AppColors.textSecondary,
+              color: enabled ? AppColors.teal : AppColors.textSecondary,
               size: 21,
             ),
           ),
-
           const SizedBox(width: 14),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1071,9 +1175,7 @@ class _ActionRow extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
                 const SizedBox(height: 4),
-
                 Text(
                   subtitle,
                   style: const TextStyle(
@@ -1085,11 +1187,8 @@ class _ActionRow extends StatelessWidget {
               ],
             ),
           ),
-
           Icon(
-            enabled
-                ? Icons.chevron_right
-                : Icons.lock_outline,
+            enabled ? Icons.chevron_right : Icons.lock_outline,
             color: AppColors.textSecondary,
           ),
         ],
@@ -1097,7 +1196,6 @@ class _ActionRow extends StatelessWidget {
     );
   }
 }
-
 
 // ============================================================================
 // STATUS BADGE
@@ -1136,9 +1234,7 @@ class _StatusBadge extends StatelessWidget {
             size: 15,
             color: color,
           ),
-
           const SizedBox(width: 6),
-
           Text(
             label,
             style: TextStyle(

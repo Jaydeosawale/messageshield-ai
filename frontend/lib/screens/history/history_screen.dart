@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 
 import '../../core/services/analysis_service.dart';
 import '../../models/message_analysis.dart';
@@ -79,9 +80,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
         '${twoDigits(localDate.minute)}';
   }
 
-  String _formatCategory(String category) {
+  String _formatCategory(String category, AppLocalizations l10n) {
     if (category.trim().isEmpty) {
-      return 'Unknown';
+      return l10n.unknown;
     }
 
     return category
@@ -90,14 +91,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
         .split('_')
         .where((word) => word.isNotEmpty)
         .map(
-          (word) =>
-              '${word[0].toUpperCase()}${word.substring(1)}',
+          (word) => '${word[0].toUpperCase()}${word.substring(1)}',
         )
         .join(' ');
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF061721),
       body: Stack(
@@ -107,13 +109,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
               child: _HistoryBackground(),
             ),
           ),
-
           SafeArea(
             child: FutureBuilder<List<MessageAnalysis>>(
               future: _historyFuture,
               builder: (context, snapshot) {
-                if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return const _LoadingState();
                 }
 
@@ -134,8 +134,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   backgroundColor: const Color(0xFF102632),
                   child: analyses.isEmpty
                       ? ListView(
-                          physics:
-                              const AlwaysScrollableScrollPhysics(),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           padding: const EdgeInsets.all(24),
                           children: const [
                             SizedBox(height: 100),
@@ -145,13 +144,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       : LayoutBuilder(
                           builder: (context, constraints) {
                             final horizontalPadding =
-                                constraints.maxWidth >= 900
-                                    ? 40.0
-                                    : 20.0;
+                                constraints.maxWidth >= 900 ? 40.0 : 20.0;
 
                             return ListView.separated(
-                              physics:
-                                  const AlwaysScrollableScrollPhysics(),
+                              physics: const AlwaysScrollableScrollPhysics(),
                               padding: EdgeInsets.fromLTRB(
                                 horizontalPadding,
                                 38,
@@ -175,8 +171,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   return const _HistoryHeader();
                                 }
 
-                                final analysis =
-                                    analyses[index - 1];
+                                final analysis = analyses[index - 1];
 
                                 return _HistoryCard(
                                   analysis: analysis,
@@ -189,9 +184,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   formattedDate: _formatDate(
                                     analysis.createdAt,
                                   ),
-                                  formattedCategory:
-                                      _formatCategory(
+                                  formattedCategory: _formatCategory(
                                     analysis.category,
+                                    l10n,
                                   ),
                                 );
                               },
@@ -208,7 +203,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 }
 
-
 // ==========================================================
 // HISTORY HEADER
 // ==========================================================
@@ -218,11 +212,13 @@ class _HistoryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Analysis History',
+          l10n.analysisHistory,
           style: TextStyle(
             fontSize: 38,
             fontWeight: FontWeight.w700,
@@ -230,11 +226,9 @@ class _HistoryHeader extends StatelessWidget {
             color: Color(0xFFF1F5F9),
           ),
         ),
-
         SizedBox(height: 8),
-
         Text(
-          'Your recent message safety checks',
+          l10n.yourRecentMessageSafetyChecks,
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w400,
@@ -245,7 +239,6 @@ class _HistoryHeader extends StatelessWidget {
     );
   }
 }
-
 
 // ==========================================================
 // HISTORY CARD
@@ -268,8 +261,7 @@ class _HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final confidencePercent =
-        (analysis.confidence * 100).toStringAsFixed(0);
+    final confidencePercent = (analysis.confidence * 100).toStringAsFixed(0);
 
     return Material(
       color: Colors.transparent,
@@ -320,8 +312,7 @@ class _HistoryCard extends StatelessWidget {
             ),
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final isCompact =
-                    constraints.maxWidth < 650;
+                final isCompact = constraints.maxWidth < 650;
 
                 if (isCompact) {
                   return _buildMobileCard(
@@ -346,6 +337,8 @@ class _HistoryCard extends StatelessWidget {
     BuildContext context,
     String confidencePercent,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -353,13 +346,10 @@ class _HistoryCard extends StatelessWidget {
           riskColor: riskColor,
           riskIcon: riskIcon,
         ),
-
         const SizedBox(width: 26),
-
         Expanded(
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -367,9 +357,7 @@ class _HistoryCard extends StatelessWidget {
                     risk: analysis.risk,
                     riskColor: riskColor,
                   ),
-
                   const Spacer(),
-
                   Icon(
                     Icons.chevron_right_rounded,
                     size: 34,
@@ -379,12 +367,10 @@ class _HistoryCard extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 12),
-
               Text(
                 analysis.safeMessage.isEmpty
-                    ? 'Message analysis'
+                    ? l10n.messageAnalysis
                     : analysis.safeMessage,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -395,9 +381,7 @@ class _HistoryCard extends StatelessWidget {
                   height: 1.35,
                 ),
               ),
-
               const SizedBox(height: 18),
-
               Wrap(
                 spacing: 12,
                 runSpacing: 10,
@@ -406,30 +390,23 @@ class _HistoryCard extends StatelessWidget {
                     icon: Icons.account_tree_outlined,
                     label: formattedCategory,
                   ),
-
                   _InfoChip(
                     icon: Icons.speed_outlined,
-                    label:
-                        'Score ${analysis.riskScore}',
+                    label: '${l10n.score} ${analysis.riskScore}',
                   ),
-
                   _InfoChip(
                     icon: Icons.analytics_outlined,
                     label: '$confidencePercent%',
                   ),
                 ],
               ),
-
               const SizedBox(height: 18),
-
               const Divider(
                 height: 1,
                 thickness: 1,
                 color: Color(0xFF21444D),
               ),
-
               const SizedBox(height: 13),
-
               _DateRow(
                 formattedDate: formattedDate,
               ),
@@ -444,9 +421,10 @@ class _HistoryCard extends StatelessWidget {
     BuildContext context,
     String confidencePercent,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -455,16 +433,13 @@ class _HistoryCard extends StatelessWidget {
               riskIcon: riskIcon,
               size: 58,
             ),
-
             const SizedBox(width: 14),
-
             Expanded(
               child: _RiskBadge(
                 risk: analysis.risk,
                 riskColor: riskColor,
               ),
             ),
-
             Icon(
               Icons.chevron_right_rounded,
               size: 30,
@@ -472,12 +447,10 @@ class _HistoryCard extends StatelessWidget {
             ),
           ],
         ),
-
         const SizedBox(height: 18),
-
         Text(
           analysis.safeMessage.isEmpty
-              ? 'Message analysis'
+              ? l10n.messageAnalysis
               : analysis.safeMessage,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
@@ -488,9 +461,7 @@ class _HistoryCard extends StatelessWidget {
             height: 1.4,
           ),
         ),
-
         const SizedBox(height: 16),
-
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -499,30 +470,23 @@ class _HistoryCard extends StatelessWidget {
               icon: Icons.account_tree_outlined,
               label: formattedCategory,
             ),
-
             _InfoChip(
               icon: Icons.speed_outlined,
-              label:
-                  'Score ${analysis.riskScore}',
+              label: '${l10n.score} ${analysis.riskScore}',
             ),
-
             _InfoChip(
               icon: Icons.analytics_outlined,
               label: '$confidencePercent%',
             ),
           ],
         ),
-
         const SizedBox(height: 18),
-
         const Divider(
           height: 1,
           thickness: 1,
           color: Color(0xFF21444D),
         ),
-
         const SizedBox(height: 12),
-
         _DateRow(
           formattedDate: formattedDate,
         ),
@@ -530,7 +494,6 @@ class _HistoryCard extends StatelessWidget {
     );
   }
 }
-
 
 // ==========================================================
 // RISK ICON
@@ -587,7 +550,6 @@ class _RiskIconBox extends StatelessWidget {
   }
 }
 
-
 // ==========================================================
 // RISK BADGE
 // ==========================================================
@@ -603,6 +565,8 @@ class _RiskBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
@@ -623,7 +587,13 @@ class _RiskBadge extends StatelessWidget {
         ),
       ),
       child: Text(
-        '${risk.toUpperCase()} RISK',
+        risk.toUpperCase() == 'HIGH'
+            ? l10n.riskHigh
+            : risk.toUpperCase() == 'MEDIUM'
+                ? l10n.riskMedium
+                : risk.toUpperCase() == 'LOW'
+                    ? l10n.riskLow
+                    : risk,
         style: TextStyle(
           color: riskColor,
           fontSize: 12,
@@ -634,7 +604,6 @@ class _RiskBadge extends StatelessWidget {
     );
   }
 }
-
 
 // ==========================================================
 // INFO CHIP
@@ -674,9 +643,7 @@ class _InfoChip extends StatelessWidget {
             size: 17,
             color: const Color(0xFF5BA9F5),
           ),
-
           const SizedBox(width: 8),
-
           Text(
             label,
             style: const TextStyle(
@@ -690,7 +657,6 @@ class _InfoChip extends StatelessWidget {
     );
   }
 }
-
 
 // ==========================================================
 // DATE ROW
@@ -712,9 +678,7 @@ class _DateRow extends StatelessWidget {
           size: 18,
           color: Color(0xFF76C9D4),
         ),
-
         const SizedBox(width: 10),
-
         Text(
           formattedDate,
           style: const TextStyle(
@@ -728,7 +692,6 @@ class _DateRow extends StatelessWidget {
   }
 }
 
-
 // ==========================================================
 // LOADING
 // ==========================================================
@@ -738,7 +701,9 @@ class _LoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    final l10n = AppLocalizations.of(context)!;
+
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -750,11 +715,9 @@ class _LoadingState extends StatelessWidget {
               color: Color(0xFF67E8C8),
             ),
           ),
-
           SizedBox(height: 20),
-
           Text(
-            'Loading your analysis history...',
+            l10n.loadingAnalysisHistory,
             style: TextStyle(
               color: Color(0xFF9BAEC2),
               fontSize: 15,
@@ -766,7 +729,6 @@ class _LoadingState extends StatelessWidget {
   }
 }
 
-
 // ==========================================================
 // EMPTY STATE
 // ==========================================================
@@ -776,6 +738,8 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -788,12 +752,10 @@ class _EmptyState extends StatelessWidget {
               width: 90,
               height: 90,
               decoration: BoxDecoration(
-                color: const Color(0xFF67E8C8)
-                    .withValues(alpha: 0.10),
+                color: const Color(0xFF67E8C8).withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
-                  color: const Color(0xFF67E8C8)
-                      .withValues(alpha: 0.20),
+                  color: const Color(0xFF67E8C8).withValues(alpha: 0.20),
                 ),
               ),
               child: const Icon(
@@ -802,22 +764,18 @@ class _EmptyState extends StatelessWidget {
                 color: Color(0xFF67E8C8),
               ),
             ),
-
             const SizedBox(height: 24),
-
-            const Text(
-              'No analyses yet',
+            Text(
+              l10n.noAnalysesYet,
               style: TextStyle(
                 color: Color(0xFFF1F5F9),
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
               ),
             ),
-
             const SizedBox(height: 10),
-
-            const Text(
-              'Your analyzed messages will appear here so you can review their safety results anytime.',
+            Text(
+              l10n.analyzedMessagesAppearHere,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFF9BAEC2),
@@ -831,7 +789,6 @@ class _EmptyState extends StatelessWidget {
     );
   }
 }
-
 
 // ==========================================================
 // ERROR STATE
@@ -848,6 +805,8 @@ class _ErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -858,12 +817,10 @@ class _ErrorState extends StatelessWidget {
               width: 82,
               height: 82,
               decoration: BoxDecoration(
-                color: const Color(0xFFFF647C)
-                    .withValues(alpha: 0.10),
+                color: const Color(0xFFFF647C).withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(26),
                 border: Border.all(
-                  color: const Color(0xFFFF647C)
-                      .withValues(alpha: 0.15),
+                  color: const Color(0xFFFF647C).withValues(alpha: 0.15),
                 ),
               ),
               child: const Icon(
@@ -872,20 +829,16 @@ class _ErrorState extends StatelessWidget {
                 color: Color(0xFFFF647C),
               ),
             ),
-
             const SizedBox(height: 24),
-
-            const Text(
-              'Unable to load history',
+            Text(
+              l10n.unableToLoadHistory,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFFF1F5F9),
               ),
             ),
-
             const SizedBox(height: 12),
-
             ConstrainedBox(
               constraints: const BoxConstraints(
                 maxWidth: 500,
@@ -900,9 +853,7 @@ class _ErrorState extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 26),
-
             ElevatedButton.icon(
               onPressed: () {
                 onRetry();
@@ -931,8 +882,8 @@ class _ErrorState extends StatelessWidget {
               icon: const Icon(
                 Icons.refresh_rounded,
               ),
-              label: const Text(
-                'Try Again',
+              label: Text(
+                l10n.tryAgain,
               ),
             ),
           ],
@@ -941,7 +892,6 @@ class _ErrorState extends StatelessWidget {
     );
   }
 }
-
 
 // ==========================================================
 // BACKGROUND DECORATION
@@ -962,12 +912,10 @@ class _HistoryBackground extends StatelessWidget {
             height: 420,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFF0D6670)
-                  .withValues(alpha: 0.10),
+              color: const Color(0xFF0D6670).withValues(alpha: 0.10),
             ),
           ),
         ),
-
         Positioned(
           right: 40,
           top: 40,
@@ -983,7 +931,6 @@ class _HistoryBackground extends StatelessWidget {
     );
   }
 }
-
 
 class _BackgroundPatternPainter extends CustomPainter {
   @override

@@ -6,13 +6,14 @@ import 'core/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'models/message_analysis.dart';
 import 'providers/auth_provider.dart';
-import 'screens/auth/login_screen.dart';
+import 'providers/language_provider.dart';
+import 'l10n/app_localizations.dart';
+import 'screens/auth/register_screen.dart';
 import 'screens/history/history_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'widgets/app_background.dart';
 import 'core/services/ocr_service.dart';
-
 
 // ============================================================
 // APP START
@@ -34,8 +35,15 @@ Future<void> main() async {
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => AuthProvider()..initialize(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider()..initialize(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => LanguageProvider()..initialize(),
+        ),
+      ],
       child: const MessageShieldApp(),
     ),
   );
@@ -50,10 +58,15 @@ class MessageShieldApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final language = context.watch<LanguageProvider>();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MessageShield',
       theme: AppTheme.darkTheme,
+      locale: language.locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const AuthGate(),
     );
   }
@@ -76,19 +89,13 @@ class AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
 
-
-
     if (!auth.isInitialized) {
       return const AppLoadingScreen();
     }
 
-
-
     if (!auth.isAuthenticated) {
-      return const LoginScreen();
+      return const RegisterScreen();
     }
-
-
 
     return const AppShell();
   }
@@ -139,10 +146,6 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   AppSection _selected = AppSection.home;
 
-  MessageAnalysis? _latestAnalysis;
-
-
-
   String? _scannedText;
 
   // ==========================================================
@@ -152,9 +155,7 @@ class _AppShellState extends State<AppShell> {
   void _handleAnalysisComplete(
     MessageAnalysis analysis,
   ) {
-    setState(() {
-      _latestAnalysis = analysis;
-    });
+    setState(() {});
   }
 
   // ==========================================================
@@ -181,8 +182,7 @@ class _AppShellState extends State<AppShell> {
     if (width < 700) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) =>
-              const SafetyGuidelinesScreen(),
+          builder: (_) => const SafetyGuidelinesScreen(),
         ),
       );
     } else {
@@ -195,164 +195,185 @@ class _AppShellState extends State<AppShell> {
   // ==========================================================
 
   Future<void> _openScan() async {
-  final source = await showModalBottomSheet<String>(
-    context: context,
-    backgroundColor: Colors.transparent,
-    builder: (sheetContext) {
-      return SafeArea(
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(
-            20,
-            20,
-            20,
-            24,
-          ),
-          decoration: const BoxDecoration(
-            color: Color(0xFF0D2028),
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(24),
+    final l10n = AppLocalizations.of(context)!;
+    final source = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(
+              20,
+              20,
+              20,
+              24,
+            ),
+            decoration: const BoxDecoration(
+              color: Color(0xFF0D2028),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: AppColors.teal.withValues(
+                      alpha: 0.12,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.document_scanner_outlined,
+                    color: AppColors.tealSoft,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  l10n.scanMessage,
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.captureMessageDescription,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 14,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Camera
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(
+                        sheetContext,
+                        'camera',
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.camera_alt_outlined,
+                    ),
+                    label: Text(
+                      l10n.scanWithCamera,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // Gallery / Screenshot
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(
+                        sheetContext,
+                        'gallery',
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.photo_library_outlined,
+                    ),
+                    label: Text(
+                      l10n.chooseImage,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: AppColors.teal.withValues(
-                    alpha: 0.12,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(
-                  Icons.document_scanner_outlined,
-                  color: AppColors.tealSoft,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(height: 14),
-              const Text(
-                'Scan message',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Capture a message with your camera '
-                'or select a screenshot/image.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 14,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Camera
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(
-                      sheetContext,
-                      'camera',
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.camera_alt_outlined,
-                  ),
-                  label: const Text(
-                    'SCAN WITH CAMERA',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // Gallery / Screenshot
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(
-                      sheetContext,
-                      'gallery',
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.photo_library_outlined,
-                  ),
-                  label: const Text(
-                    'CHOOSE IMAGE',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-
-  if (!mounted || source == null) {
-    return;
-  }
-
-  String? extractedText;
-
-  try {
-    // ==========================================
-    // Show OCR progress
-    // ==========================================
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return const Center(
-          child: CircularProgressIndicator(),
         );
       },
     );
 
-    // ==========================================
-    // OCR
-    // ==========================================
-
-    if (source == 'camera') {
-      extractedText =
-          await OcrService.scanFromCamera();
-    } else if (source == 'gallery') {
-      extractedText =
-          await OcrService.scanFromGallery();
+    if (!mounted || source == null) {
+      return;
     }
-  } catch (error, stackTrace) {
-    debugPrint(
-      '========================================',
-    );
-    debugPrint('OCR SCAN ERROR:');
-    debugPrint(error.toString());
-    debugPrint('OCR STACK TRACE:');
-    debugPrint(stackTrace.toString());
-    debugPrint(
-      '========================================',
-    );
 
-    extractedText = null;
+    String? extractedText;
 
+    try {
+      // ==========================================
+      // Show OCR progress
+      // ==========================================
+
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
+      // ==========================================
+      // OCR
+      // ==========================================
+
+      if (source == 'camera') {
+        extractedText = await OcrService.scanFromCamera();
+      } else if (source == 'gallery') {
+        extractedText = await OcrService.scanFromGallery();
+      }
+    } catch (error, stackTrace) {
+      debugPrint(
+        '========================================',
+      );
+      debugPrint('OCR SCAN ERROR:');
+      debugPrint(error.toString());
+      debugPrint('OCR STACK TRACE:');
+      debugPrint(stackTrace.toString());
+      debugPrint(
+        '========================================',
+      );
+
+      extractedText = null;
+
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '${l10n.unableToScanMessage} '
+            '${error.toString().replaceFirst('Exception: ', '')}',
+          ),
+          backgroundColor: AppColors.danger,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+
+      return;
+    }
+
+    // Close OCR progress dialog.
     if (mounted) {
       Navigator.of(context).pop();
     }
@@ -361,56 +382,32 @@ class _AppShellState extends State<AppShell> {
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Unable to scan the message. '
-          '${error.toString().replaceFirst('Exception: ', '')}',
+    // ==========================================
+    // No text detected
+    // ==========================================
+
+    if (extractedText == null || extractedText.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n.noReadableTextFound,
+          ),
+          behavior: SnackBarBehavior.floating,
         ),
-        backgroundColor: AppColors.danger,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+      );
 
-    return;
+      return;
+    }
+
+    // ==========================================
+    // Send extracted text to HomeScreen
+    // ==========================================
+
+    setState(() {
+      _scannedText = extractedText!.trim();
+      _selected = AppSection.home;
+    });
   }
-
-  // Close OCR progress dialog.
-  if (mounted) {
-    Navigator.of(context).pop();
-  }
-
-  if (!mounted) {
-    return;
-  }
-
-  // ==========================================
-  // No text detected
-  // ==========================================
-
-  if (extractedText == null ||
-      extractedText!.trim().isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'No readable text was found in the image.',
-        ),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-
-    return;
-  }
-
-  // ==========================================
-  // Send extracted text to HomeScreen
-  // ==========================================
-
-  setState(() {
-    _scannedText = extractedText!.trim();
-    _selected = AppSection.home;
-  });
-}
 
   // ==========================================================
   // CURRENT PAGE
@@ -422,10 +419,8 @@ class _AppShellState extends State<AppShell> {
     switch (_selected) {
       case AppSection.home:
         return HomeScreen(
-          onAnalysisComplete:
-              _handleAnalysisComplete,
-          onOpenSafety: () =>
-              _openSafety(context),
+          onAnalysisComplete: _handleAnalysisComplete,
+          onOpenSafety: () => _openSafety(context),
           scannedText: _scannedText,
           onScannedTextConsumed: () {
             setState(() {
@@ -455,23 +450,19 @@ class _AppShellState extends State<AppShell> {
   Widget build(
     BuildContext context,
   ) {
-    final width =
-        MediaQuery.sizeOf(context).width;
+    final width = MediaQuery.sizeOf(context).width;
 
     final isMobile = width < 700;
 
-    final isTablet =
-        width >= 700 && width < 1100;
+    final isTablet = width >= 700 && width < 1100;
 
     return AppBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-
         body: isMobile
             ? SafeArea(
                 bottom: false,
-                child:
-                    _buildCurrentPage(context),
+                child: _buildCurrentPage(context),
               )
             : SafeArea(
                 child: Row(
@@ -479,39 +470,30 @@ class _AppShellState extends State<AppShell> {
                     if (isTablet)
                       _SideNavigation(
                         selected: _selected,
-                        onSelected:
-                            _selectSection,
+                        onSelected: _selectSection,
                         onScan: _openScan,
                         extended: false,
                       )
                     else
                       _SideNavigation(
                         selected: _selected,
-                        onSelected:
-                            _selectSection,
+                        onSelected: _selectSection,
                         onScan: _openScan,
                         extended: true,
                       ),
-
                     Container(
                       width: 1,
-                      color:
-                          AppColors.teal.withValues(
+                      color: AppColors.teal.withValues(
                         alpha: 0.12,
                       ),
                     ),
-
                     Expanded(
-                      child:
-                          _buildCurrentPage(context),
+                      child: _buildCurrentPage(context),
                     ),
                   ],
                 ),
               ),
-
-        bottomNavigationBar: isMobile
-            ? _buildMobileBottomNavigation()
-            : null,
+        bottomNavigationBar: isMobile ? _buildMobileBottomNavigation() : null,
       ),
     );
   }
@@ -521,6 +503,8 @@ class _AppShellState extends State<AppShell> {
   // ==========================================================
 
   Widget _buildMobileBottomNavigation() {
+    final l10n = AppLocalizations.of(context)!;
+
     final selectedIndex = switch (_selected) {
       AppSection.home => 0,
       AppSection.history => 2,
@@ -532,7 +516,6 @@ class _AppShellState extends State<AppShell> {
       backgroundColor: AppColors.background,
       height: 72,
       selectedIndex: selectedIndex,
-
       onDestinationSelected: (index) {
         switch (index) {
           case 0:
@@ -558,37 +541,26 @@ class _AppShellState extends State<AppShell> {
             break;
         }
       },
-
-      destinations: const [
+      destinations: [
         NavigationDestination(
           icon: Icon(Icons.home_outlined),
-          selectedIcon:
-              Icon(Icons.home_rounded),
-          label: 'Home',
+          selectedIcon: Icon(Icons.home_rounded),
+          label: l10n.home,
         ),
-
         NavigationDestination(
-          icon:
-              Icon(Icons.document_scanner_outlined),
-          selectedIcon:
-              Icon(Icons.document_scanner_rounded),
-          label: 'Scan',
+          icon: Icon(Icons.document_scanner_outlined),
+          selectedIcon: Icon(Icons.document_scanner_rounded),
+          label: l10n.scan,
         ),
-
         NavigationDestination(
-          icon:
-              Icon(Icons.history_outlined),
-          selectedIcon:
-              Icon(Icons.history_rounded),
-          label: 'History',
+          icon: Icon(Icons.history_outlined),
+          selectedIcon: Icon(Icons.history_rounded),
+          label: l10n.history,
         ),
-
         NavigationDestination(
-          icon:
-              Icon(Icons.person_outline_rounded),
-          selectedIcon:
-              Icon(Icons.person_rounded),
-          label: 'Profile',
+          icon: Icon(Icons.person_outline_rounded),
+          selectedIcon: Icon(Icons.person_rounded),
+          label: l10n.profile,
         ),
       ],
     );
@@ -614,44 +586,38 @@ class _SideNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return NavigationRail(
       backgroundColor: AppColors.backgroundSoft,
-
       extended: extended,
       minWidth: 76,
       minExtendedWidth: 220,
-
       indicatorColor: AppColors.teal.withValues(
         alpha: 0.18,
       ),
-
       selectedIconTheme: const IconThemeData(
         color: AppColors.teal,
       ),
-
       unselectedIconTheme: const IconThemeData(
         color: AppColors.textSecondary,
       ),
-
       selectedLabelTextStyle: const TextStyle(
         color: AppColors.teal,
         fontSize: 14,
         fontWeight: FontWeight.w700,
       ),
-
       unselectedLabelTextStyle: const TextStyle(
         color: AppColors.textSecondary,
         fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
-
       selectedIndex: switch (selected) {
         AppSection.home => 0,
         AppSection.history => 2,
         AppSection.safety => 0,
         AppSection.profile => 3,
       },
-
       onDestinationSelected: (index) {
         switch (index) {
           case 0:
@@ -671,36 +637,28 @@ class _SideNavigation extends StatelessWidget {
             break;
         }
       },
-
-      destinations: const [
+      destinations: [
         NavigationRailDestination(
           icon: Icon(Icons.home_outlined),
           selectedIcon: Icon(Icons.home_rounded),
-          label: Text('Home'),
+          label: Text(l10n.home),
         ),
-
         NavigationRailDestination(
           icon: Icon(Icons.document_scanner_outlined),
-          selectedIcon:
-              Icon(Icons.document_scanner_rounded),
-          label: Text('Scan'),
+          selectedIcon: Icon(Icons.document_scanner_rounded),
+          label: Text(l10n.scan),
         ),
-
         NavigationRailDestination(
           icon: Icon(Icons.history_outlined),
           selectedIcon: Icon(Icons.history_rounded),
-          label: Text('History'),
+          label: Text(l10n.history),
         ),
-
         NavigationRailDestination(
           icon: Icon(Icons.person_outline_rounded),
           selectedIcon: Icon(Icons.person_rounded),
-          label: Text('Profile'),
+          label: Text(l10n.profile),
         ),
       ],
     );
   }
 }
-
-
-

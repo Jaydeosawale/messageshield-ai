@@ -43,7 +43,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // ==========================================
 
   Future<void> _register() async {
-    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -84,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (_) {
       if (!mounted) return;
 
-      final rawError = authProvider.error ?? l10n.registrationFailed;
+      final rawError = authProvider.error ?? 'Registration failed';
 
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
@@ -99,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  _friendlyRegisterError(rawError, l10n),
+                  _friendlyRegisterError(rawError),
                 ),
               ),
             ],
@@ -200,7 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                             final error =
                                 dialogBuildContext.read<AuthProvider>().error ??
-                                    l10n.unableToResendVerificationEmail;
+                                    'Unable to resend verification email.';
 
                             ScaffoldMessenger.of(
                               dialogContext,
@@ -268,7 +267,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                           final error =
                               dialogBuildContext.read<AuthProvider>().error ??
-                                  l10n.pleaseVerifyEmailFirst;
+                                  'Please verify your email first.';
 
                           ScaffoldMessenger.of(
                             dialogContext,
@@ -293,8 +292,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: Colors.white,
                           ),
                         )
-                      : Text(
-                          l10n.iveVerifiedMyEmail,
+                      : const Text(
+                          "I've verified my email",
                         ),
                 ),
               ],
@@ -313,9 +312,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text(
-          l10n.emailVerifiedSuccessfully,
+          'Email verified successfully.',
         ),
         backgroundColor: AppColors.success,
         behavior: SnackBarBehavior.floating,
@@ -329,7 +328,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   String _friendlyRegisterError(
     Object error,
-    AppLocalizations l10n,
   ) {
     final cleanedError =
         error.toString().replaceFirst('Exception: ', '').trim();
@@ -350,7 +348,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         message.contains('google account identity') ||
         message.contains('message shield account') ||
         message.contains('messageshield account')) {
-      return l10n.accountWithEmailAlreadyExists;
+      return 'An account with this email already exists. '
+          'Please sign in instead.';
     }
 
     // ==========================================
@@ -360,7 +359,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (message.contains('network') ||
         message.contains('socket') ||
         message.contains('connection')) {
-      return l10n.unableToConnectServer;
+      return 'Unable to connect to the server. '
+          'Please check your internet connection.';
     }
 
     // ==========================================
@@ -368,14 +368,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // ==========================================
 
     if (message.contains('timeout')) {
-      return l10n.requestTimedOut;
+      return 'The request timed out. Please try again.';
     }
 
     // ==========================================
     // Default error
     // ==========================================
 
-    return cleanedError.isNotEmpty ? cleanedError : l10n.unableToCreateAccount;
+    return cleanedError.isNotEmpty
+        ? cleanedError
+        : 'Unable to create your account. Please try again.';
   }
 
   // ==========================================
@@ -460,7 +462,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       final message = _friendlyGoogleError(
         actualError,
-        l10n,
       );
 
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -493,14 +494,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   String _friendlyGoogleError(
     String error,
-    AppLocalizations l10n,
   ) {
     final cleanedError = error.replaceFirst('Exception: ', '').trim();
 
     final message = cleanedError.toLowerCase();
 
     if (message.contains('409') || message.contains('conflict')) {
-      return l10n.accountWithEmailAlreadyExists;
+      return 'An account with this email already exists. '
+          'Please sign in instead.';
     }
 
     // Check this FIRST because the backend message
@@ -509,7 +510,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         message.contains('provider conflict') ||
         message.contains('using email and password') ||
         message.contains('email and password sign-in')) {
-      return l10n.emailPasswordAccountExists;
+      return 'An account with this email already exists '
+          'using email and password. '
+          'Please sign in using your email and password.';
     }
 
     // ------------------------------------------
@@ -523,7 +526,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         message.contains('email already') ||
         message.contains('email exists') ||
         message.contains('please sign in instead')) {
-      return l10n.accountWithEmailAlreadyExists;
+      return 'An account with this email already exists. '
+          'Please sign in instead.';
     }
 
     // ------------------------------------------
@@ -533,7 +537,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (message.contains('cancelled') ||
         message.contains('canceled') ||
         message.contains('popup-closed-by-user')) {
-      return l10n.googleSignInCancelled;
+      return 'Google sign-in was cancelled.';
     }
 
     // ------------------------------------------
@@ -541,7 +545,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // ------------------------------------------
 
     if (message.contains('popup-blocked')) {
-      return l10n.googlePopupBlocked;
+      return 'Google sign-in popup was blocked. '
+          'Please allow popups and try again.';
     }
 
     // ------------------------------------------
@@ -552,7 +557,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         message.contains('socket') ||
         message.contains('connection') ||
         message.contains('network-request-failed')) {
-      return l10n.unableToConnectServer;
+      return 'Unable to connect. '
+          'Please check your internet connection.';
     }
 
     // ------------------------------------------
@@ -562,7 +568,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (message.contains('invalid firebase') ||
         message.contains('authentication token') ||
         message.contains('firebase authentication')) {
-      return l10n.firebaseAuthVerificationFailed;
+      return 'Google authentication could not be verified.';
     }
 
     // ------------------------------------------
@@ -570,7 +576,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // ------------------------------------------
 
     if (message.contains('not supported')) {
-      return l10n.unsupportedPlatform;
+      return 'Google sign-in is not supported '
+          'on this platform.';
     }
 
     // ------------------------------------------
@@ -579,7 +586,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return cleanedError.isNotEmpty
         ? cleanedError
-        : l10n.unableToContinueWithGoogle;
+        : 'Unable to continue with Google. '
+            'Please try again.';
   }
 
   @override
@@ -720,8 +728,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
 
                         Text(
-                          l10n.createAccountDescription,
-                          textAlign: TextAlign.center,
+                          l10n.createAccountDescription,                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColors.textSecondary,
                             fontSize: 14,
@@ -747,8 +754,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               size: 20,
                             ),
                             label: Text(
-                              l10n.continueWithGoogle,
-                              style: TextStyle(
+                              l10n.continueWithGoogle,                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -787,8 +793,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 horizontal: 14,
                               ),
                               child: Text(
-                                l10n.or,
-                                style: TextStyle(
+                                l10n.or,                                style: TextStyle(
                                   color: AppColors.textSecondary.withValues(
                                     alpha: 0.8,
                                   ),
@@ -867,8 +872,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ).copyWith(
                             suffixIcon: IconButton(
                               tooltip: _obscurePassword
-                                  ? l10n.showPassword
-                                  : l10n.hidePassword,
+                                  ? 'Show password'
+                                  : 'Hide password',
                               icon: Icon(
                                 _obscurePassword
                                     ? Icons.visibility_outlined
@@ -912,8 +917,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ).copyWith(
                             suffixIcon: IconButton(
                               tooltip: _obscureConfirmPassword
-                                  ? l10n.showPassword
-                                  : l10n.hidePassword,
+                                  ? 'Show password'
+                                  : 'Hide password',
                               icon: Icon(
                                 _obscureConfirmPassword
                                     ? Icons.visibility_outlined
@@ -982,8 +987,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                   )
                                 : Text(
-                                    l10n.createSecureAccount,
-                                    style: TextStyle(
+                                    l10n.createSecureAccount,                                    style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
                                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 
 import '../../core/services/analysis_service.dart';
 import '../../models/analysis_history_response.dart';
@@ -83,13 +84,15 @@ class _AnalysisHistoryScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Analysis History'),
+        title: Text(l10n.analysisHistory),
       ),
       body: Column(
         children: [
-          _buildRiskFilters(),
+          _buildRiskFilters(context),
 
           Expanded(
             child: FutureBuilder<AnalysisHistoryResponse>(
@@ -103,14 +106,14 @@ class _AnalysisHistoryScreenState
                 }
 
                 if (snapshot.hasError) {
-                  return _buildError();
+                  return _buildError(context);
                 }
 
                 final history = snapshot.data;
 
                 if (history == null ||
                     history.items.isEmpty) {
-                  return _buildEmpty();
+                  return _buildEmpty(context);
                 }
 
                 return RefreshIndicator(
@@ -124,6 +127,7 @@ class _AnalysisHistoryScreenState
 
                       return _AnalysisHistoryCard(
                         analysis: analysis,
+                        l10n: l10n,
                         riskColor:
                             _riskColor(analysis.risk),
                         riskIcon:
@@ -148,14 +152,15 @@ class _AnalysisHistoryScreenState
     );
   }
 
-  Widget _buildRiskFilters() {
+  Widget _buildRiskFilters(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Wrap(
         spacing: 8,
         children: [
           ChoiceChip(
-            label: const Text('All'),
+            label: Text(l10n.all),
             selected: _selectedRisk == null,
             onSelected: (_) {
               setState(() {
@@ -165,7 +170,7 @@ class _AnalysisHistoryScreenState
             },
           ),
           ChoiceChip(
-            label: const Text('High'),
+            label: Text(l10n.high),
             selected: _selectedRisk == 'HIGH',
             onSelected: (_) {
               setState(() {
@@ -175,7 +180,7 @@ class _AnalysisHistoryScreenState
             },
           ),
           ChoiceChip(
-            label: const Text('Medium'),
+            label: Text(l10n.medium),
             selected: _selectedRisk == 'MEDIUM',
             onSelected: (_) {
               setState(() {
@@ -185,7 +190,7 @@ class _AnalysisHistoryScreenState
             },
           ),
           ChoiceChip(
-            label: const Text('Low'),
+            label: Text(l10n.low),
             selected: _selectedRisk == 'LOW',
             onSelected: (_) {
               setState(() {
@@ -199,8 +204,9 @@ class _AnalysisHistoryScreenState
     );
   }
 
-  Widget _buildEmpty() {
-    return const Center(
+  Widget _buildEmpty(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -210,14 +216,15 @@ class _AnalysisHistoryScreenState
           ),
           SizedBox(height: 16),
           Text(
-            'No analyses found',
+            l10n.noAnalysesFound,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildError() {
+  Widget _buildError(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -229,8 +236,8 @@ class _AnalysisHistoryScreenState
               size: 64,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Unable to load analysis history',
+            Text(
+              l10n.unableToLoadAnalysisHistory,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -240,7 +247,7 @@ class _AnalysisHistoryScreenState
                   _loadHistory();
                 });
               },
-              child: const Text('Try Again'),
+              child: Text(l10n.tryAgain),
             ),
           ],
         ),
@@ -255,6 +262,7 @@ class _AnalysisHistoryCard extends StatelessWidget {
   final IconData riskIcon;
   final String category;
   final String date;
+  final AppLocalizations l10n;
 
   const _AnalysisHistoryCard({
     required this.analysis,
@@ -262,7 +270,21 @@ class _AnalysisHistoryCard extends StatelessWidget {
     required this.riskIcon,
     required this.category,
     required this.date,
+    required this.l10n,
   });
+
+  String _localizedRisk(String risk) {
+    switch (risk.toUpperCase()) {
+      case 'HIGH':
+        return l10n.highRisk;
+      case 'MEDIUM':
+        return l10n.mediumRisk;
+      case 'LOW':
+        return l10n.lowRisk;
+      default:
+        return risk;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -289,7 +311,7 @@ class _AnalysisHistoryCard extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    '${analysis.risk} RISK',
+                    _localizedRisk(analysis.risk),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
@@ -332,12 +354,12 @@ class _AnalysisHistoryCard extends StatelessWidget {
                 ),
                 Chip(
                   label: Text(
-                    '$confidencePercent% confidence',
+                    '$confidencePercent% ${l10n.confidence}',
                   ),
                 ),
                 Chip(
                   label: Text(
-                    'Score ${analysis.riskScore}',
+                    '${l10n.score} ${analysis.riskScore}',
                   ),
                 ),
               ],

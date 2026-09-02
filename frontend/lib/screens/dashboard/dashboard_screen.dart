@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:messageshield/l10n/app_localizations.dart';
 
 import '../../core/services/analysis_service.dart';
 import '../../models/message_analysis.dart';
@@ -54,14 +55,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ) {
     return analyses.where(
       (analysis) {
-        return analysis.risk.toUpperCase() ==
-            risk.toUpperCase();
+        return analysis.risk.toUpperCase() == risk.toUpperCase();
       },
     ).length;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -79,10 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(width: 10),
             RichText(
               text: TextSpan(
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                 children: [
@@ -107,7 +105,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ),
-
       body: FutureBuilder<List<MessageAnalysis>>(
         future: _dashboardFuture,
         builder: (context, snapshot) {
@@ -115,8 +112,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // Loading
           // ======================================================
 
-          if (snapshot.connectionState ==
-              ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -153,21 +149,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           return RefreshIndicator(
             onRefresh: _refresh,
             color: colorScheme.primary,
-            backgroundColor: Theme.of(context)
-                .colorScheme
-                .surface,
-
+            backgroundColor: Theme.of(context).colorScheme.surface,
             child: ListView(
-              physics:
-                  const AlwaysScrollableScrollPhysics(),
-
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(
                 16,
                 8,
                 16,
                 28,
               ),
-
               children: [
                 // =================================================
                 // Hero / Security Overview
@@ -186,9 +176,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                 _SectionHeader(
                   icon: Icons.dashboard_outlined,
-                  title: 'Security Overview',
-                  subtitle:
-                      'Your message security activity',
+                  title: l10n.securityOverview,
+                  subtitle: l10n.yourMessageSecurityActivity,
                 ),
 
                 const SizedBox(height: 14),
@@ -218,7 +207,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               Expanded(
                                 child: _RiskStatCard(
-                                  label: 'High',
+                                  label: l10n.high,
                                   value: high.toString(),
                                   icon: Icons.shield_outlined,
                                   color: const Color(
@@ -229,7 +218,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: _RiskStatCard(
-                                  label: 'Risky',
+                                  label: l10n.risky,
                                   value: medium.toString(),
                                   icon: Icons.warning_amber_rounded,
                                   color: const Color(
@@ -239,20 +228,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ],
                           ),
-
                           const SizedBox(height: 12),
-
                           SizedBox(
                             width: double.infinity,
                             child: _RiskStatCard(
-                              label: 'Safe Messages',
+                              label: l10n.safeMessages,
                               value: low.toString(),
-                              icon:
-                                  Icons.verified_user_outlined,
-                              color:
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .secondary,
+                              icon: Icons.verified_user_outlined,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
                         ],
@@ -263,7 +246,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         Expanded(
                           child: _RiskStatCard(
-                            label: 'High Risk',
+                            label: l10n.highRisk,
                             value: high.toString(),
                             icon: Icons.shield_outlined,
                             color: const Color(
@@ -271,33 +254,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
                         ),
-
                         const SizedBox(width: 12),
-
                         Expanded(
                           child: _RiskStatCard(
-                            label: 'Risky',
+                            label: l10n.risky,
                             value: medium.toString(),
-                            icon:
-                                Icons.warning_amber_rounded,
+                            icon: Icons.warning_amber_rounded,
                             color: const Color(
                               0xFFFFB84D,
                             ),
                           ),
                         ),
-
                         const SizedBox(width: 12),
-
                         Expanded(
                           child: _RiskStatCard(
-                            label: 'Safe',
+                            label: l10n.safe,
                             value: low.toString(),
-                            icon:
-                                Icons.verified_user_outlined,
-                            color:
-                                Theme.of(context)
-                                    .colorScheme
-                                    .secondary,
+                            icon: Icons.verified_user_outlined,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                       ],
@@ -316,9 +290,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Expanded(
                       child: _SectionHeader(
                         icon: Icons.history_rounded,
-                        title: 'Recent Analyses',
-                        subtitle:
-                            'Latest message security checks',
+                        title: l10n.recentAnalyses,
+                        subtitle: l10n.latestMessageSecurityChecks,
                       ),
                     ),
                   ],
@@ -369,51 +342,36 @@ class _DashboardError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
-
         child: Column(
           mainAxisSize: MainAxisSize.min,
-
           children: [
             Container(
               width: 76,
               height: 76,
-
               decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .error
-                    .withValues(alpha: 0.12),
-
-                borderRadius:
-                    BorderRadius.circular(24),
+                color:
+                    Theme.of(context).colorScheme.error.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(24),
               ),
-
               child: Icon(
                 Icons.cloud_off_rounded,
                 size: 38,
-                color: Theme.of(context)
-                    .colorScheme
-                    .error,
+                color: Theme.of(context).colorScheme.error,
               ),
             ),
-
             const SizedBox(height: 20),
-
             Text(
-              'Could not load dashboard',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(
+              l10n.couldNotLoadDashboard,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
-
             const SizedBox(height: 8),
-
             Text(
               error.replaceFirst(
                 'Exception: ',
@@ -422,23 +380,18 @@ class _DashboardError extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
-
             const SizedBox(height: 24),
-
             SizedBox(
               width: 180,
-
               child: ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(
                   Icons.refresh_rounded,
                 ),
-                label: const Text(
-                  'Try Again',
+                label: Text(
+                  l10n.tryAgain,
                 ),
               ),
             ),
@@ -464,16 +417,14 @@ class _DashboardHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     final isSecure = highRisk == 0;
 
     return Container(
       width: double.infinity,
-
       padding: const EdgeInsets.all(22),
-
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -485,86 +436,61 @@ class _DashboardHero extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-
-        borderRadius:
-            BorderRadius.circular(24),
-
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: colorScheme.primary.withValues(
             alpha: 0.28,
           ),
         ),
       ),
-
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               const AppLogo(
                 size: 58,
               ),
-
               const SizedBox(width: 14),
-
               Expanded(
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
-
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Message Security',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(
-                            fontWeight:
-                                FontWeight.w700,
+                      l10n.messageSecurity,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
                           ),
                     ),
-
                     const SizedBox(height: 4),
-
                     Text(
                       isSecure
-                          ? 'Your recent activity looks secure'
-                          : 'Some messages need attention',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium,
+                          ? l10n.recentActivitySecure
+                          : l10n.messagesNeedAttention,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
                 ),
               ),
             ],
           ),
-
           const SizedBox(height: 22),
-
           Container(
             padding: const EdgeInsets.all(16),
-
             decoration: BoxDecoration(
               color: Colors.black.withValues(
                 alpha: 0.12,
               ),
-
-              borderRadius:
-                  BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(18),
             ),
-
             child: Row(
               children: [
                 Expanded(
                   child: _HeroMetric(
                     value: totalAnalyses.toString(),
-                    label: 'Messages checked',
+                    label: l10n.messagesChecked,
                   ),
                 ),
-
                 Container(
                   width: 1,
                   height: 38,
@@ -572,11 +498,10 @@ class _DashboardHero extends StatelessWidget {
                     alpha: 0.12,
                   ),
                 ),
-
                 Expanded(
                   child: _HeroMetric(
                     value: highRisk.toString(),
-                    label: 'Need attention',
+                    label: l10n.needAttention,
                     valueColor: highRisk > 0
                         ? const Color(0xFFFF6B6B)
                         : colorScheme.secondary,
@@ -612,23 +537,16 @@ class _HeroMetric extends StatelessWidget {
       children: [
         Text(
           value,
-          style: Theme.of(context)
-              .textTheme
-              .headlineMedium
-              ?.copyWith(
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: valueColor,
                 fontWeight: FontWeight.bold,
               ),
         ),
-
         const SizedBox(height: 3),
-
         Text(
           label,
           textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );
@@ -653,59 +571,36 @@ class _SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: 42,
           height: 42,
-
           decoration: BoxDecoration(
-            color: Theme.of(context)
-                .colorScheme
-                .primary
-                .withValues(alpha: 0.12),
-
-            borderRadius:
-                BorderRadius.circular(14),
+            color:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(14),
           ),
-
           child: Icon(
             icon,
-            color:
-                Theme.of(context)
-                    .colorScheme
-                    .primary,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
-
         const SizedBox(width: 12),
-
         Expanded(
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
-
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(
-                      fontWeight:
-                          FontWeight.w700,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
                     ),
               ),
-
               const SizedBox(height: 3),
-
               Text(
                 subtitle,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
@@ -728,86 +623,59 @@ class _TotalAnalysesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .surface,
-
-        borderRadius:
-            BorderRadius.circular(20),
-
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: colorScheme.primary.withValues(
             alpha: 0.18,
           ),
         ),
       ),
-
       child: Row(
         children: [
           Container(
             width: 54,
             height: 54,
-
             decoration: BoxDecoration(
               color: colorScheme.primary.withValues(
                 alpha: 0.12,
               ),
-
-              borderRadius:
-                  BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(18),
             ),
-
             child: Icon(
               Icons.analytics_outlined,
               color: colorScheme.primary,
               size: 28,
             ),
           ),
-
           const SizedBox(width: 16),
-
           Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Total Analyses',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(
-                        fontWeight:
-                            FontWeight.w600,
+                  l10n.totalAnalyses,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
                       ),
                 ),
-
                 const SizedBox(height: 4),
-
                 Text(
-                  'Messages checked for threats',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall,
+                  l10n.messagesCheckedForThreats,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),
           ),
-
           Text(
             value,
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium
-                ?.copyWith(
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),
@@ -841,71 +709,48 @@ class _RiskStatCard extends StatelessWidget {
       constraints: const BoxConstraints(
         minHeight: 142,
       ),
-
       padding: const EdgeInsets.all(16),
-
       decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .surface,
-
-        borderRadius:
-            BorderRadius.circular(20),
-
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: color.withValues(
             alpha: 0.25,
           ),
         ),
       ),
-
       child: Column(
-        mainAxisAlignment:
-            MainAxisAlignment.center,
-
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 42,
             height: 42,
-
             decoration: BoxDecoration(
               color: color.withValues(
                 alpha: 0.12,
               ),
-
-              borderRadius:
-                  BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14),
             ),
-
             child: Icon(
               icon,
               color: color,
             ),
           ),
-
           const SizedBox(height: 10),
-
           Text(
             value,
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   color: color,
                   fontWeight: FontWeight.bold,
                 ),
           ),
-
           const SizedBox(height: 4),
-
           Text(
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),
@@ -922,67 +767,52 @@ class _EmptyDashboardState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme =
-        Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
         vertical: 40,
       ),
-
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius:
-            BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(22),
         border: Border.all(
           color: colorScheme.primary.withValues(
             alpha: 0.18,
           ),
         ),
       ),
-
       child: Column(
         children: [
           Container(
             width: 68,
             height: 68,
-
             decoration: BoxDecoration(
               color: colorScheme.primary.withValues(
                 alpha: 0.12,
               ),
-
               shape: BoxShape.circle,
             ),
-
             child: Icon(
               Icons.shield_outlined,
               size: 34,
               color: colorScheme.primary,
             ),
           ),
-
           const SizedBox(height: 18),
-
           Text(
-            'No analyses yet',
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(
+            l10n.noAnalysesYet,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
           ),
-
           const SizedBox(height: 8),
-
           Text(
-            'Analyze a message to start building your security activity.',
+            l10n.analyzeMessageToStart,
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ),
@@ -1013,14 +843,10 @@ class _RecentAnalysisCard extends StatelessWidget {
 
       case 'LOW':
       case 'SAFE':
-        return Theme.of(context)
-            .colorScheme
-            .secondary;
+        return Theme.of(context).colorScheme.secondary;
 
       default:
-        return Theme.of(context)
-            .colorScheme
-            .primary;
+        return Theme.of(context).colorScheme.primary;
     }
   }
 
@@ -1046,11 +872,7 @@ class _RecentAnalysisCard extends StatelessWidget {
   String _formatCategory(
     String category,
   ) {
-    return category
-        .toLowerCase()
-        .replaceAll('-', '_')
-        .split('_')
-        .map(
+    return category.toLowerCase().replaceAll('-', '_').split('_').map(
       (word) {
         if (word.isEmpty) {
           return word;
@@ -1062,11 +884,14 @@ class _RecentAnalysisCard extends StatelessWidget {
     ).join(' ');
   }
 
-  String _shortMessage(String message) {
+  String _shortMessage(
+    String message,
+    AppLocalizations l10n,
+  ) {
     final normalized = message.trim();
 
     if (normalized.isEmpty) {
-      return 'Message analysis';
+      return l10n.messageAnalysis;
     }
 
     return normalized;
@@ -1074,138 +899,98 @@ class _RecentAnalysisCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final color = _riskColor(context);
-    final colorScheme =
-        Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       margin: const EdgeInsets.only(
         bottom: 12,
       ),
-
       decoration: BoxDecoration(
         color: colorScheme.surface,
-        borderRadius:
-            BorderRadius.circular(18),
-
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: color.withValues(
             alpha: 0.18,
           ),
         ),
       ),
-
       child: Padding(
         padding: const EdgeInsets.all(14),
-
         child: Row(
           children: [
             Container(
               width: 46,
               height: 46,
-
               decoration: BoxDecoration(
                 color: color.withValues(
                   alpha: 0.12,
                 ),
-
-                borderRadius:
-                    BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(15),
               ),
-
               child: Icon(
                 _riskIcon(),
                 color: color,
                 size: 23,
               ),
             ),
-
             const SizedBox(width: 12),
-
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     _shortMessage(
                       analysis.safeMessage,
+                      l10n,
                     ),
                     maxLines: 1,
-                    overflow:
-                        TextOverflow.ellipsis,
-
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(
-                          fontWeight:
-                              FontWeight.w600,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
                         ),
                   ),
-
                   const SizedBox(height: 5),
-
                   Text(
                     _formatCategory(
                       analysis.category,
                     ),
-
                     maxLines: 1,
-                    overflow:
-                        TextOverflow.ellipsis,
-
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),
             ),
-
             const SizedBox(width: 10),
-
             Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.end,
-
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 5,
                   ),
-
                   decoration: BoxDecoration(
                     color: color.withValues(
                       alpha: 0.12,
                     ),
-
-                    borderRadius:
-                        BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-
                   child: Text(
                     analysis.risk.toUpperCase(),
-
                     style: TextStyle(
                       color: color,
                       fontSize: 11,
-                      fontWeight:
-                          FontWeight.w700,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 6),
-
                 Text(
-                  'Score ${analysis.riskScore}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall,
+                  '${l10n.score} ${analysis.riskScore}',
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),

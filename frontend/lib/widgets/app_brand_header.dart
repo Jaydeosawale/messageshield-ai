@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../core/theme/app_theme.dart';
 
 class AppBrandHeader extends StatelessWidget {
@@ -16,6 +17,7 @@ class AppBrandHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.sizeOf(context).width;
 
     final logoSize = compact
@@ -107,8 +109,8 @@ class AppBrandHeader extends StatelessWidget {
         // ==========================================
         // Tagline
         // ==========================================
-        const Text(
-          'Smart. Private. Protected.',
+        Text(
+          l10n.smartPrivateProtected,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.textSecondary,

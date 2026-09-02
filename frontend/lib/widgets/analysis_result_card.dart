@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 import '../core/theme/app_theme.dart';
 import '../models/message_analysis.dart';
@@ -31,12 +32,12 @@ class AnalysisResultCard extends StatelessWidget {
     return AppColors.green;
   }
 
-  String get _riskTitle {
-    if (_isHigh) return 'HIGH RISK';
+  String _riskTitle(AppLocalizations l10n) {
+    if (_isHigh) return l10n.riskHigh;
 
-    if (_isMedium) return 'MEDIUM RISK';
+    if (_isMedium) return l10n.riskMedium;
 
-    return 'LOW RISK';
+    return l10n.riskLow;
   }
 
   IconData get _riskIcon {
@@ -51,38 +52,38 @@ class AnalysisResultCard extends StatelessWidget {
     return Icons.verified_rounded;
   }
 
-  String get _alert {
+  String _alert(AppLocalizations l10n) {
     if (_isHigh) {
-      return 'This message may be unsafe. Do not click links or share OTPs, passwords, PINs, CVV, or banking details.';
+      return l10n.highRiskAlert;
     }
 
     if (_isMedium) {
-      return 'This message contains some indicators that need verification. Confirm the sender through an official channel before acting.';
+      return l10n.mediumRiskAlert;
     }
 
-    return 'No major risk indicators were detected. Still verify unexpected requests before sharing personal information or making payments.';
+    return l10n.lowRiskAlert;
   }
 
-  List<String> get _actions {
+  List<String> _actions(AppLocalizations l10n) {
     if (_isHigh) {
-      return const [
-        'Do not click suspicious links.',
-        'Do not share OTPs, passwords, PINs or CVV.',
-        'Verify the organisation using an official website or number.',
+      return [
+        l10n.doNotClickSuspiciousLinks,
+        l10n.doNotShareSensitiveCodes,
+        l10n.verifyOrganisationOfficial,
       ];
     }
 
     if (_isMedium) {
-      return const [
-        'Verify the sender independently.',
-        'Avoid using links from the message until verified.',
-        'Do not share sensitive information.',
+      return [
+        l10n.verifySenderIndependently,
+        l10n.avoidMessageLinks,
+        l10n.doNotShareSensitiveInformation,
       ];
     }
 
-    return const [
-      'Stay cautious with unexpected requests.',
-      'Verify payment or account requests independently.',
+    return [
+      l10n.stayCautiousUnexpectedRequests,
+      l10n.verifyPaymentAccountRequests,
     ];
   }
 
@@ -112,11 +113,11 @@ class AnalysisResultCard extends StatelessWidget {
   ///
   /// stays:
   /// "Suspicious link detected"
-  String _displaySignalMessage(AnalysisSignal signal) {
+  String _displaySignalMessage(AnalysisSignal signal, AppLocalizations l10n) {
     final message = signal.displayMessage.trim();
 
     if (message.isEmpty) {
-      return 'Security analysis completed.';
+      return l10n.securityAnalysisCompleted;
     }
 
     return message;
@@ -124,8 +125,9 @@ class AnalysisResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final confidence =
-        analysis.confidencePercent.clamp(0, 100).toDouble();
+    final l10n = AppLocalizations.of(context)!;
+
+    final confidence = analysis.confidencePercent.clamp(0, 100).toDouble();
 
     final safety = analysis.safety;
 
@@ -150,7 +152,6 @@ class AnalysisResultCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           // ==========================================
           // RISK HEADER
           // ==========================================
@@ -176,7 +177,7 @@ class AnalysisResultCard extends StatelessWidget {
 
               Expanded(
                 child: Text(
-                  _riskTitle,
+                  _riskTitle(l10n),
                   style: TextStyle(
                     color: _riskColor,
                     fontSize: isPhone ? 18 : 21,
@@ -205,7 +206,7 @@ class AnalysisResultCard extends StatelessWidget {
           // MESSAGE TYPE
           // ==========================================
 
-          _section('MESSAGE TYPE'),
+          _section(l10n.messageType),
 
           const SizedBox(height: 6),
 
@@ -224,12 +225,12 @@ class AnalysisResultCard extends StatelessWidget {
           // ALERT
           // ==========================================
 
-          _section('ALERT'),
+          _section(l10n.alert),
 
           const SizedBox(height: 6),
 
           Text(
-            _alert,
+            _alert(l10n),
             style: const TextStyle(
               color: AppColors.textSecondary,
               fontSize: 14,
@@ -243,32 +244,25 @@ class AnalysisResultCard extends StatelessWidget {
 
           if (analysis.signals.isNotEmpty) ...[
             const SizedBox(height: 18),
-
-            _section('WHY WE FLAGGED THIS'),
-
+            _section(l10n.whyWeFlaggedThis),
             const SizedBox(height: 8),
-
             ...analysis.signals.take(5).map(
-              (signal) => _bullet(
-                icon: Icons.warning_amber_rounded,
-                color: _riskColor,
-                text: _displaySignalMessage(signal),
-              ),
-            ),
+                  (signal) => _bullet(
+                    icon: Icons.warning_amber_rounded,
+                    color: _riskColor,
+                    text: _displaySignalMessage(signal, l10n),
+                  ),
+                ),
           ],
 
           // ==========================================
           // SAFETY CHECK
           // ==========================================
 
-          if (safety != null &&
-              safety.label.isNotEmpty) ...[
+          if (safety != null && safety.label.isNotEmpty) ...[
             const SizedBox(height: 18),
-
-            _section('SAFETY CHECK'),
-
+            _section(l10n.safetyCheck),
             const SizedBox(height: 7),
-
             Row(
               children: [
                 const Icon(
@@ -276,9 +270,7 @@ class AnalysisResultCard extends StatelessWidget {
                   color: AppColors.tealSoft,
                   size: 19,
                 ),
-
                 const SizedBox(width: 8),
-
                 Expanded(
                   child: Text(
                     _humanize(safety.label),
@@ -299,11 +291,11 @@ class AnalysisResultCard extends StatelessWidget {
 
           const SizedBox(height: 18),
 
-          _section('WHAT YOU SHOULD DO'),
+          _section(l10n.whatYouShouldDo),
 
           const SizedBox(height: 8),
 
-          ..._actions.map(
+          ..._actions(l10n).map(
             (action) => _bullet(
               icon: Icons.check_circle_outline_rounded,
               color: AppColors.tealSoft,
@@ -324,11 +316,9 @@ class AnalysisResultCard extends StatelessWidget {
                 color: AppColors.textSecondary,
                 size: 16,
               ),
-
               const SizedBox(width: 7),
-
               Text(
-                'Analysis confidence: ${confidence.toStringAsFixed(0)}%',
+                '${l10n.analysisConfidence}: ${confidence.toStringAsFixed(0)}%',
                 style: const TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 12,
@@ -353,53 +343,48 @@ class AnalysisResultCard extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            _section('ADMIN ANALYSIS DETAILS'),
+            _section(l10n.adminAnalysisDetails),
 
             const SizedBox(height: 12),
 
             _adminRow(
-              'Risk score',
+              l10n.riskScore,
               '${analysis.riskScore}/100',
             ),
 
             _adminRow(
-              'Category confidence',
+              l10n.categoryConfidence,
               '${confidence.toStringAsFixed(2)}%',
             ),
 
             _adminRow(
-              'Category model',
+              l10n.categoryModel,
               analysis.model.name.isEmpty
-                  ? 'Not available'
+                  ? l10n.notAvailable
                   : analysis.model.name,
             ),
 
             _adminRow(
-              'Model version',
+              l10n.modelVersion,
               analysis.model.version.isEmpty
-                  ? 'Not available'
+                  ? l10n.notAvailable
                   : analysis.model.version,
             ),
 
             if (safety != null) ...[
               const SizedBox(height: 10),
-
               _adminRow(
-                'Safety label',
-                safety.label.isEmpty
-                    ? 'Not available'
-                    : safety.label,
+                l10n.safetyLabel,
+                safety.label.isEmpty ? l10n.notAvailable : safety.label,
               ),
-
               _adminRow(
-                'Safety confidence',
+                l10n.safetyConfidence,
                 '${safety.confidencePercent.clamp(0, 100).toStringAsFixed(2)}%',
               ),
-
               _adminRow(
-                'Safety model',
+                l10n.safetyModel,
                 safety.model.name.isEmpty
-                    ? 'Not available'
+                    ? l10n.notAvailable
                     : safety.model.name,
               ),
             ],
@@ -407,15 +392,11 @@ class AnalysisResultCard extends StatelessWidget {
             // Category probabilities.
             if (analysis.probabilities.isNotEmpty) ...[
               const SizedBox(height: 14),
-
-              _section('CATEGORY PROBABILITIES'),
-
+              _section(l10n.categoryProbabilities),
               const SizedBox(height: 8),
-
               ...analysis.probabilities.entries.map(
                 (entry) {
-                  final probability =
-                      (entry.value * 100).clamp(0, 100);
+                  final probability = (entry.value * 100).clamp(0, 100);
 
                   return _adminRow(
                     _humanize(entry.key),
@@ -426,18 +407,13 @@ class AnalysisResultCard extends StatelessWidget {
             ],
 
             // Safety probabilities.
-            if (safety != null &&
-                safety.probabilities.isNotEmpty) ...[
+            if (safety != null && safety.probabilities.isNotEmpty) ...[
               const SizedBox(height: 14),
-
-              _section('SAFETY PROBABILITIES'),
-
+              _section(l10n.safetyProbabilities),
               const SizedBox(height: 8),
-
               ...safety.probabilities.entries.map(
                 (entry) {
-                  final probability =
-                      (entry.value * 100).clamp(0, 100);
+                  final probability = (entry.value * 100).clamp(0, 100);
 
                   return _adminRow(
                     _humanize(entry.key),
@@ -482,17 +458,14 @@ class AnalysisResultCard extends StatelessWidget {
         bottom: 8,
       ),
       child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
             icon,
             color: color,
             size: 18,
           ),
-
           const SizedBox(width: 9),
-
           Expanded(
             child: Text(
               text,
@@ -521,8 +494,7 @@ class AnalysisResultCard extends StatelessWidget {
         bottom: 8,
       ),
       child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             width: isPhone ? 130 : 170,
@@ -535,7 +507,6 @@ class AnalysisResultCard extends StatelessWidget {
               ),
             ),
           ),
-
           Expanded(
             child: Text(
               value,

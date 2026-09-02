@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../core/theme/app_theme.dart';
 import '../models/message_analysis.dart';
 
@@ -13,6 +14,8 @@ class SafetyStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (safety == null) {
       return const SizedBox.shrink();
     }
@@ -20,14 +23,13 @@ class SafetyStatusCard extends StatelessWidget {
     final label = safety!.label;
     final normalizedLabel = label.toUpperCase();
 
-    final isSafe = normalizedLabel.contains('SAFE') &&
-        !normalizedLabel.contains('UNSAFE');
+    final isSafe =
+        normalizedLabel.contains('SAFE') && !normalizedLabel.contains('UNSAFE');
 
     final color = isSafe ? AppColors.green : Colors.red;
 
-    final icon = isSafe
-        ? Icons.verified_user_rounded
-        : Icons.warning_amber_rounded;
+    final icon =
+        isSafe ? Icons.verified_user_rounded : Icons.warning_amber_rounded;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -53,24 +55,20 @@ class SafetyStatusCard extends StatelessWidget {
               size: 28,
             ),
           ),
-
           const SizedBox(width: 16),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'AI Safety Analysis',
+                Text(
+                  l10n.aiSafetyAnalysis,
                   style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
                 const SizedBox(height: 4),
-
                 Text(
                   label.replaceAll('_', ' '),
                   style: TextStyle(
@@ -79,11 +77,9 @@ class SafetyStatusCard extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-
                 const SizedBox(height: 4),
-
                 Text(
-                  '${safety!.confidencePercent.toStringAsFixed(1)}% confidence',
+                  '${safety!.confidencePercent.toStringAsFixed(1)}% ${l10n.confidence}',
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 12,
