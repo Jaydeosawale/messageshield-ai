@@ -27,6 +27,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from app import models
+from app.core.security import create_access_token
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import app
@@ -167,3 +168,18 @@ def client(db: Session):
         yield test_client
 
     app.dependency_overrides.clear()
+
+# ==========================================
+# Authenticated test client
+# ==========================================
+@pytest.fixture
+def authenticated_client(client, seed_users):
+    token = create_access_token(
+        str(seed_users["user"].id)
+    )
+
+    client.headers.update({
+        "Authorization": f"Bearer {token}",
+    })
+
+    return client

@@ -1,5 +1,7 @@
-def test_get_analyses(client):
-    response = client.get("/api/v1/analyses")
+def test_get_analyses(authenticated_client):
+    response = authenticated_client.get(
+        "/api/v1/analyses"
+    )
 
     assert response.status_code == 200
 
@@ -13,8 +15,8 @@ def test_get_analyses(client):
     assert isinstance(data["items"], list)
 
 
-def test_get_analyses_with_pagination(client):
-    response = client.get(
+def test_get_analyses_with_pagination(authenticated_client):
+    response = authenticated_client.get(
         "/api/v1/analyses?skip=0&limit=10"
     )
 
@@ -27,8 +29,8 @@ def test_get_analyses_with_pagination(client):
     assert data["returned"] <= 10
 
 
-def test_analysis_not_found(client):
-    response = client.get(
+def test_analysis_not_found(authenticated_client):
+    response = authenticated_client.get(
         "/api/v1/analyses/999999"
     )
 
@@ -36,10 +38,5 @@ def test_analysis_not_found(client):
 
     data = response.json()
 
-    assert data["error"]["code"] == (
-        "ANALYSIS_NOT_FOUND"
-    )
-
-    assert data["error"]["message"] == (
-        "Analysis not found"
-    )
+    assert data["error"]["code"] == "ANALYSIS_NOT_FOUND"
+    assert data["error"]["message"] == "Analysis not found"

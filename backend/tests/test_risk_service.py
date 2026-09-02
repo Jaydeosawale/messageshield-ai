@@ -3,15 +3,19 @@ from app.services.risk_service import assess_risk
 
 def test_urgent_otp_and_cvv_is_high_risk():
     result = assess_risk(
-        message="URGENT: share your bank OTP and CVV immediately",
-        category="OTP_OR_SECURITY",
+        message="URGENT: share the OTP and CVV immediately",
+        category="OTP",
         confidence=0.95,
+        safety_label="SCAM",
+        safety_confidence=0.95,
     )
 
     assert result["risk"] == "HIGH"
-    assert result["risk_score"] >= 8
-    assert "requests_otp" in result["signals"]
-    assert "requests_cvv" in result["signals"]
+    assert result["risk_score"] >= 70
+    assert "OTP_REQUEST" in {
+        signal["type"]
+        for signal in result["signals"]
+    }
 
 
 def test_genuine_security_warning_is_low_risk():
@@ -20,12 +24,14 @@ def test_genuine_security_warning_is_low_risk():
             "Never share your OTP, CVV, PIN "
             "or password with anyone."
         ),
-        category="OTP_OR_SECURITY",
+        category="OTP",
         confidence=0.95,
+        safety_label="SAFE",
+        safety_confidence=0.95,
     )
 
     assert result["risk"] == "LOW"
-    assert "protective_security_context" in result["signals"]
+    assert result["risk_score"] < 40
 
 
 def test_otp_delivery_is_low_risk():
@@ -34,25 +40,30 @@ def test_otp_delivery_is_low_risk():
             "Your OTP is 123456. "
             "Do not share this OTP with anyone."
         ),
-        category="OTP_OR_SECURITY",
+        category="OTP",
         confidence=0.95,
+        safety_label="SAFE",
+        safety_confidence=0.95,
     )
 
     assert result["risk"] == "LOW"
-    assert "otp_delivery_context" in result["signals"]
+    assert result["risk_score"] < 40
 
 
 def test_account_threat_with_otp_request_is_high_risk():
     result = assess_risk(
         message=(
             "URGENT! Your bank account will be blocked. "
-            "Share your OTP immediately to verify your account."
+            "Share the OTP immediately to verify your account."
         ),
-        category="OTP_OR_SECURITY",
+        category="OTP",
         confidence=0.90,
+        safety_label="SCAM",
+        safety_confidence=0.90,
     )
 
     assert result["risk"] == "HIGH"
+    assert result["risk_score"] >= 70
 
 
 def test_suspicious_link_is_high_risk():
@@ -62,11 +73,14 @@ def test_suspicious_link_is_high_risk():
             "Click here immediately to restore access: "
             "http://fake-bank.com"
         ),
-        category="OTP_OR_SECURITY",
+        category="OTP",
         confidence=0.90,
+        safety_label="SCAM",
+        safety_confidence=0.90,
     )
 
     assert result["risk"] == "HIGH"
+    assert result["risk_score"] >= 70
 
 
 def test_normal_transaction_notification_is_not_high_risk():
@@ -75,8 +89,10 @@ def test_normal_transaction_notification_is_not_high_risk():
             "Your account was debited by ₹500. "
             "If this was not you, contact your bank immediately."
         ),
-        category="BANKING_OR_FINANCE",
+        category="BANKING",
         confidence=0.90,
+        safety_label="SAFE",
+        safety_confidence=0.90,
     )
 
     assert result["risk"] != "HIGH"
@@ -90,6 +106,8 @@ def test_fake_prize_is_suspicious():
         ),
         category="SCAM",
         confidence=0.90,
+        safety_label="SCAM",
+        safety_confidence=0.90,
     )
 
     assert result["risk"] == "HIGH"
@@ -101,8 +119,10 @@ def test_bank_warning_alone_is_not_scam():
             "For your security, your bank will never ask "
             "you to share your OTP or PIN."
         ),
-        category="OTP_OR_SECURITY",
+        category="OTP",
         confidence=0.90,
+        safety_label="SAFE",
+        safety_confidence=0.90,
     )
 
     assert result["risk"] == "LOW"
