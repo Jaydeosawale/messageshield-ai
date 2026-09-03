@@ -3,6 +3,11 @@ from pathlib import Path
 from collections import Counter
 
 import joblib
+import numpy as np
+import mlflow
+import mlflow.sklearn
+
+from app.mlops.mlflow_config import configure_mlflow
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -17,6 +22,18 @@ from sklearn.metrics import (
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 
+
+# ==========================================================
+# MLFLOW
+# ==========================================================
+
+configure_mlflow()
+
+mlflow.set_experiment("MessageShield-Category")
+
+mlflow_run = mlflow.start_run(
+    run_name="category_model_v4"
+)
 
 # ==========================================================
 # PATHS
@@ -120,6 +137,29 @@ X_train, X_test, y_train, y_test = (
         random_state=42,
         stratify=categories,
     )
+)
+
+mlflow.log_params(
+    {
+        "model_name": "MessageShieldCategoryModel",
+        "model_version": "4",
+        "dataset": "messages_v15.json",
+        "total_examples": len(messages),
+        "category_count": len(set(categories)),
+        "train_examples": len(X_train),
+        "test_examples": len(X_test),
+        "test_size": 0.20,
+        "random_state": 42,
+        "tfidf_ngram_range": "(1,2)",
+        "tfidf_lowercase": True,
+        "tfidf_stop_words": "english",
+        "tfidf_sublinear_tf": True,
+        "tfidf_min_df": 1,
+        "tfidf_max_df": 0.95,
+        "classifier": "LogisticRegression",
+        "classifier_C": 2.0,
+        "classifier_max_iter": 5000,
+    }
 )
 
 
@@ -243,6 +283,18 @@ f1_macro = f1_score(
     predictions,
     average="macro",
     zero_division=0,
+)
+
+mlflow.log_metrics(
+    {
+        "accuracy": float(accuracy),
+        "precision_weighted": float(precision_weighted),
+        "recall_weighted": float(recall_weighted),
+        "f1_weighted": float(f1_weighted),
+        "precision_macro": float(precision_macro),
+        "recall_macro": float(recall_macro),
+        "f1_macro": float(f1_macro),
+    }
 )
 
 
@@ -434,6 +486,15 @@ joblib.dump(
     MODEL_PATH,
 )
 
+mlflow.sklearn.log_model(
+    model,
+    name="category_model",
+    input_example=np.array(
+        ["Your account verification code is 123456."],
+        dtype=str,
+    ),
+)
+
 
 # ==========================================================
 # SAVE METRICS
@@ -491,6 +552,11 @@ with open(
         indent=4,
     )
 
+mlflow.log_artifact(
+    str(METRICS_PATH),
+    artifact_path="metrics",
+)
+
 
 # ==========================================================
 # SAVE COMPLETE
@@ -508,3 +574,4 @@ print()
 print("=" * 60)
 print("TRAINING COMPLETE")
 print("=" * 60)
+mlflow.end_run()

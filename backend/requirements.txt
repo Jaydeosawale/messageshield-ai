@@ -25,3 +25,7 @@ pytest>=8.0
 httpx>=0.27
 
 firebase-admin
+
+# MLOps
+mlflow==3.1.4
+dagshub==0.7.2
