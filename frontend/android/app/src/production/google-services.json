@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "361867576556",
+    "project_id": "messageshield-ai",
+    "storage_bucket": "messageshield-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361867576556:android:c3af4c15d7a88f44d8d1c9",
+        "android_client_info": {
+          "package_name": "com.example.messageshield"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "361867576556-12078ja7a5p6cr510jpjlq31adh90iuk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.messageshield",
+            "certificate_hash": "ae974aec1d3e966711fc84f9d7c1827717465146"
+          }
+        },
+        {
+          "client_id": "361867576556-sve60sh88m3ro8daa7vtlljjemqf3pbf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.messageshield",
+            "certificate_hash": "ae6dbdf920515242b4811d425c6aac5592d27346"
+          }
+        },
+        {
+          "client_id": "361867576556-g9jiqskd1e5h7qkcpuht71fuqqk611cr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA7Y-gL5rDfnRPXg1OeD3k3QFcsFdB1vY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361867576556-g9jiqskd1e5h7qkcpuht71fuqqk611cr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "361867576556-fgl8dsn5utjou7t20vn4b5tlosv05bd6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.messageshield"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -58,4 +58,12 @@ dist/
 *.egg-info/
 
 firebase-service-account.json
-*.firebase-adminsdk-*.json
+*.firebase-adminsdk-*.jsonfirebase-staging-service-account.json
+
+# Firebase service account credentials
+backend/firebase-service-account.json
+backend/firebase-staging-service-account.json
+
+# Firebase credentials
+firebase-service-account.json
+firebase-staging-service-account.json

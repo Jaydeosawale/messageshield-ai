@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'core/theme/app_theme.dart';
-import 'firebase_options.dart';
+import 'app_environment.dart';
+import 'firebase_options.dart' as production_firebase;
+import 'firebase_options_staging.dart' as staging_firebase;
 import 'models/message_analysis.dart';
 import 'providers/auth_provider.dart';
 import 'providers/language_provider.dart';
@@ -31,7 +33,9 @@ Future<void> main() async {
   // ----------------------------------------------------------
 
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: AppEnvironmentConfig.isStaging
+        ? staging_firebase.DefaultFirebaseOptions.currentPlatform
+        : production_firebase.DefaultFirebaseOptions.currentPlatform,
   );
 
   runApp(
