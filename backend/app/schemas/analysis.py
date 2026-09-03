@@ -171,6 +171,19 @@ class AnalysisListResponse(BaseModel):
 # Admin statistics response
 # =====================================
 
+class DriftMonitoringStats(BaseModel):
+
+    sample_count: int
+
+    psi: Optional[float] = None
+
+    status: str
+
+    current_distribution: Dict[str, float] = Field(
+        default_factory=dict
+    )
+
+
 class ModelMonitoringStats(BaseModel):
 
     model_name: str
@@ -184,6 +197,8 @@ class ModelMonitoringStats(BaseModel):
     low_confidence_count: int
 
     low_confidence_rate: float
+
+    drift_monitoring: DriftMonitoringStats
 
 
 class SafetyMonitoringStats(BaseModel):

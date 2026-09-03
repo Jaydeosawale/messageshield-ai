@@ -9,6 +9,7 @@ from app.db.session import get_db
 from app.models.message_analysis import MessageAnalysis
 from app.models.user import User
 from app.schemas.analysis import AdminStatsResponse
+from mlops.drift.category_monitor import monitor_category_model
 
 
 router = APIRouter()
@@ -143,6 +144,16 @@ def admin_stats(
     )
 
     # -------------------------
+    # Category drift monitoring
+    # -------------------------
+    category_drift = monitor_category_model(
+        db,
+        model_name=category_model_name,
+        model_version=category_model_version,
+        limit=100,
+    )
+
+    # -------------------------
     # Safety model monitoring
     # -------------------------
     safety_monitoring = (
@@ -193,6 +204,7 @@ def admin_stats(
             "low_confidence_rate": float(
                 category_low_confidence_rate
             ),
+            "drift_monitoring": category_drift,
         },
         "safety_monitoring": {
             "model_name": safety_model_name,
