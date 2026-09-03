@@ -1,0 +1,17 @@
+{
+  "dataset": "messages_v15.json",
+  "total_examples": 1000,
+  "category_count": 10,
+  "categories": {
+    "BANKING": 0.1,
+    "DELIVERY": 0.1,
+    "GENERAL": 0.1,
+    "IMPERSONATION": 0.1,
+    "INVESTMENT": 0.1,
+    "JOB": 0.1,
+    "OTP": 0.1,
+    "PAYMENT": 0.1,
+    "PHISHING": 0.1,
+    "PROMOTION": 0.1
+  }
+}

@@ -52,6 +52,14 @@ def test_admin_stats_with_admin(client, seed_users):
     assert "low_confidence_count" in model_monitoring
     assert "low_confidence_rate" in model_monitoring
 
+    assert "drift_monitoring" in model_monitoring
+
+    drift_monitoring = model_monitoring["drift_monitoring"]
+    assert "sample_count" in drift_monitoring
+    assert "psi" in drift_monitoring
+    assert "status" in drift_monitoring
+    assert "current_distribution" in drift_monitoring
+
     safety_monitoring = data["safety_monitoring"]
     assert "model_name" in safety_monitoring
     assert "model_version" in safety_monitoring
