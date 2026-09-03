@@ -91,8 +91,115 @@ def admin_stats(
         for category, count in category_rows
     }
 
+    # -------------------------
+    # Category model monitoring
+    # -------------------------
+    category_monitoring = (
+        db.query(
+            MessageAnalysis.model_name,
+            MessageAnalysis.model_version,
+            func.count(MessageAnalysis.id),
+            func.avg(MessageAnalysis.confidence),
+        )
+        .group_by(
+            MessageAnalysis.model_name,
+            MessageAnalysis.model_version,
+        )
+        .order_by(
+            MessageAnalysis.model_version.desc()
+        )
+        .first()
+    )
+
+    if category_monitoring:
+        (
+            category_model_name,
+            category_model_version,
+            category_total_predictions,
+            category_average_confidence,
+        ) = category_monitoring
+
+        category_low_confidence_count = (
+            db.query(MessageAnalysis)
+            .filter(
+                MessageAnalysis.model_name == category_model_name,
+                MessageAnalysis.model_version == category_model_version,
+                MessageAnalysis.confidence < 0.50,
+            )
+            .count()
+        )
+    else:
+        category_model_name = "unknown"
+        category_model_version = "unknown"
+        category_total_predictions = 0
+        category_average_confidence = 0.0
+        category_low_confidence_count = 0
+
+    category_low_confidence_rate = (
+        category_low_confidence_count
+        / category_total_predictions
+        if category_total_predictions
+        else 0.0
+    )
+
+    # -------------------------
+    # Safety model monitoring
+    # -------------------------
+    safety_monitoring = (
+        db.query(
+            MessageAnalysis.safety_model_name,
+            MessageAnalysis.safety_model_version,
+            func.count(MessageAnalysis.id),
+            func.avg(MessageAnalysis.safety_confidence),
+        )
+        .filter(
+            MessageAnalysis.safety_confidence.isnot(None)
+        )
+        .group_by(
+            MessageAnalysis.safety_model_name,
+            MessageAnalysis.safety_model_version,
+        )
+        .order_by(
+            MessageAnalysis.safety_model_version.desc()
+        )
+        .first()
+    )
+
+    if safety_monitoring:
+        (
+            safety_model_name,
+            safety_model_version,
+            safety_total_predictions,
+            safety_average_confidence,
+        ) = safety_monitoring
+    else:
+        safety_model_name = "unknown"
+        safety_model_version = "unknown"
+        safety_total_predictions = 0
+        safety_average_confidence = 0.0
+
     return {
         "total_analyses": total_analyses,
         "risk_distribution": risk_distribution,
         "category_distribution": category_distribution,
+        "model_monitoring": {
+            "model_name": category_model_name,
+            "model_version": category_model_version,
+            "total_predictions": category_total_predictions,
+            "average_confidence": float(
+                category_average_confidence
+            ),
+            "low_confidence_count": category_low_confidence_count,
+            "low_confidence_rate": float(
+                category_low_confidence_rate
+            ),
+        },
+        "safety_monitoring": {
+            "model_name": safety_model_name,
+            "model_version": safety_model_version,
+            "total_predictions": safety_total_predictions,
+            "average_confidence": float(
+                safety_average_confidence
+            ),
+        },
     }
