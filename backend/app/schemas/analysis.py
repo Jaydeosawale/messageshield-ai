@@ -171,6 +171,32 @@ class AnalysisListResponse(BaseModel):
 # Admin statistics response
 # =====================================
 
+class ModelMonitoringStats(BaseModel):
+
+    model_name: str
+
+    model_version: str
+
+    total_predictions: int
+
+    average_confidence: float
+
+    low_confidence_count: int
+
+    low_confidence_rate: float
+
+
+class SafetyMonitoringStats(BaseModel):
+
+    model_name: str
+
+    model_version: str
+
+    total_predictions: int
+
+    average_confidence: float
+
+
 class AdminStatsResponse(BaseModel):
 
     total_analyses: int
@@ -178,3 +204,7 @@ class AdminStatsResponse(BaseModel):
     risk_distribution: Dict[str, int]
 
     category_distribution: Dict[str, int]
+
+    model_monitoring: ModelMonitoringStats
+
+    safety_monitoring: SafetyMonitoringStats

@@ -40,3 +40,20 @@ def test_admin_stats_with_admin(client, seed_users):
     assert "total_analyses" in data
     assert "risk_distribution" in data
     assert "category_distribution" in data
+
+    assert "model_monitoring" in data
+    assert "safety_monitoring" in data
+
+    model_monitoring = data["model_monitoring"]
+    assert "model_name" in model_monitoring
+    assert "model_version" in model_monitoring
+    assert "total_predictions" in model_monitoring
+    assert "average_confidence" in model_monitoring
+    assert "low_confidence_count" in model_monitoring
+    assert "low_confidence_rate" in model_monitoring
+
+    safety_monitoring = data["safety_monitoring"]
+    assert "model_name" in safety_monitoring
+    assert "model_version" in safety_monitoring
+    assert "total_predictions" in safety_monitoring
+    assert "average_confidence" in safety_monitoring
