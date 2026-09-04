@@ -1,0 +1,79 @@
+[
+  {
+    "candidate": "v5_baseline",
+    "C": 1.0,
+    "class_weight": "balanced",
+    "accuracy": 0.9534883720930233,
+    "precision": 0.9577167019027484,
+    "recall": 0.9534883720930233,
+    "f1": 0.9535387093526629,
+    "scam_false_negatives": 0,
+    "safe_false_positives": 2
+  },
+  {
+    "candidate": "v6_c_025",
+    "C": 0.25,
+    "class_weight": "balanced",
+    "accuracy": 0.9534883720930233,
+    "precision": 0.9577167019027484,
+    "recall": 0.9534883720930233,
+    "f1": 0.9535387093526629,
+    "scam_false_negatives": 0,
+    "safe_false_positives": 2
+  },
+  {
+    "candidate": "v6_c_050",
+    "C": 0.5,
+    "class_weight": "balanced",
+    "accuracy": 0.9534883720930233,
+    "precision": 0.9577167019027484,
+    "recall": 0.9534883720930233,
+    "f1": 0.9535387093526629,
+    "scam_false_negatives": 0,
+    "safe_false_positives": 2
+  },
+  {
+    "candidate": "v6_c_200",
+    "C": 2.0,
+    "class_weight": "balanced",
+    "accuracy": 0.9534883720930233,
+    "precision": 0.9577167019027484,
+    "recall": 0.9534883720930233,
+    "f1": 0.9535387093526629,
+    "scam_false_negatives": 0,
+    "safe_false_positives": 2
+  },
+  {
+    "candidate": "v6_c_500",
+    "C": 5.0,
+    "class_weight": "balanced",
+    "accuracy": 0.9534883720930233,
+    "precision": 0.9577167019027484,
+    "recall": 0.9534883720930233,
+    "f1": 0.9535387093526629,
+    "scam_false_negatives": 0,
+    "safe_false_positives": 2
+  },
+  {
+    "candidate": "v6_safe_weighted",
+    "C": 1.0,
+    "class_weight": "{'SAFE': 1.2, 'SCAM': 1.0}",
+    "accuracy": 0.813953488372093,
+    "precision": 0.8619654913728432,
+    "recall": 0.813953488372093,
+    "f1": 0.8044788975021534,
+    "scam_false_negatives": 8,
+    "safe_false_positives": 0
+  },
+  {
+    "candidate": "v6_safe_weighted_c2",
+    "C": 2.0,
+    "class_weight": "{'SAFE': 1.2, 'SCAM': 1.0}",
+    "accuracy": 0.9534883720930233,
+    "precision": 0.9572093023255813,
+    "recall": 0.9534883720930233,
+    "f1": 0.953233374133007,
+    "scam_false_negatives": 2,
+    "safe_false_positives": 0
+  }
+]
