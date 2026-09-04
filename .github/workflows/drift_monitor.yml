@@ -1,0 +1,35 @@
+name: MessageShield Drift Monitoring
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  category-drift:
+    name: Category Drift Monitoring
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.MESSAGE_SHIELD_DRIFT_DATABASE_URL }}
+      MLFLOW_CATEGORY_MODEL_NAME: MessageShieldCategoryModel
+      MLFLOW_CATEGORY_MODEL_VERSION: "4"
+      DRIFT_MONITORING_LIMIT: "100"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run category drift monitor
+        working-directory: backend
+        run: python -m mlops.drift.run_category_monitor
