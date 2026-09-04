@@ -58,7 +58,7 @@ def test_monitor_returns_insufficient_data_for_missing_model_version(
     assert result["current_distribution"] == {}
 
 
-def test_monitor_calculates_normal_drift(
+def test_monitor_returns_insufficient_data_below_minimum(
     db,
     seed_users,
 ):
@@ -80,6 +80,34 @@ def test_monitor_calculates_normal_drift(
     )
 
     assert result["sample_count"] == 10
+    assert result["psi"] is None
+    assert result["status"] == "INSUFFICIENT_DATA"
+    assert result["current_distribution"] == {}
+
+
+def test_monitor_calculates_normal_drift(
+    db,
+    seed_users,
+):
+    user_id = seed_users["user"].id
+
+    rows = [
+        make_prediction(user_id, category)
+        for category in CATEGORIES
+        for _ in range(3)
+    ]
+
+    db.add_all(rows)
+    db.flush()
+
+    result = monitor_category_model(
+        db,
+        model_name="MessageShieldCategoryModel",
+        model_version="4",
+        limit=30,
+    )
+
+    assert result["sample_count"] == 30
     assert result["psi"] == 0.0
     assert result["status"] == "NORMAL"
 
