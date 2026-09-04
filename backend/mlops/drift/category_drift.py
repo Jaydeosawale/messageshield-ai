@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Dict
 
 
-BASELINE_PATH = Path("models/category_drift_baseline.json")
+BASELINE_PATH = Path(__file__).resolve().parents[2] / "models" / "category_drift_baseline.json"
 
 EPSILON = 1e-10
 

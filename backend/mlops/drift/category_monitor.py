@@ -6,6 +6,9 @@ from mlops.drift.category_distribution import get_category_distribution
 from mlops.drift.category_drift import calculate_category_drift
 
 
+MIN_SAMPLE_COUNT = 30
+
+
 def monitor_category_model(
     db: Session,
     *,
@@ -24,11 +27,11 @@ def monitor_category_model(
         limit=limit,
     )
 
-    if sample_count == 0:
+    if sample_count < MIN_SAMPLE_COUNT:
         return {
             "model_name": model_name,
             "model_version": model_version,
-            "sample_count": 0,
+            "sample_count": sample_count,
             "psi": None,
             "status": "INSUFFICIENT_DATA",
             "current_distribution": {},
