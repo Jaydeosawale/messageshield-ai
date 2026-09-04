@@ -31,6 +31,7 @@ METRICS_PATH = MODELS_DIR / "safety_metrics_v5.json"
 def main():
     configure_mlflow()
     mlflow.set_experiment("MessageShield-Safety")
+    mlflow.start_run(run_name="safety_model_v5")
 
     print("\n===== TRAINING MESSAGE SHIELD SAFETY MODEL =====\n")
 
@@ -84,6 +85,24 @@ def main():
     print(
         f"Test examples: {len(X_test)}"
     )
+
+    mlflow.log_params({
+        "model_name": "MessageShieldSafetyModel",
+        "model_version": "5",
+        "dataset": "messages_v5.json",
+        "dataset_size": len(texts),
+        "train_size": len(X_train),
+        "test_size": len(X_test),
+        "test_size_ratio": 0.25,
+        "random_state": 42,
+        "tfidf_ngram_range": "(1,2)",
+        "tfidf_lowercase": True,
+        "tfidf_min_df": 1,
+        "tfidf_sublinear_tf": True,
+        "classifier": "LogisticRegression",
+        "max_iter": 2000,
+        "class_weight": "balanced",
+    })
 
     # -----------------------------------------
     # 3. Build ML pipeline
