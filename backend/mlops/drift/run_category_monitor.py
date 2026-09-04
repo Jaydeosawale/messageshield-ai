@@ -1,10 +1,18 @@
 import os
 
-from app.db.session import SessionLocal
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 from mlops.drift.category_monitor import monitor_category_model
 
 
 def main() -> None:
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise RuntimeError("DATABASE_URL is not configured.")
+
+    engine = create_engine(database_url, pool_pre_ping=True)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     model_name = os.getenv(
         "MLFLOW_CATEGORY_MODEL_NAME",
         "MessageShieldCategoryModel",
