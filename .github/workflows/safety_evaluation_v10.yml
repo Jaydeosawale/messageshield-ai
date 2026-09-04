@@ -1,0 +1,40 @@
+name: MessageShield Safety V10 Evaluation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  safety-evaluation:
+    name: Safety V10 CV and Holdout Evaluation
+    runs-on: ubuntu-latest
+    env:
+      MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+      MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
+      MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
+
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Safety V10 Evaluation
+        working-directory: backend
+        run: python -m scripts.evaluate_safety_candidates_v10
+
+      - name: Verify evaluation results
+        working-directory: backend
+        run: |
+          test -f models/safety_v10_evaluation_results.json
+          echo 'Safety V10 evaluation results generated successfully.'
