@@ -1,6 +1,11 @@
 from pathlib import Path
 import json
 import joblib
+import mlflow
+import mlflow.sklearn
+import numpy as np
+
+from app.mlops.mlflow_config import configure_mlflow
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -24,6 +29,8 @@ METRICS_PATH = MODELS_DIR / "safety_metrics_v5.json"
 
 
 def main():
+    configure_mlflow()
+    mlflow.set_experiment("MessageShield-Safety")
 
     print("\n===== TRAINING MESSAGE SHIELD SAFETY MODEL =====\n")
 
@@ -213,6 +220,13 @@ def main():
         "dataset_size": len(texts),
     }
 
+    mlflow.log_metrics({
+        "accuracy": float(accuracy),
+        "precision_weighted": float(precision),
+        "recall_weighted": float(recall),
+        "f1_weighted": float(f1),
+    })
+
     with open(
         METRICS_PATH,
         "w",
@@ -224,6 +238,17 @@ def main():
             file,
             indent=2,
         )
+
+    mlflow.log_artifact(str(METRICS_PATH), artifact_path="metrics")
+    mlflow.sklearn.log_model(
+        model,
+        name="safety_model",
+        input_example=np.array(
+            ["Your bank account has been blocked. Verify immediately."],
+            dtype=str,
+        ),
+    )
+    mlflow.end_run()
 
     print(
         f"\nMetrics saved to:\n{METRICS_PATH}"
