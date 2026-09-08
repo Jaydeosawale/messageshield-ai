@@ -191,6 +191,28 @@ MessageShield includes privacy-aware handling for sensitive message content, inc
 - Password-like values
 - Card-like values
 
+## Technology Stack
+
+### Frontend
+- Flutter
+- Firebase Authentication
+
+### Backend
+- FastAPI
+- Python
+
+### Machine Learning & MLOps
+- Scikit-learn
+- MLflow
+- DagsHub
+- PSI-based drift detection
+
+### DevOps & Deployment
+- Docker
+- GitHub Actions
+- Render
+- Vercel
+
 The project is production-oriented but is **not a claim of completed security certification**.
 
 Security documentation: [`docs/security.md`](docs/security.md)
