@@ -1,3 +1,4 @@
+import 'widgets/web_play_store_frame.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,6 +67,9 @@ class MessageShieldApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => WebPlayStoreFrame(
+        child: child ?? const SizedBox.shrink(),
+      ),
       title: 'MessageShield',
       theme: AppTheme.darkTheme,
       locale: language.locale,
