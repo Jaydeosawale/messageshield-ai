@@ -38,6 +38,7 @@ dependencies:
   # ==========================================
   # Navigation
   # ==========================================
+  url_launcher: ^6.3.2
   go_router: ^14.2.0
 
   # ==========================================
@@ -87,6 +88,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/images/google_play_badge.png
     - assets/images/messageshield_logo.png
 
 # ==========================================
