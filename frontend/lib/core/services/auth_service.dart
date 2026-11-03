@@ -31,52 +31,6 @@ class AuthService {
   // creates the MessageShield account.
   // ==========================================
 
-  // ==========================================
-// Firebase / Email-password REGISTER
-// ==========================================
-//
-// Step 1:
-// Check whether the email already exists
-// in MessageShield.
-//
-// Step 2:
-// Firebase creates the user.
-//
-// Step 3:
-// Firebase sends verification email.
-//
-// IMPORTANT:
-// We DO NOT create the MessageShield account here.
-//
-// The user must first verify the email.
-//
-// After verification:
-// completeFirebaseRegistration()
-// creates the MessageShield account.
-// ==========================================
-// ==========================================
-// Check whether email already exists
-// ==========================================
-
-  static Future<bool> checkEmailExists(
-    String email,
-  ) async {
-    final response = await ApiService.post(
-      ApiConstants.checkEmail,
-      body: {
-        'email': email.trim(),
-      },
-    );
-
-    if (response.statusCode != 200) {
-      throw _getAuthException(response);
-    }
-
-    final data = ApiService.decodeResponse(response) as Map<String, dynamic>;
-
-    return data['exists'] == true;
-  }
-
   static Future<firebase_auth.User> register({
     required String email,
     required String password,
@@ -84,25 +38,8 @@ class AuthService {
     try {
       final normalizedEmail = email.trim();
 
-      // ==========================================
-      // 1. Check MessageShield database first
-      // ==========================================
-
-      final emailExists = await checkEmailExists(
-        normalizedEmail,
-      );
-
-      if (emailExists) {
-        throw Exception(
-          'An account with this email already exists. '
-          'Please sign in instead.',
-        );
-      }
-
-      // ==========================================
-      // 2. Create Firebase account
-      // ==========================================
-
+      // Firebase handles account uniqueness. Avoid a separate API preflight,
+      // which can delay registration while the free backend wakes up.
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: normalizedEmail,
         password: password,
@@ -488,8 +425,7 @@ class AuthService {
     }
 
     try {
-      final credential =
-          firebase_auth.EmailAuthProvider.credential(
+      final credential = firebase_auth.EmailAuthProvider.credential(
         email: user.email ?? '',
         password: password,
       );
@@ -536,8 +472,7 @@ class AuthService {
     }
 
     try {
-      final credential =
-          firebase_auth.EmailAuthProvider.credential(
+      final credential = firebase_auth.EmailAuthProvider.credential(
         email: user.email!,
         password: currentPassword,
       );

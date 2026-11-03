@@ -672,4 +672,58 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get emailPasswordAccountExists => 'या ईमेलसह ईमेल आणि पासवर्ड वापरणारे खाते आधीपासून अस्तित्वात आहे. कृपया तुमच्या ईमेल आणि पासवर्डने साइन इन करा.';
+
+  @override
+  String get passwordResetTitle => 'पासवर्ड रीसेट करा';
+
+  @override
+  String get forgotPassword => 'पासवर्ड विसरलात?';
+
+  @override
+  String get passwordResetIntro => 'पासवर्ड रीसेट लिंक मिळवण्यासाठी तुमचा MessageShield ईमेल टाका.';
+
+  @override
+  String get resetSent => 'हे खाते अस्तित्वात असल्यास रीसेट लिंक पाठवली आहे. इनबॉक्स आणि स्पॅम फोल्डर तपासा.';
+
+  @override
+  String get resetSending => 'पाठवत आहे…';
+
+  @override
+  String get resetSendLink => 'रीसेट लिंक पाठवा';
+
+  @override
+  String get resetBackToLogin => 'साइन इनकडे परत जा';
+
+  @override
+  String get resetInvalidEmail => 'वैध ईमेल पत्ता टाका.';
+
+  @override
+  String get resetTooMany => 'खूप विनंत्या केल्या आहेत. पुन्हा प्रयत्न करण्यापूर्वी थांबा.';
+
+  @override
+  String get resetFailed => 'रीसेट ईमेल पाठवता आला नाही. कनेक्शन तपासून पुन्हा प्रयत्न करा.';
+
+  @override
+  String get modelOverrideWarning => 'धोक्याचे संकेत मॉडेलच्या निकालापेक्षा महत्त्वाचे आहेत';
+
+  @override
+  String get modelNoWarning => 'मॉडेलची चेतावणी नाही; पाठवणारा आणि लिंक पडताळलेले नाहीत';
+
+  @override
+  String get productBadge => 'संदेश सुरक्षा, अधिक स्पष्ट';
+
+  @override
+  String get productHeadline => 'कशावर प्रश्न विचारायचा ते ओळखा.';
+
+  @override
+  String get productDescription => 'क्लिक, उत्तर किंवा पैसे देण्याआधी संशयास्पद संदेश समजून घ्या.';
+
+  @override
+  String get productExample => '“तुमचे खाते बंद होईल. तुमचा OTP आत्ता पाठवा.”';
+
+  @override
+  String get productExampleReason => 'एकदाच वापरायचा कोड मागतो • घाई करण्याचा दबाव';
+
+  @override
+  String get productCaution => 'जोखीम मूल्यांकन हे मार्गदर्शन आहे, हमी नाही.';
 }

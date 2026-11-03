@@ -1,5 +1,6 @@
 import logging
 import re
+import unicodedata
 
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,12 @@ def assess_risk(
     Returns final risk level and score.
     """
 
-    message_lower = message.lower()
+    message_lower = unicodedata.normalize('NFKC', message).casefold()
+    message_lower = re.sub(r'[\u200b-\u200f\ufeff]', '', message_lower)
+    message_lower = re.sub(r'[^\S\n]+', ' ', message_lower)
+    # Negation is sentence-local: a warning must not cancel a separate request.
+    request_text = ' '.join(part for part in re.split(r'[.!?;\n]+|\b(?:but|however|then)\b', message_lower)
+                            if not re.search(r"\b(?:never|do not|don't|dont)\s+(?:ever\s+)?(?:share|send|provide|tell|forward|enter)\b", part))
 
     signals = []
 
@@ -156,7 +162,7 @@ def assess_risk(
     detected_urgency = [
         word
         for word in urgency_words
-        if word in message_lower
+        if re.search(r"(?<!\w)" + re.escape(word) + r"(?!\w)", message_lower)
     ]
 
     if detected_urgency:
@@ -194,12 +200,10 @@ def assess_risk(
         "share the verification code",
         "send the verification code",
         "provide the verification code",
-        "share the code",
-        "send the code",
     ]
 
     detected_otp_request = any(
-        pattern in message_lower
+        pattern in request_text
         for pattern in otp_request_patterns
     )
 
@@ -236,7 +240,7 @@ def assess_risk(
     ]
 
     detected_upi_request = any(
-        pattern in message_lower
+        pattern in request_text
         for pattern in upi_pin_patterns
     )
 
@@ -346,6 +350,11 @@ def assess_risk(
     # ==================================================
 
     critical_patterns = []
+    sharing_pin = detected_upi_request and re.search(r'\b(?:share|provide|tell)\b', request_text)
+    receive_money_pin = detected_upi_request and re.search(r'\b(?:refund|receive|cashback)\b', request_text)
+    if detected_otp_request or sharing_pin or receive_money_pin:
+        critical_patterns.append('REQUEST_FOR_SECRET')
+
 
 
     # --------------------------------------------------

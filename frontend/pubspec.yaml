@@ -2,7 +2,7 @@ name: messageshield
 description: Privacy-first AI message safety assistant
 publish_to: "none"
 
-version: 0.2.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -68,6 +68,7 @@ dependencies:
 # Development Dependencies
 # ==========================================
 
+  intl: ^0.20.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -106,5 +107,5 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/images/messageshield_logo.png"
-    background_color: "#08111F"
-    theme_color: "#08111F"
+    background_color: "#11665B"
+    theme_color: "#11665B"

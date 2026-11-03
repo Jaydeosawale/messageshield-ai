@@ -23,7 +23,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.messageshield"
+    namespace = "com.jaydeo.messageshield"
     compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
@@ -33,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.messageshield"
+        applicationId = "com.jaydeo.messageshield"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -45,6 +45,7 @@ android {
     productFlavors {
         create("staging") {
             dimension = "environment"
+            applicationId = "com.example.messageshield"
         }
 
         create("production") {

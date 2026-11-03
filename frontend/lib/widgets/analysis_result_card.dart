@@ -273,7 +273,12 @@ class AnalysisResultCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    _humanize(safety.label),
+                    (_isHigh || _isMedium) &&
+                            safety.label.toUpperCase() == 'SAFE'
+                        ? l10n.modelOverrideWarning
+                        : safety.label.toUpperCase() == 'SAFE'
+                            ? l10n.modelNoWarning
+                            : _humanize(safety.label),
                     style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 14,

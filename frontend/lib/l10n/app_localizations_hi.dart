@@ -672,4 +672,58 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get emailPasswordAccountExists => 'इस ईमेल से ईमेल और पासवर्ड का उपयोग करने वाला खाता पहले से मौजूद है। कृपया अपने ईमेल और पासवर्ड से साइन इन करें।';
+
+  @override
+  String get passwordResetTitle => 'पासवर्ड रीसेट करें';
+
+  @override
+  String get forgotPassword => 'पासवर्ड भूल गए?';
+
+  @override
+  String get passwordResetIntro => 'पासवर्ड रीसेट लिंक पाने के लिए अपना MessageShield ईमेल दर्ज करें।';
+
+  @override
+  String get resetSent => 'यदि यह खाता मौजूद है, तो रीसेट लिंक भेज दिया गया है। इनबॉक्स और स्पैम फ़ोल्डर देखें।';
+
+  @override
+  String get resetSending => 'भेजा जा रहा है…';
+
+  @override
+  String get resetSendLink => 'रीसेट लिंक भेजें';
+
+  @override
+  String get resetBackToLogin => 'साइन इन पर वापस जाएँ';
+
+  @override
+  String get resetInvalidEmail => 'सही ईमेल पता दर्ज करें।';
+
+  @override
+  String get resetTooMany => 'बहुत अधिक अनुरोध किए गए हैं। दोबारा प्रयास करने से पहले प्रतीक्षा करें।';
+
+  @override
+  String get resetFailed => 'रीसेट ईमेल नहीं भेजा जा सका। कनेक्शन जाँचें और फिर प्रयास करें।';
+
+  @override
+  String get modelOverrideWarning => 'चेतावनी संकेत मॉडल के परिणाम से अधिक महत्वपूर्ण हैं';
+
+  @override
+  String get modelNoWarning => 'मॉडल ने चेतावनी नहीं दी; भेजने वाले और लिंक की पुष्टि नहीं हुई है';
+
+  @override
+  String get productBadge => 'संदेश सुरक्षा, अब और स्पष्ट';
+
+  @override
+  String get productHeadline => 'जानें, कहाँ सवाल करना है।';
+
+  @override
+  String get productDescription => 'क्लिक करने, जवाब देने या भुगतान से पहले संदिग्ध संदेश समझें।';
+
+  @override
+  String get productExample => '“आपका खाता बंद हो जाएगा। अपना OTP अभी भेजें।”';
+
+  @override
+  String get productExampleReason => 'एक बार उपयोग होने वाला कोड माँगता है • जल्दबाजी का दबाव';
+
+  @override
+  String get productCaution => 'जोखिम आकलन मार्गदर्शन है, गारंटी नहीं।';
 }

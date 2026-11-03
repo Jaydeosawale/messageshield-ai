@@ -1422,6 +1422,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An account with this email already exists using email and password. Please sign in using your email and password.'**
   String get emailPasswordAccountExists;
+
+  /// No description provided for @passwordResetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get passwordResetTitle;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPassword;
+
+  /// No description provided for @passwordResetIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your MessageShield email to receive a password-reset link.'**
+  String get passwordResetIntro;
+
+  /// No description provided for @resetSent.
+  ///
+  /// In en, this message translates to:
+  /// **'If this account exists, a reset link has been sent. Check your inbox and spam folder.'**
+  String get resetSent;
+
+  /// No description provided for @resetSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending…'**
+  String get resetSending;
+
+  /// No description provided for @resetSendLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset link'**
+  String get resetSendLink;
+
+  /// No description provided for @resetBackToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to sign in'**
+  String get resetBackToLogin;
+
+  /// No description provided for @resetInvalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address.'**
+  String get resetInvalidEmail;
+
+  /// No description provided for @resetTooMany.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many reset requests. Please wait before trying again.'**
+  String get resetTooMany;
+
+  /// No description provided for @resetFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to send the reset email. Check your connection and try again.'**
+  String get resetFailed;
+
+  /// No description provided for @modelOverrideWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning signals override the model result'**
+  String get modelOverrideWarning;
+
+  /// No description provided for @modelNoWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'No model warning; sender and links are unverified'**
+  String get modelNoWarning;
+
+  /// No description provided for @productBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Message safety, made clearer'**
+  String get productBadge;
+
+  /// No description provided for @productHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Know what to question.'**
+  String get productHeadline;
+
+  /// No description provided for @productDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Understand suspicious messages before you click, reply, or pay.'**
+  String get productDescription;
+
+  /// No description provided for @productExample.
+  ///
+  /// In en, this message translates to:
+  /// **'“Your account will be blocked. Share your OTP now.”'**
+  String get productExample;
+
+  /// No description provided for @productExampleReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests a one-time code • Uses urgency'**
+  String get productExampleReason;
+
+  /// No description provided for @productCaution.
+  ///
+  /// In en, this message translates to:
+  /// **'A risk assessment is guidance, not a guarantee.'**
+  String get productCaution;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
