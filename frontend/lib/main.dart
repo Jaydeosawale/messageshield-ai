@@ -68,11 +68,11 @@ class MessageShieldApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       builder: (context, child) => WebPlayStoreFrame(
-        light: !context.watch<AuthProvider>().isAuthenticated,
+        light: true,
         child: child ?? const SizedBox.shrink(),
       ),
       title: 'MessageShield',
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       locale: language.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -218,7 +218,7 @@ class _AppShellState extends State<AppShell> {
               24,
             ),
             decoration: const BoxDecoration(
-              color: Color(0xFF0D2028),
+              color: Color(0xFFEDF2E9),
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(24),
               ),

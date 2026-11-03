@@ -32,38 +32,10 @@ class AppBrandHeader extends StatelessWidget {
         // ==========================================
         // MessageShield Logo
         // ==========================================
-        Container(
-          width: logoSize,
-          height: logoSize,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              compact ? 20 : 24,
-            ),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                AppColors.teal,
-                AppColors.green,
-              ],
-            ),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.12),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.teal.withValues(alpha: 0.22),
-                blurRadius: 24,
-                spreadRadius: 1,
-              ),
-            ],
-          ),
-          child: Icon(
-            Icons.shield_rounded,
-            color: Colors.white,
-            size: compact ? 34 : 44,
-          ),
-        ),
+        ClipRRect(
+            borderRadius: BorderRadius.circular(compact ? 16 : 20),
+            child: Image.asset('assets/images/messageshield_logo.png',
+                width: logoSize, height: logoSize, excludeFromSemantics: true)),
 
         SizedBox(
           height: compact ? 14 : 18,

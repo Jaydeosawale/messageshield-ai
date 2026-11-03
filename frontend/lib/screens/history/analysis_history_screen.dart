@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/app_theme.dart';
 import '../../l10n/app_localizations.dart';
 
 import '../../core/services/analysis_service.dart';
@@ -43,11 +44,11 @@ class _AnalysisHistoryScreenState
   Color _riskColor(String risk) {
     switch (risk.toUpperCase()) {
       case 'HIGH':
-        return Colors.red;
+        return AppColors.danger;
       case 'MEDIUM':
-        return Colors.orange;
+        return AppColors.warning;
       default:
-        return Colors.green;
+        return AppColors.success;
     }
   }
 

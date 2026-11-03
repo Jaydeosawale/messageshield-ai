@@ -18,11 +18,11 @@ class RiskBadge extends StatelessWidget {
 
     switch (normalizedRisk) {
       case 'HIGH':
-        color = Colors.red;
+        color = AppColors.danger;
         break;
 
       case 'MEDIUM':
-        color = Colors.orange;
+        color = AppColors.warning;
         break;
 
       case 'LOW':

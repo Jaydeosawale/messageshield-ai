@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
+import '../core/theme/app_theme.dart';
 
 /// Shared product identity for sign-in, registration and account recovery.
 class AuthSurface extends StatelessWidget {
@@ -15,49 +16,8 @@ class AuthSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    const ink = Color(0xFF202B29);
     const accent = Color(0xFF11665B);
-    final theme = ThemeData(
-      useMaterial3: true,
-      colorScheme:
-          ColorScheme.fromSeed(seedColor: accent, brightness: Brightness.light)
-              .copyWith(
-                  primary: accent,
-                  onPrimary: Colors.white,
-                  surface: Colors.white,
-                  onSurface: ink),
-      scaffoldBackgroundColor: const Color(0xFFFAFAF7),
-      textTheme:
-          ThemeData.light().textTheme.apply(bodyColor: ink, displayColor: ink),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-        labelStyle: const TextStyle(color: Color(0xFF54645F)),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFFCFD8D2))),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: accent, width: 2)),
-      ),
-      filledButtonTheme: FilledButtonThemeData(
-          style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(50),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              textStyle:
-                  const TextStyle(fontSize: 15, fontWeight: FontWeight.w600))),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-              minimumSize: const Size.fromHeight(50),
-              foregroundColor: ink,
-              side: const BorderSide(color: Color(0xFFCFD8D2)),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)))),
-    );
+    final theme = AppTheme.lightTheme;
     final brand = Row(mainAxisSize: MainAxisSize.min, children: [
       ClipRRect(
           borderRadius: BorderRadius.circular(10),

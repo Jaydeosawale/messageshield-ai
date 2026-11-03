@@ -26,7 +26,7 @@ class SafetyStatusCard extends StatelessWidget {
     final isSafe =
         normalizedLabel.contains('SAFE') && !normalizedLabel.contains('UNSAFE');
 
-    final color = isSafe ? AppColors.green : Colors.red;
+    final color = isSafe ? AppColors.green : AppColors.danger;
 
     final icon =
         isSafe ? Icons.verified_user_rounded : Icons.warning_amber_rounded;

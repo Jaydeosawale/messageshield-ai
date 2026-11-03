@@ -36,16 +36,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Color _riskColor(String risk) {
     switch (risk.toUpperCase()) {
       case 'HIGH':
-        return const Color(0xFFFF647C);
+        return const Color(0xFFB42335);
 
       case 'MEDIUM':
-        return const Color(0xFFFFB547);
+        return const Color(0xFF925409);
 
       case 'LOW':
-        return const Color(0xFF67E8C8);
+        return const Color(0xFF11665B);
 
       default:
-        return const Color(0xFF8FA3BF);
+        return const Color(0xFF54645F);
     }
   }
 
@@ -101,7 +101,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF061721),
+      backgroundColor: const Color(0xFFFAFAF7),
       body: Stack(
         children: [
           const Positioned.fill(
@@ -130,8 +130,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
                 return RefreshIndicator(
                   onRefresh: _refresh,
-                  color: const Color(0xFF67E8C8),
-                  backgroundColor: const Color(0xFF102632),
+                  color: const Color(0xFF11665B),
+                  backgroundColor: const Color(0xFFEDF2E9),
                   child: analyses.isEmpty
                       ? ListView(
                           physics: const AlwaysScrollableScrollPhysics(),
@@ -223,7 +223,7 @@ class _HistoryHeader extends StatelessWidget {
             fontSize: 38,
             fontWeight: FontWeight.w700,
             letterSpacing: -0.8,
-            color: Color(0xFFF1F5F9),
+            color: Color(0xFF202B29),
           ),
         ),
         SizedBox(height: 8),
@@ -232,7 +232,7 @@ class _HistoryHeader extends StatelessWidget {
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF9BAEC2),
+            color: Color(0xFF54645F),
           ),
         ),
       ],
@@ -282,15 +282,15 @@ class _HistoryCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: const Color(0xFF1F5963),
+              color: const Color(0xFFCFD8D2),
               width: 1,
             ),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(0xFF102C36),
-                Color(0xFF0B202A),
+                Color(0xFFFFFFFF),
+                Color(0xFFF3F5EF),
               ],
             ),
             boxShadow: [
@@ -377,7 +377,7 @@ class _HistoryCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFFE6EDF5),
+                  color: Color(0xFF202B29),
                   height: 1.35,
                 ),
               ),
@@ -404,7 +404,7 @@ class _HistoryCard extends StatelessWidget {
               const Divider(
                 height: 1,
                 thickness: 1,
-                color: Color(0xFF21444D),
+                color: Color(0xFFCFD8D2),
               ),
               const SizedBox(height: 13),
               _DateRow(
@@ -457,7 +457,7 @@ class _HistoryCard extends StatelessWidget {
           style: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w600,
-            color: Color(0xFFE6EDF5),
+            color: Color(0xFF202B29),
             height: 1.4,
           ),
         ),
@@ -484,7 +484,7 @@ class _HistoryCard extends StatelessWidget {
         const Divider(
           height: 1,
           thickness: 1,
-          color: Color(0xFF21444D),
+          color: Color(0xFFCFD8D2),
         ),
         const SizedBox(height: 12),
         _DateRow(
@@ -629,10 +629,10 @@ class _InfoChip extends StatelessWidget {
         vertical: 9,
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF081827),
+        color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: const Color(0xFF244353),
+          color: const Color(0xFFCFD8D2),
         ),
       ),
       child: Row(
@@ -641,13 +641,13 @@ class _InfoChip extends StatelessWidget {
           Icon(
             icon,
             size: 17,
-            color: const Color(0xFF5BA9F5),
+            color: const Color(0xFF11665B),
           ),
           const SizedBox(width: 8),
           Text(
             label,
             style: const TextStyle(
-              color: Color(0xFFC6D3E2),
+              color: Color(0xFF54645F),
               fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
@@ -676,17 +676,18 @@ class _DateRow extends StatelessWidget {
         const Icon(
           Icons.access_time_outlined,
           size: 18,
-          color: Color(0xFF76C9D4),
+          color: Color(0xFF11665B),
         ),
         const SizedBox(width: 10),
-        Text(
+        Expanded(
+            child: Text(
           formattedDate,
           style: const TextStyle(
-            color: Color(0xFF9EB2C5),
+            color: Color(0xFF54645F),
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
-        ),
+        )),
       ],
     );
   }
@@ -712,14 +713,14 @@ class _LoadingState extends StatelessWidget {
             height: 44,
             child: CircularProgressIndicator(
               strokeWidth: 3,
-              color: Color(0xFF67E8C8),
+              color: Color(0xFF11665B),
             ),
           ),
           SizedBox(height: 20),
           Text(
             l10n.loadingAnalysisHistory,
             style: TextStyle(
-              color: Color(0xFF9BAEC2),
+              color: Color(0xFF54645F),
               fontSize: 15,
             ),
           ),
@@ -752,23 +753,23 @@ class _EmptyState extends StatelessWidget {
               width: 90,
               height: 90,
               decoration: BoxDecoration(
-                color: const Color(0xFF67E8C8).withValues(alpha: 0.10),
+                color: const Color(0xFF11665B).withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
-                  color: const Color(0xFF67E8C8).withValues(alpha: 0.20),
+                  color: const Color(0xFF11665B).withValues(alpha: 0.20),
                 ),
               ),
               child: const Icon(
                 Icons.history_rounded,
                 size: 42,
-                color: Color(0xFF67E8C8),
+                color: Color(0xFF11665B),
               ),
             ),
             const SizedBox(height: 24),
             Text(
               l10n.noAnalysesYet,
               style: TextStyle(
-                color: Color(0xFFF1F5F9),
+                color: Color(0xFF202B29),
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
               ),
@@ -778,7 +779,7 @@ class _EmptyState extends StatelessWidget {
               l10n.analyzedMessagesAppearHere,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Color(0xFF9BAEC2),
+                color: Color(0xFF54645F),
                 fontSize: 15,
                 height: 1.5,
               ),
@@ -817,16 +818,16 @@ class _ErrorState extends StatelessWidget {
               width: 82,
               height: 82,
               decoration: BoxDecoration(
-                color: const Color(0xFFFF647C).withValues(alpha: 0.10),
+                color: const Color(0xFFB42335).withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(26),
                 border: Border.all(
-                  color: const Color(0xFFFF647C).withValues(alpha: 0.15),
+                  color: const Color(0xFFB42335).withValues(alpha: 0.15),
                 ),
               ),
               child: const Icon(
                 Icons.cloud_off_outlined,
                 size: 40,
-                color: Color(0xFFFF647C),
+                color: Color(0xFFB42335),
               ),
             ),
             const SizedBox(height: 24),
@@ -835,7 +836,7 @@ class _ErrorState extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFFF1F5F9),
+                color: Color(0xFF202B29),
               ),
             ),
             const SizedBox(height: 12),
@@ -847,7 +848,7 @@ class _ErrorState extends StatelessWidget {
                 message,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  color: Color(0xFF9BAEC2),
+                  color: Color(0xFF54645F),
                   fontSize: 14,
                   height: 1.5,
                 ),
@@ -863,7 +864,7 @@ class _ErrorState extends StatelessWidget {
                   0xFF123842,
                 ),
                 foregroundColor: const Color(
-                  0xFF67E8C8,
+                  0xFF11665B,
                 ),
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(
@@ -875,7 +876,7 @@ class _ErrorState extends StatelessWidget {
                     12,
                   ),
                   side: const BorderSide(
-                    color: Color(0xFF28616A),
+                    color: Color(0xFFCFD8D2),
                   ),
                 ),
               ),
@@ -939,12 +940,12 @@ class _BackgroundPatternPainter extends CustomPainter {
     Size size,
   ) {
     final paint = Paint()
-      ..color = const Color(0xFF3CC9C5)
+      ..color = const Color(0xFF11665B)
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
     final dotPaint = Paint()
-      ..color = const Color(0xFF3CC9C5)
+      ..color = const Color(0xFF11665B)
       ..style = PaintingStyle.fill;
 
     for (double x = 10; x < size.width; x += 16) {
