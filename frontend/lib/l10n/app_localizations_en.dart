@@ -672,4 +672,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emailPasswordAccountExists => 'An account with this email already exists using email and password. Please sign in using your email and password.';
+
+  @override
+  String get passwordResetTitle => 'Reset password';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get passwordResetIntro => 'Enter your MessageShield email to receive a password-reset link.';
+
+  @override
+  String get resetSent => 'If this account exists, a reset link has been sent. Check your inbox and spam folder.';
+
+  @override
+  String get resetSending => 'Sending…';
+
+  @override
+  String get resetSendLink => 'Send reset link';
+
+  @override
+  String get resetBackToLogin => 'Back to sign in';
+
+  @override
+  String get resetInvalidEmail => 'Enter a valid email address.';
+
+  @override
+  String get resetTooMany => 'Too many reset requests. Please wait before trying again.';
+
+  @override
+  String get resetFailed => 'Unable to send the reset email. Check your connection and try again.';
+
+  @override
+  String get modelOverrideWarning => 'Warning signals override the model result';
+
+  @override
+  String get modelNoWarning => 'No model warning; sender and links are unverified';
+
+  @override
+  String get productBadge => 'Message safety, made clearer';
+
+  @override
+  String get productHeadline => 'Know what to question.';
+
+  @override
+  String get productDescription => 'Understand suspicious messages before you click, reply, or pay.';
+
+  @override
+  String get productExample => '“Your account will be blocked. Share your OTP now.”';
+
+  @override
+  String get productExampleReason => 'Requests a one-time code • Uses urgency';
+
+  @override
+  String get productCaution => 'A risk assessment is guidance, not a guarantee.';
 }

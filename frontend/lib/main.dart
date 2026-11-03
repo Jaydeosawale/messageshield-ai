@@ -11,7 +11,7 @@ import 'models/message_analysis.dart';
 import 'providers/auth_provider.dart';
 import 'providers/language_provider.dart';
 import 'l10n/app_localizations.dart';
-import 'screens/auth/register_screen.dart';
+import 'screens/auth/login_screen.dart';
 import 'screens/history/history_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/profile/profile_screen.dart';
@@ -68,6 +68,7 @@ class MessageShieldApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       builder: (context, child) => WebPlayStoreFrame(
+        light: !context.watch<AuthProvider>().isAuthenticated,
         child: child ?? const SizedBox.shrink(),
       ),
       title: 'MessageShield',
@@ -102,7 +103,7 @@ class AuthGate extends StatelessWidget {
     }
 
     if (!auth.isAuthenticated) {
-      return const RegisterScreen();
+      return const LoginScreen();
     }
 
     return const AppShell();

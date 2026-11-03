@@ -8,8 +8,9 @@ import '../../core/services/google_auth_service.dart';
 import '../../core/theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 
-import '../../widgets/app_background.dart';
+import '../../widgets/auth_surface.dart';
 import 'register_screen.dart';
+import 'forgot_password_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -58,8 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       debugPrint(
-    'LOGIN SUCCESS: isAuthenticated=${authProvider.isAuthenticated}',
-);
+        'LOGIN SUCCESS: isAuthenticated=${authProvider.isAuthenticated}',
+      );
 
       if (!mounted) return;
 
@@ -302,10 +303,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final providerError = authProvider.error;
 
-      final actualError =
-          providerError != null && providerError.isNotEmpty
-              ? providerError
-              : error.toString();
+      final actualError = providerError != null && providerError.isNotEmpty
+          ? providerError
+          : error.toString();
 
       final message = _friendlyGoogleError(
         actualError,
@@ -455,494 +455,124 @@ class _LoginScreenState extends State<LoginScreen> {
     // Default
     // ----------------------------------------------------------
 
-    return cleanedError.isNotEmpty
-        ? cleanedError
-        : l10n.unableToSignIn;
+    return cleanedError.isNotEmpty ? cleanedError : l10n.unableToSignIn;
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final auth = context.watch<AuthProvider>();
-
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: AppBackground(
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 460,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Container(
-                    padding: const EdgeInsets.all(30),
-                    decoration: BoxDecoration(
-                      color: AppColors.backgroundSoft,
-                      borderRadius: BorderRadius.circular(28),
-                      border: Border.all(
-                        color: AppColors.teal.withValues(
-                          alpha: 0.22,
-                        ),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(
-                            alpha: 0.32,
-                          ),
-                          blurRadius: 32,
-                          offset: const Offset(0, 14),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // ==================================================
-                        // LOGO
-                        // ==================================================
-
-                        Center(
-                          child: Container(
-                            width: 86,
-                            height: 86,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  AppColors.teal,
-                                  AppColors.green,
-                                ],
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.teal.withValues(
-                                    alpha: 0.24,
-                                  ),
-                                  blurRadius: 28,
-                                  spreadRadius: 1,
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.shield_outlined,
-                              color: Colors.white,
-                              size: 44,
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 22),
-
-                        // ==================================================
-                        // BRAND
-                        // ==================================================
-
-                        const Text(
-                          'MessageShield',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        Text(
-                          l10n.aiPoweredMessageSecurity,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 14,
-                            letterSpacing: 0.3,
-                          ),
-                        ),
-
-                        const SizedBox(height: 34),
-
-                        // ==================================================
-                        // LOGIN TITLE
-                        // ==================================================
-
-                        Text(
-                          l10n.welcomeBack,
-                          style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        Text(
-                          l10n.signInToProtectMessages,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 14,
-                            height: 1.4,
-                          ),
-                        ),
-
-                        const SizedBox(height: 28),
-
-                        // ==================================================
-                        // EMAIL
-                        // ==================================================
-
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          autofillHints: const [
-                            AutofillHints.email,
-                          ],
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                          ),
-                          cursorColor: AppColors.teal,
-                          decoration: _inputDecoration(
-                            label: l10n.emailAddress,
-                            icon: Icons.email_outlined,
-                          ),
-                          validator: (value) {
-                            final email = value?.trim() ?? '';
-
-                            if (email.isEmpty) {
-                              return l10n.emailRequired;
-                            }
-
-                            if (!email.contains('@') ||
-                                !email.contains(
-                                  '.',
-                                )) {
-                              return l10n.invalidEmail;
-                            }
-
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 18),
-
-                        // ==================================================
-                        // PASSWORD
-                        // ==================================================
-
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: _obscurePassword,
-                          autofillHints: const [
-                            AutofillHints.password,
-                          ],
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                          ),
-                          cursorColor: AppColors.teal,
-                          decoration: _inputDecoration(
-                            label: l10n.password,
-                            icon: Icons.lock_outline,
-                          ).copyWith(
-                            suffixIcon: IconButton(
-                              tooltip: _obscurePassword
-                                  ? l10n.showPassword
-                                  : l10n.hidePassword,
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_outlined
-                                    : Icons.visibility_off_outlined,
-                                color: AppColors.textSecondary,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePassword = !_obscurePassword;
-                                });
-                              },
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return l10n.passwordRequired;
-                            }
-
-                            return null;
-                          },
-                          onFieldSubmitted: (_) {
-                            if (!auth.isLoading) {
-                              _login();
-                            }
-                          },
-                        ),
-
-                        const SizedBox(height: 28),
-
-                        // ==================================================
-                        // LOGIN BUTTON
-                        // ==================================================
-
-                        SizedBox(
-                          height: 54,
-                          child: ElevatedButton(
-                            onPressed: auth.isLoading ? null : _login,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.teal,
-                              foregroundColor: Colors.white,
-                              disabledBackgroundColor:
-                                  AppColors.teal.withValues(
-                                alpha: 0.45,
-                              ),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  14,
-                                ),
-                              ),
-                            ),
-                            child: auth.isLoading
-                                ? const SizedBox(
-                                    width: 23,
-                                    height: 23,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : Text(
-                                    l10n.secureLogin,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // ==================================================
-                        // DIVIDER
-                        // ==================================================
-
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Divider(
-                                color: AppColors.inputBorder,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                              ),
-                              child: Text(
-                                l10n.or,
-                                style: TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            const Expanded(
-                              child: Divider(
-                                color: AppColors.inputBorder,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // ==================================================
-                        // GOOGLE
-                        // ==================================================
-
-                        SizedBox(
-                          height: 54,
-                          child: OutlinedButton.icon(
-                            onPressed:
-                                auth.isLoading ? null : _continueWithGoogle,
-                            icon: const FaIcon(
-                              FontAwesomeIcons.google,
-                              size: 20,
-                            ),
-                            label: Text(
-                              l10n.continueWithGoogle,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppColors.textPrimary,
-                              side: const BorderSide(
-                                color: AppColors.inputBorder,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 22),
-
-                        // ==================================================
-                        // REGISTER
-                        // ==================================================
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              l10n.dontHaveAccount,
-                              style: TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 14,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: auth.isLoading
-                                  ? null
-                                  : () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) =>
-                                              const RegisterScreen(),
-                                        ),
-                                      );
-                                    },
-                              child: Text(
-                                l10n.createAccount,
-                                style: TextStyle(
-                                  color: AppColors.teal,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // ==================================================
-                        // SECURITY FOOTER
-                        // ==================================================
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.verified_user_outlined,
-                              size: 16,
-                              color: AppColors.green,
-                            ),
-                            const SizedBox(width: 7),
-                            Text(
-                              l10n.secureAiProtection,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.textSecondary.withValues(
-                                  alpha: 0.8,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+    return AuthSurface(
+      title: l10n.welcomeBack,
+      description: l10n.signInToProtectMessages,
+      child: Form(
+          key: _formKey,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            OutlinedButton(
+                onPressed: auth.isLoading ? null : _continueWithGoogle,
+                child: Row(children: [
+                  const FaIcon(FontAwesomeIcons.google, size: 18),
+                  const SizedBox(width: 12),
+                  Expanded(
+                      child: Text(l10n.continueWithGoogle,
+                          textAlign: TextAlign.center))
+                ])),
+            const SizedBox(height: 22),
+            Row(children: [
+              const Expanded(child: Divider()),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Text(l10n.or,
+                      style: const TextStyle(
+                          color: Color(0xFF738096), fontSize: 12))),
+              const Expanded(child: Divider())
+            ]),
+            const SizedBox(height: 22),
+            TextFormField(
+                controller: _emailController,
+                enabled: !auth.isLoading,
+                keyboardType: TextInputType.emailAddress,
+                autocorrect: false,
+                autofillHints: const [AutofillHints.email],
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(labelText: l10n.emailAddress),
+                validator: (value) {
+                  final email = value?.trim() ?? '';
+                  if (email.isEmpty) return l10n.emailRequired;
+                  if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email)) {
+                    return l10n.invalidEmail;
+                  }
+                  return null;
+                }),
+            const SizedBox(height: 18),
+            TextFormField(
+                controller: _passwordController,
+                enabled: !auth.isLoading,
+                obscureText: _obscurePassword,
+                autofillHints: const [AutofillHints.password],
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                    labelText: l10n.password,
+                    suffixIcon: IconButton(
+                        tooltip: _obscurePassword
+                            ? l10n.showPassword
+                            : l10n.hidePassword,
+                        onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword),
+                        icon: Icon(_obscurePassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined))),
+                validator: (value) => value == null || value.isEmpty
+                    ? l10n.passwordRequired
+                    : null,
+                onFieldSubmitted: (_) {
+                  if (!auth.isLoading) _login();
+                }),
+            const SizedBox(height: 6),
+            Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                    onPressed: auth.isLoading
+                        ? null
+                        : () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                                builder: (_) => ForgotPasswordPage(
+                                    initialEmail:
+                                        _emailController.text.trim()))),
+                    child: Text(l10n.forgotPassword))),
+            const SizedBox(height: 14),
+            FilledButton(
+                onPressed: auth.isLoading ? null : _login,
+                child: auth.isLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                    : Text(l10n.login)),
+            const SizedBox(height: 22),
+            Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(l10n.dontHaveAccount),
+                  TextButton(
+                      onPressed: auth.isLoading
+                          ? null
+                          : () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                  builder: (_) => const RegisterScreen())),
+                      child: Text(l10n.createAccount))
+                ]),
+          ])),
     );
   }
-
-  // ============================================================
-  // INPUT DECORATION
-  // ============================================================
-
-  InputDecoration _inputDecoration({
-    required String label,
-    required IconData icon,
-  }) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(
-        color: AppColors.textSecondary,
-      ),
-      floatingLabelStyle: const TextStyle(
-        color: AppColors.teal,
-        fontWeight: FontWeight.w600,
-      ),
-      prefixIcon: Icon(
-        icon,
-        color: AppColors.teal,
-      ),
-      filled: true,
-      fillColor: AppColors.inputBackground,
-      errorStyle: const TextStyle(
-        color: AppColors.danger,
-        fontSize: 12,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(
-          color: AppColors.inputBorder,
-        ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(
-          color: AppColors.inputBorder,
-        ),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(
-          color: AppColors.teal,
-          width: 1.6,
-        ),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(
-          color: AppColors.danger,
-        ),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(
-          color: AppColors.danger,
-          width: 1.5,
-        ),
-      ),
-    );
-  }
-
-  // ==========================================
-  // Friendly Google Login Errors
-  // ==========================================
 
   String _friendlyGoogleError(
     String error,
     AppLocalizations l10n,
   ) {
-    final cleanedError =
-        error.replaceFirst('Exception: ', '').trim();
+    final cleanedError = error.replaceFirst('Exception: ', '').trim();
 
     final message = cleanedError.toLowerCase();
 
@@ -967,5 +597,4 @@ class _LoginScreenState extends State<LoginScreen> {
         ? cleanedError
         : l10n.unableToSignInWithGoogle;
   }
-
 }
