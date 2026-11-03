@@ -38,7 +38,7 @@ void main() {
               create: (_) => ReadyAuth(),
               child: MaterialApp(
                 debugShowCheckedModeBanner: false,
-                theme: AppTheme.darkTheme,
+                theme: AppTheme.lightTheme,
                 locale: locale,
                 localizationsDelegates: const [
                   AppLocalizations.delegate,

@@ -78,7 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               fit: BoxFit.contain,
             ),
             const SizedBox(width: 10),
-            RichText(
+            Expanded(child: RichText(
               text: TextSpan(
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
@@ -101,7 +101,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               ),
-            ),
+            )),
           ],
         ),
       ),
@@ -211,7 +211,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   value: high.toString(),
                                   icon: Icons.shield_outlined,
                                   color: const Color(
-                                    0xFFFF6B6B,
+                                    0xFFB42335,
                                   ),
                                 ),
                               ),
@@ -222,7 +222,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   value: medium.toString(),
                                   icon: Icons.warning_amber_rounded,
                                   color: const Color(
-                                    0xFFFFB84D,
+                                    0xFF925409,
                                   ),
                                 ),
                               ),
@@ -250,7 +250,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             value: high.toString(),
                             icon: Icons.shield_outlined,
                             color: const Color(
-                              0xFFFF6B6B,
+                              0xFFB42335,
                             ),
                           ),
                         ),
@@ -261,7 +261,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             value: medium.toString(),
                             icon: Icons.warning_amber_rounded,
                             color: const Color(
-                              0xFFFFB84D,
+                              0xFF925409,
                             ),
                           ),
                         ),
@@ -428,7 +428,7 @@ class _DashboardHero extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF102633),
+            const Color(0xFFEDF2E9),
             colorScheme.primary.withValues(
               alpha: 0.18,
             ),
@@ -478,8 +478,8 @@ class _DashboardHero extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(
-                alpha: 0.12,
+              color: Colors.white.withValues(
+                alpha: 0.85,
               ),
               borderRadius: BorderRadius.circular(18),
             ),
@@ -494,8 +494,8 @@ class _DashboardHero extends StatelessWidget {
                 Container(
                   width: 1,
                   height: 38,
-                  color: Colors.white.withValues(
-                    alpha: 0.12,
+                  color: colorScheme.outline.withValues(
+                    alpha: 1,
                   ),
                 ),
                 Expanded(
@@ -503,7 +503,7 @@ class _DashboardHero extends StatelessWidget {
                     value: highRisk.toString(),
                     label: l10n.needAttention,
                     valueColor: highRisk > 0
-                        ? const Color(0xFFFF6B6B)
+                        ? const Color(0xFFB42335)
                         : colorScheme.secondary,
                   ),
                 ),
@@ -835,11 +835,11 @@ class _RecentAnalysisCard extends StatelessWidget {
     switch (analysis.risk.toUpperCase()) {
       case 'HIGH':
       case 'UNSAFE':
-        return const Color(0xFFFF6B6B);
+        return const Color(0xFFB42335);
 
       case 'MEDIUM':
       case 'RISKY':
-        return const Color(0xFFFFB84D);
+        return const Color(0xFF925409);
 
       case 'LOW':
       case 'SAFE':

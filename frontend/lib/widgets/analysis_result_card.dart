@@ -26,7 +26,7 @@ class AnalysisResultCard extends StatelessWidget {
     if (_isHigh) return AppColors.danger;
 
     if (_isMedium) {
-      return const Color(0xFFFFA94D);
+      return const Color(0xFF925409);
     }
 
     return AppColors.green;

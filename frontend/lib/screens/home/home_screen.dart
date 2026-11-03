@@ -278,24 +278,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Row(
       children: [
-        Container(
-          width: isPhone ? 46 : 52,
-          height: isPhone ? 46 : 52,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [
-                AppColors.teal,
-                AppColors.green,
-              ],
-            ),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: const Icon(
-            Icons.shield_rounded,
-            color: Colors.white,
-            size: 26,
-          ),
-        ),
+        ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset('assets/images/messageshield_logo.png',
+                width: isPhone ? 46 : 52,
+                height: isPhone ? 46 : 52,
+                excludeFromSemantics: true)),
         const SizedBox(width: 12),
         Expanded(
           child: Text.rich(
@@ -376,13 +364,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF102B34),
+              color: const Color(0xFFFFFFFF),
 
               // Less curved input box.
               borderRadius: BorderRadius.circular(8),
 
               border: Border.all(
-                color: const Color(0xFF1D4A56),
+                color: const Color(0xFFCFD8D2),
               ),
             ),
             child: TextField(
@@ -604,14 +592,15 @@ class _SafetyContent extends StatelessWidget {
                       ),
                     ),
                   const SizedBox(width: 8),
-                  Text(
+                  Expanded(
+                      child: Text(
                     l10n.safetyGuidelines,
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
                     ),
-                  ),
+                  )),
                 ],
               ),
               const SizedBox(height: 20),

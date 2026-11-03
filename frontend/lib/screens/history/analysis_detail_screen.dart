@@ -304,13 +304,14 @@ class AnalysisDetailScreen extends StatelessWidget {
                                 color: riskColor,
                               ),
                               const SizedBox(width: 8),
-                              Text(
+                              Flexible(
+                                  child: Text(
                                 '${l10n.riskScoreLabel}: ${analysis.riskScore}',
                                 style: const TextStyle(
                                   color: AppColors.textPrimary,
                                   fontWeight: FontWeight.w700,
                                 ),
-                              ),
+                              )),
                             ],
                           ),
                         ),
